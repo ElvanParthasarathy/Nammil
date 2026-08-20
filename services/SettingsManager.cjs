@@ -69,12 +69,12 @@ class SettingsManager {
     if (s.mediaFolder && fs.existsSync(s.mediaFolder) && (s.mediaFolder.toLowerCase().endsWith('media') || s.mediaFolder.toLowerCase().includes('elvan nammil'))) {
       return s.mediaFolder;
     }
-    const docsMedia = path.join(this.app.getPath('documents'), 'Elvan Nammil', 'Media');
-    if (fs.existsSync(docsMedia)) {
-      return docsMedia;
+    const defaultMedia = path.join(this.app.getPath('pictures'), 'Elvan Nammil', 'Media');
+    if (fs.existsSync(defaultMedia)) {
+      return defaultMedia;
     }
     const userDataMedia = path.join(this.app.getPath('userData'), 'Media');
-    return fs.existsSync(userDataMedia) ? userDataMedia : docsMedia;
+    return fs.existsSync(userDataMedia) ? userDataMedia : defaultMedia;
   }
 
   setMediaFolder(newPath) {
