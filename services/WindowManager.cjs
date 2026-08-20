@@ -44,11 +44,16 @@ class WindowManager {
       if (!isFirstBoot) {
         this.mainWindow.maximize();
       }
+      
+      // Force window to foreground (bypasses Windows focus-stealing prevention)
+      this.mainWindow.setAlwaysOnTop(true);
       this.mainWindow.show();
       if (this.mainWindow.isMinimized()) {
         this.mainWindow.restore();
       }
       this.mainWindow.focus();
+      this.mainWindow.setAlwaysOnTop(false);
+      this.app.focus();
     });
 
     // Load frontend

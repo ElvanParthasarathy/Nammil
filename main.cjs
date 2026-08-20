@@ -50,8 +50,11 @@ app.on('second-instance', () => {
   if (orchestrator && orchestrator.windowManager && orchestrator.windowManager.mainWindow) {
     const mainWindow = orchestrator.windowManager.mainWindow;
     if (mainWindow.isMinimized()) mainWindow.restore();
+    mainWindow.setAlwaysOnTop(true);
     mainWindow.show();
     mainWindow.focus();
+    mainWindow.setAlwaysOnTop(false);
+    app.focus();
   }
 });
 
