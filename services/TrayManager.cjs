@@ -40,6 +40,17 @@ class TrayManager {
         mainWindow.focus();
       }
     });
+    this.tray.on('click', () => {
+      const mainWindow = this.orchestrator.windowManager.mainWindow;
+      if (mainWindow) {
+        if (mainWindow.isVisible()) {
+          mainWindow.focus();
+        } else {
+          mainWindow.show();
+          mainWindow.focus();
+        }
+      }
+    });
     return this.tray;
   }
 }
