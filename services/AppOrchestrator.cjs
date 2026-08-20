@@ -94,7 +94,13 @@ class AppOrchestrator {
         
         // 4. Relaunch
         this.app.isQuitting = true;
-        this.app.relaunch();
+        
+        if (this.app.isPackaged) {
+          this.app.relaunch();
+        } else {
+          this.app.relaunch({ args: process.argv.slice(1) });
+        }
+        
         this.app.exit(0);
         return { success: true };
       } catch (e) {
