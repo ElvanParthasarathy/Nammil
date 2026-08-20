@@ -45,6 +45,10 @@ class WindowManager {
         this.mainWindow.maximize();
       }
       this.mainWindow.show();
+      if (this.mainWindow.isMinimized()) {
+        this.mainWindow.restore();
+      }
+      this.mainWindow.focus();
     });
 
     // Load frontend
