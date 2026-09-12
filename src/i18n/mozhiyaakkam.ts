@@ -335,7 +335,8 @@ export function mlymToTaml(text: string): string {
       '\u0D40': '\u0BC0', // ீ
       '\u0D41': '\u0BC1', // ு
       '\u0D42': '\u0BC2', // ூ
-      '\u0D43': '\u0BBF\u0BB0\u0BBF', // ൃ -> ிரி
+      '\u0D43': '\u0BBF\u0BB0\u0BC1', // ൃ -> ிரு (e.g. കൃ -> கிரு)
+      '\u0D44': '\u0BBF\u0BB0\u0BC2', // ൄ -> ிரூ
       '\u0D46': '\u0BC6', // ெ
       '\u0D47': '\u0BC7', // ே
       '\u0D48': '\u0BC8', // ை
