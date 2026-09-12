@@ -247,11 +247,8 @@ function isLetterChar(c: string): boolean {
 }
 
 function getTamilBaseConsonant(c: string): string | null {
-  if (c === '\u0D38') return '\u0BB8'; // സ -> ஸ
-  if (c === '\u0D36') return '\u0BB6'; // ശ -> ஶ
+  if (c === '\u0D36' || c === '\u0D38' || c === '\u0D1C' || (c >= '\u0D1A' && c <= '\u0D1D')) return '\u0B9A'; // ശ, സ, ജ, ച -> ச
   if (c >= '\u0D15' && c <= '\u0D18') return '\u0B95'; // க
-  if (c >= '\u0D1A' && c <= '\u0D1D' && c !== '\u0D1C') return '\u0B9A'; // ச
-  if (c === '\u0D1C') return '\u0B9C'; // ஜ
   if (c >= '\u0D1F' && c <= '\u0D22') return '\u0B9F'; // ட
   if (c === '\u0D23') return '\u0BA3'; // ண
   if (c >= '\u0D24' && c <= '\u0D27') return '\u0BA4'; // த
@@ -268,7 +265,7 @@ function getTamilBaseConsonant(c: string): string | null {
   if (c === '\u0D34') return '\u0BB4'; // ழ
   if (c === '\u0D35') return '\u0BB5'; // வ
   if (c === '\u0D37') return '\u0BB7'; // ஷ
-  if (c === '\u0D39') return '\u0BB9'; // ஹ
+  if (c === '\u0D39') return '\u0B95'; // ഹ -> க (medially)
   return null;
 }
 
@@ -286,23 +283,13 @@ export function mlymToTaml(text: string): string {
   while (i < n) {
     const c = text[i];
     const isWordStart = i === 0 || !isLetterChar(text[i - 1]);
+    const isWordEnd = i === n - 1 || !isLetterChar(text[i + 1]);
 
-    // Word-initial Prosthetic Vowel (மொழிமுதல் முன்னிலை உயிர்):
+    // 1. Word-initial Prosthetic Vowel (மொழிமுதல் முன்னிலை உயிர்: ற, ര, ല, ള):
     // In Tamil, words cannot start with ற, ர, ல, ள (Tolkappiyam Mozhimarabu).
     // Prepend 'இ' (or 'உ' before u/o vowels).
     if (isWordStart) {
-      if (c === '\u0D31') { // റ -> இர / உர
-        const next = i + 1 < n ? text[i + 1] : '';
-        if (next === '\u0D41' || next === '\u0D42') { // ു, ൂ
-          sb.push('\u0B89'); // உ
-        } else {
-          sb.push('\u0B87'); // இ
-        }
-        sb.push('\u0BB0'); // ர
-        i++;
-        continue;
-      }
-      if (c === '\u0D30') { // ര -> இர / உர
+      if (c === '\u0D31' || c === '\u0D30') { // റ, ര -> இர / உர
         const next = i + 1 < n ? text[i + 1] : '';
         if (next === '\u0D41' || next === '\u0D42') { // ു, ൂ
           sb.push('\u0B89'); // உ
@@ -324,28 +311,76 @@ export function mlymToTaml(text: string): string {
         i++;
         continue;
       }
+
+      // 2. Word-initial Ha (ഹ) deletion per Tolkappiyam (ஹரி -> அரி, இந்து, ஏமம்):
+      if (c === '\u0D39') {
+        const next = i + 1 < n ? text[i + 1] : '';
+        const vMap: Record<string, string> = {
+          '\u0D3E': '\u0B86', // ஆ
+          '\u0D3F': '\u0B87', // இ
+          '\u0D40': '\u0B88', // ஈ
+          '\u0D41': '\u0B89', // உ
+          '\u0D42': '\u0B8A', // ஊ
+          '\u0D46': '\u0B8E', // எ
+          '\u0D47': '\u0B8F', // ஏ
+          '\u0D48': '\u0B90', // ஐ
+          '\u0D4A': '\u0B92', // ஒ
+          '\u0D4B': '\u0B93', // ஓ
+          '\u0D4C': '\u0B94', // ஔ
+          '\u0D57': '\u0B94'
+        };
+        if (vMap[next]) {
+          sb.push(vMap[next]);
+          i += 2;
+          continue;
+        } else {
+          // Inherent short a (e.g. ഹരി -> அரி)
+          sb.push('\u0B85'); // அ
+          i++;
+          continue;
+        }
+      }
     }
 
-    // Word-initial / Svarabhakti cluster resolution (மொழிமுதல் மெய்ம்மயக்கமின்மை):
-    // E.g. പ്ര -> பிர, പ്രി -> பிரி, ശ്ര -> சிர (ശ്രമം -> சிரமம், ശ്രദ്ധ -> சிரத்தை)
+    // 3. Cluster ഹ്മ (hma) / ഹ്ന (hna) - Ha deletion per Tolkappiyam (Brahm -> பிரம்மம், பிராமண):
+    if (c === '\u0D39' && i + 2 < n && text[i + 1] === '\u0D4D') {
+      const c3 = text[i + 2];
+      if (c3 === '\u0D2E') { // ഹ്മ -> ம்ம / ம
+        const prev = i > 0 ? text[i - 1] : '';
+        const prevIsLong = prev === '\u0D3E' || prev === '\u0D40' || prev === '\u0D42' || prev === '\u0D47' || prev === '\u0D4B' || prev === '\u0D48';
+        if (prevIsLong) {
+          sb.push('\u0BAE'); // ம (e.g. ബ്രാഹ്മണ -> பிராமண)
+        } else {
+          sb.push('\u0BAE\u0BCD\u0BAE'); // ம்ம (e.g. ബ്രഹ്മം -> பிரம்மம்)
+        }
+        i += 3;
+        continue;
+      }
+      if (c3 === '\u0D28') { // ഹ്ന -> ன்ன (e.g. ചിഹ്നം -> சின்னம்)
+        sb.push('\u0BA9\u0BCD\u0BA9');
+        i += 3;
+        continue;
+      }
+    }
+
+    // 4. Word-initial / Svarabhakti cluster resolution (மொழிமுதல் மெய்ம்மயக்கமின்மை):
     if (i + 2 < n && text[i + 1] === '\u0D4D') {
       const c1 = c;
       const c3 = text[i + 2];
       const base1 = getTamilBaseConsonant(c1);
 
       if (base1) {
-        // 1. C1 + ് + ര (Ra):
-        // പ്ര -> பிர, പ്രി -> பிரி, ക്ര -> கிர, ത്ര -> திர
-        // Universal at word start (or for ശ്ര everywhere: ആശ്രമം -> ஆஶிரமம், ശ്രമം -> ஶிரமம்)
+        // C1 + ് + ര (Ra):
+        // പ്ര -> பிர, പ്രി -> பிரி, ശ്ര -> சிர (ശ്രമം -> சிரமம், ശ്രദ്ധ -> சிரத்தை)
         if (c3 === '\u0D30' && (isWordStart || c1 === '\u0D36' || c1 === '\u0D38')) {
-          sb.push(base1 + '\u0BBF'); // inserts ி (for ശ്ര -> ஶிர)
+          sb.push(base1 + '\u0BBF'); // inserts ி
           sb.push('\u0BB0');         // ர
           i += 3;
           continue;
         }
 
-        // 2. C1 + ് + യ (Ya) -> Svarabhakti:
-        // - Word-medial Dental + ് + യ -> த் + தி + ய (thtthiya, e.g. സാങ്കേതികവിദ്യ: -> ஸாங்கேதிகவித்திய:, ആദിത്യ -> ஆதித்திய, സത്യ -> ஸத்திய, പ്രത്യേകം -> பிரத்தியேகம்)
+        // Dental + ് + യ (Ya) -> Svarabhakti:
+        // - Word-medial Dental + ് + യ -> த் + தி + ய (thtthiya, e.g. സാങ്കേതികവിദ്യ: -> சாங்கேதிகவித்திய:, ആദിത്യ -> ஆதித்திய, സത്യ -> சத்திய, പ്രത്യേകം -> பிரத்தியேகம்)
         // - Word-initial Dental + ് + യ -> தியா (e.g. ത്യാഗം -> தியாகம்)
         // - Other Word-initial C1 + ് + യ -> C1 + ி + ய (e.g. ന്യാ -> நியா, വ്യാ -> வியா)
         if (c3 === '\u0D2F') {
@@ -369,7 +404,7 @@ export function mlymToTaml(text: string): string {
           }
         }
 
-        // 3. Word-initial C1 + ് + വ (Va) -> C1 + ு + வ (e.g. സ്വാ -> ஸுவா, ദ്வா -> துவா)
+        // Word-initial C1 + ് + വ (Va) -> C1 + ு + வ (சுவா / சுவ, e.g. സ്വാമി -> சுவாமி, ദ്வா -> துவா, സ്വന്തം -> சுவந்தம்)
         if (isWordStart && c3 === '\u0D35') {
           sb.push(base1 + '\u0BC1'); // inserts ு
           sb.push('\u0BB5');         // வ
@@ -377,7 +412,26 @@ export function mlymToTaml(text: string): string {
           continue;
         }
 
-        // 5. C1 + ് + ല/ള (Liquid La / Lla):
+        // Word-initial സ/ശ + ് + ന/മ/ല (Sibilant + Nasal/Liquid per Tolkappiyam):
+        if (isWordStart && (c1 === '\u0D38' || c1 === '\u0D36')) {
+          if (c3 === '\u0D28') { // സ്ന -> சின (சினேகம்)
+            sb.push('\u0B9A\u0BBF\u0BA9');
+            i += 3;
+            continue;
+          }
+          if (c3 === '\u0D2E') { // സ്ம -> சும (சுமரணை)
+            sb.push('\u0B9A\u0BC1\u0BAE');
+            i += 3;
+            continue;
+          }
+          if (c3 === '\u0D32') { // ശ്ല -> சுல (சுலோகம்)
+            sb.push('\u0B9A\u0BC1\u0BB2');
+            i += 3;
+            continue;
+          }
+        }
+
+        // C1 + ് + ല/ള (Liquid La / Lla):
         // Svarabhakti (இடைப்பிறவரல்):
         // - After Anusvara (e.g. ഇംഗ്ലീഷ് -> இங்கிலீஷ், ഇംഗ്ലണ്ട് -> இங்கிலண்டு)
         // - At word start (e.g. ക്ലാസ്സ് -> கிலாசு, പ്ലാവ് -> பிலாவு)
@@ -389,159 +443,184 @@ export function mlymToTaml(text: string): string {
             continue;
           }
         }
+
+        // s + consonant in loanwords like സ്റ്റ (st) in റീസ്റ്റാർട്ട്:
+        if (c1 === '\u0D38') {
+          sb.push('\u0BB8\u0BCD'); // retain pulli sibilant ஸ்
+          sb.push(getTamilBaseConsonant(c3) ?? c3);
+          i += 3;
+          continue;
+        }
       }
     }
 
-    // Word-final A-stem feminine/loan noun ending -> Tamil '-ai' (ஆ ஈற்று வடசொல் ஐகார ஈறாதல்):
-    // E.g. കഥ -> கதை, ലങ്ക -> இலங்கை, ദോശ -> தோசை, ഗംഗ -> கங்கை, മാല -> மாலை, പൂജ -> பூஜை, സഭ -> ஸபை
-    {
-      const isWordEnd = i === n - 1 || !isLetterChar(text[i + 1]);
-      if (isWordEnd) {
-        const prev = i > 0 ? text[i - 1] : '';
-        const prev2 = i > 1 ? text[i - 2] : '';
-        const prevIsLong = prev === '\u0D3E' || prev === '\u0D40' || prev === '\u0D42' || prev === '\u0D47' || prev === '\u0D4B' || prev === '\u0D48';
+    // 5. Word-final A-stem feminine/loan noun ending -> Tamil '-ai' (ஆ ஈற்று வடசொல் ஐகார ஈறாதல்):
+    // E.g. കഥ -> கதை, ലങ്ക -> இலங்கை, ദോശ -> தோசை, ഗംഗ -> கங்கை, മാല -> மாலை, പൂജ -> பூசை, സഭ -> சபை
+    if (isWordEnd) {
+      const prev = i > 0 ? text[i - 1] : '';
+      const prev2 = i > 1 ? text[i - 2] : '';
+      const prevIsLong = prev === '\u0D3E' || prev === '\u0D40' || prev === '\u0D42' || prev === '\u0D47' || prev === '\u0D4B' || prev === '\u0D48';
 
-        // 1. Ending in ഥ (tha) -> தை (e.g. കഥ -> கதை)
-        if (c === '\u0D25') {
+      // 1. Ending in ഥ (tha) -> தை (e.g. കഥ -> கதை)
+      if (c === '\u0D25') {
+        sb.push('\u0BA4\u0BC8');
+        i++;
+        continue;
+      }
+
+      // 2. Ending in ശ/ഷ -> சை (e.g. ദോശ -> தோசை, ഭാഷ -> பாசை, ആശ -> ஆசை)
+      if (c === '\u0D36' || c === '\u0D37') {
+        sb.push('\u0B9A\u0BC8');
+        i++;
+        continue;
+      }
+
+      // 3. Ending in ഭ (bha) -> பை (e.g. സഭ -> சபை, ശോഭ -> சோபை)
+      if (c === '\u0D2D') {
+        sb.push('\u0BAA\u0BC8');
+        i++;
+        continue;
+      }
+
+      // 4. Ending in ജ (ja) -> சை (e.g. പൂജ -> பூசை)
+      if (c === '\u0D1C') {
+        sb.push('\u0B9A\u0BC8');
+        i++;
+        continue;
+      }
+
+      // 5. Ending in ങ്ക (nka) or Anusvara + ഗ (nga) -> ங்கை (e.g. ലങ്ക -> இலங்கை, ഗംഗ -> கங்கை)
+      if ((c === '\u0D15' && prev === '\u0D4D' && prev2 === '\u0D19') ||
+          (c === '\u0D17' && prev === '\u0D02')) {
+        sb.push('\u0B95\u0BC8');
+        i++;
+        continue;
+      }
+
+      // 6. Ending in Dental (ത, ഥ, ദ, ധ) after long vowel, nasal, or conjunct (e.g. ചിന്ത -> சிந்தை, വാർത്ത -> வார்த்தை, കവിത -> கவிதை, സീത -> சீதை, ശ്രദ്ധ -> சிரத்தை)
+      if (c >= '\u0D24' && c <= '\u0D27') {
+        const isAfterNasalOrConjunct = prev === '\u0D4D' || prev === '\u0D7B' || prev === '\u0D7A' || prev === '\u0D7C';
+        const isAfterMultiSyllableVowel = prev === '\u0D3F' && i >= 3;
+        if (prevIsLong || isAfterNasalOrConjunct || isAfterMultiSyllableVowel) {
           sb.push('\u0BA4\u0BC8');
           i++;
           continue;
         }
+      }
 
-        // 2. Food item ദോശ -> தோசை (preserving Grantha ஶ for other words like സന്ദേശ -> ஸந்தேஶ)
-        if (c === '\u0D36' && i >= 2 && text.slice(i - 2, i + 1) === '\u0D26\u0D4B\u0D36') {
-          sb.push('\u0B9A\u0BC8');
-          i++;
-          continue;
-        }
+      // 7. Ending in ല (la) after long vowel (e.g. മാല -> மாலை, ശാല -> சாலை)
+      if (c === '\u0D32' && prevIsLong) {
+        sb.push('\u0BB2\u0BC8');
+        i++;
+        continue;
+      }
 
-        // 3. Ending in ഷ (sha) -> ஷை (e.g. ഭാഷ -> பாஷை, പരീക്ഷ -> பரீக்ஷை)
-        if (c === '\u0D37') {
-          sb.push('\u0BB7\u0BC8');
-          i++;
-          continue;
-        }
+      // 8. Ending in വ (va) after long vowel (e.g. സേവ -> சேவை)
+      if (c === '\u0D35' && prevIsLong) {
+        sb.push('\u0BB5\u0BC8');
+        i++;
+        continue;
+      }
 
-        // 4. Ending in ഭ (bha) -> பை (e.g. സഭ -> ஸபை, ശോഭ -> சோபை)
-        if (c === '\u0D2D') {
-          sb.push('\u0BAA\u0BC8');
-          i++;
-          continue;
-        }
+      // 9. Ending in ഖ (kha) after long vowel (e.g. ശാഖ -> சாகை, രേഖ -> இரேகை)
+      if (c === '\u0D16' && prevIsLong) {
+        sb.push('\u0B95\u0BC8');
+        i++;
+        continue;
+      }
 
-        // 5. Ending in ജ (ja) -> ஜை (e.g. പൂജ -> பூஜை)
-        if (c === '\u0D1C') {
-          sb.push('\u0B9C\u0BC8');
-          i++;
-          continue;
-        }
-
-        // 6. Ending in ങ്ക (nka) or Anusvara + ഗ (nga) -> ங்கை (e.g. ലങ്ക -> இலங்கை, ഗംഗ -> கங்கை)
-        if ((c === '\u0D15' && prev === '\u0D4D' && prev2 === '\u0D19') ||
-            (c === '\u0D17' && prev === '\u0D02')) {
-          sb.push('\u0B95\u0BC8');
-          i++;
-          continue;
-        }
-
-        // 7. Ending in ത (ta) after long vowel, nasal, or conjunct (e.g. ചിന്ത -> சிந்தை, വാർത്ത -> வார்த்தை, കവിത -> கவிதை, സീത -> சீதை)
-        if (c === '\u0D24') {
-          const isAfterNasalOrConjunct = prev === '\u0D4D' || prev === '\u0D7B' || prev === '\u0D7A' || prev === '\u0D7C';
-          const isAfterMultiSyllableVowel = prev === '\u0D3F' && i >= 3; // e.g. കവിത -> கவிதை
-          if (prevIsLong || isAfterNasalOrConjunct || isAfterMultiSyllableVowel) {
-            sb.push('\u0BA4\u0BC8');
-            i++;
-            continue;
-          }
-        }
-
-        // 8. Ending in ല (la) after long vowel (e.g. മാല -> மாலை, ശാല -> சாலை)
-        if (c === '\u0D32' && prevIsLong) {
-          sb.push('\u0BB2\u0BC8');
-          i++;
-          continue;
-        }
-
-        // 9. Ending in വ (va) after long vowel (e.g. സേവ -> ஸேவை)
-        if (c === '\u0D35' && prevIsLong) {
-          sb.push('\u0BB5\u0BC8');
-          i++;
-          continue;
-        }
-
-        // 10. Ending in ഖ (kha) after long vowel (e.g. ശാഖ -> சாகை, രേഖ -> இரேகை)
-        if (c === '\u0D16' && prevIsLong) {
-          sb.push('\u0B95\u0BC8');
-          i++;
-          continue;
-        }
-
-        // 11. Ending in യ (ya) after long vowel (e.g. ഛായ -> சாயை, മായ -> மாயை)
-        if (c === '\u0D2F' && (prev === '\u0D3E' || prev === '\u0D47' || prev === '\u0D4B')) {
-          sb.push('\u0BAF\u0BC8');
-          i++;
-          continue;
-        }
+      // 10. Ending in യ (ya) after long vowel (e.g. ഛായ -> சாயை, മായ -> மாயை)
+      if (c === '\u0D2F' && (prev === '\u0D3E' || prev === '\u0D47' || prev === '\u0D4B')) {
+        sb.push('\u0BAF\u0BC8');
+        i++;
+        continue;
       }
     }
 
-    // Anusvara (ം) Homorganic Nasal (இனவெழுத்து) assimilation:
-    // When followed by a stop consonant, ം assimilates to the homorganic nasal:
+    // 6. Anusvara (ം) Homorganic Nasal (இனவெழுத்து) assimilation:
     // Velar (ക,ഖ,ഗ,ഘ) -> ங் (e.g. ഇംഗ്ലീഷ് -> இங்கிலீஷ், സംഗീതം -> சங்கீதம்)
     // Palatal (ച,ഛ,ജ,ഝ) -> ஞ் (e.g. പഞ്ചായത്ത് -> பஞ்சாயத்து)
     // Retroflex (ട,ഠ,ഡ,ഢ) -> ண்
-    // Dental (ത,ഥ,ദ,ധ) -> ந் (e.g. സന്തോഷம் -> சந்தோஷம்)
+    // Dental (ത,ഥ,ദ,ധ) -> ந் (e.g. സന്തോഷം -> சந்தோஷம்)
     // Labial (പ,ഫ,ബ,ഭ,മ) -> ம் (e.g. ആരംഭം -> ஆரம்பம்)
     if (c === '\u0D02') {
       const nextChar = i + 1 < n ? text[i + 1] : null;
       if (nextChar !== null) {
         const nextCode = nextChar.charCodeAt(0);
         if (nextCode >= 0x0D15 && nextCode <= 0x0D18) {
-          // Velar: ക, ഖ, ഗ, ഘ -> ங்
-          sb.push('\u0B99\u0BCD');
+          sb.push('\u0B99\u0BCD'); // ங்
           i++;
           continue;
         } else if (nextCode >= 0x0D1A && nextCode <= 0x0D1D) {
-          // Palatal: ച, ഛ, ജ, ഝ -> ஞ்
-          sb.push('\u0B9E\u0BCD');
+          sb.push('\u0B9E\u0BCD'); // ஞ்
           i++;
           continue;
         } else if (nextCode >= 0x0D1F && nextCode <= 0x0D22) {
-          // Retroflex: ட, ഠ, ഡ, ഢ -> ண்
-          sb.push('\u0BA3\u0BCD');
+          sb.push('\u0BA3\u0BCD'); // ண்
           i++;
           continue;
         } else if (nextCode >= 0x0D24 && nextCode <= 0x0D27) {
-          // Dental: ത, ഥ, ദ, ധ -> ந்
-          sb.push('\u0BA8\u0BCD');
+          sb.push('\u0BA8\u0BCD'); // ந்
           i++;
           continue;
         } else if (nextCode >= 0x0D2A && nextCode <= 0x0D2E) {
-          // Labial: പ, ഫ, ബ, ഭ, മ -> ம்
-          sb.push('\u0BAE\u0BCD');
+          sb.push('\u0BAE\u0BCD'); // ம்
           i++;
           continue;
         }
       }
-      // Default: Anusvara is ம் (word-final or before non-stops)
       sb.push('\u0BAE\u0BCD');
       i++;
       continue;
     }
 
-    // Word-final Virama '്':
+    // 7. Intervocalic Ha (இடை ஹகரம் -> க, e.g. സ്നേഹം -> சினேகம், മോഹം -> மோகம், ദേഹം -> தேகம், ദാഹം -> தாகம்):
+    if (!isWordStart && c === '\u0D39') {
+      sb.push('\u0B95'); // க
+      i++;
+      continue;
+    }
+
+    // 7b. Dental vs Alveolar Nasal (ந vs ன per Tolkappiyam):
+    // Word-initial is ந, medial single is ன (ജനം -> சனம், ദിനം -> தினம், നന്ദി -> நந்தி)
+    if (c === '\u0D28') {
+      if (isWordStart) {
+        sb.push('\u0BA8'); // ந
+      } else if (i + 2 < n && text[i + 1] === '\u0D4D' && text[i + 2] >= '\u0D24' && text[i + 2] <= '\u0D27') {
+        sb.push('\u0BA8'); // ந் before dental stop
+      } else {
+        sb.push('\u0BA9'); // ன (medial intervocalic)
+      }
+      i++;
+      continue;
+    }
+
+    // 8. Word-final sibilant with virama (e.g. Settings -> സെറ്റിങ്സ്):
+    // Avoid corrupted 'ச்' at word ends in loanwords
+    if (c === '\u0D38' && i + 1 < n && text[i + 1] === '\u0D4D') {
+      sb.push('\u0BB8\u0BCD'); // retain pulli ஸ் (not ச்)
+      i += 2;
+      continue;
+    }
+
+    // 9. Word-final Virama '്':
     // - After Vallinam and Chillu-capable consonants -> Tamil 'ு' (Kutriyalukaram: അത്, വീട്, എന്താണ്, അവന്, കണ്ണ്)
     // - After consonants without chillu (ழ, ய, வ) and Grantha -> Tamil '்' (Pure pulli: തമിഴ്, താഴ്, ബസ്)
     if (c === '\u0D4D') {
-      const isWordEnd = i === n - 1 || !isLetterChar(text[i + 1]);
-      if (isWordEnd && i > 0 && takesKutriyalukaram(text[i - 1])) {
-        // If previous letter was dental na (ந) taking word-final ugaram, adjust to ன for natural Tamil orthography (e.g. அவனு)
-        if (text[i - 1] === '\u0D28' && sb.length > 0 && sb[sb.length - 1] === '\u0BA8') {
-          sb[sb.length - 1] = '\u0BA9';
+      if (isWordEnd && i > 0) {
+        if (text[i - 1] === '\u0D37') {
+          sb.push('\u0BCD');
+          i++;
+          continue;
         }
-        sb.push('\u0BC1');
-        i++;
-        continue;
+        if (takesKutriyalukaram(text[i - 1])) {
+          if (text[i - 1] === '\u0D28' && sb.length > 0 && sb[sb.length - 1] === '\u0BA8') {
+            sb[sb.length - 1] = '\u0BA9';
+          }
+          sb.push('\u0BC1');
+          i++;
+          continue;
+        }
       }
     }
 
@@ -553,11 +632,11 @@ export function mlymToTaml(text: string): string {
       '\u0D08': '\u0B88', // ഈ -> ஈ
       '\u0D09': '\u0B89', // ഉ -> உ
       '\u0D0A': '\u0B8A', // ഊ -> ஊ
-      '\u0D0B': '\u0BB0\u0BBF', // ഋ -> ரி
-      '\u0D0E': '\u0B8E', // എ -> எ
+      '\u0D0B': '\u0B87\u0BB0\u0BBF', // ഋ -> இரி
+      '\u0D0E': '\u0B8E', // எ -> எ
       '\u0D0F': '\u0B8F', // ഏ -> ஏ
-      '\u0D10': '\u0B90', // ഐ -> ஐ
-      '\u0D12': '\u0B92', // ഒ -> ஒ
+      '\u0D10': '\u0B90', // ஐ -> ஐ
+      '\u0D12': '\u0B92', // ஒ -> ஒ
       '\u0D13': '\u0B93', // ഓ -> ஓ
       '\u0D14': '\u0B94', // ഔ -> ஔ
 
@@ -572,31 +651,24 @@ export function mlymToTaml(text: string): string {
       '\u0D7E': '\u0BB3\u0BCD', // ൾ -> ள்
       '\u0D7F': '\u0B95\u0BCD', // ൿ -> க்
 
-      // Consonants
+      // Consonants in Tolkappiyam (Granthas converted to Tamil letters):
       '\u0D15': '\u0B95', '\u0D16': '\u0B95', '\u0D17': '\u0B95', '\u0D18': '\u0B95', // க
       '\u0D19': '\u0B99', // ங
       '\u0D1A': '\u0B9A', '\u0D1B': '\u0B9A', '\u0D1D': '\u0B9A', // ச
-      '\u0D1C': '\u0B9C', // ஜ (Grantha Ja)
+      '\u0D1C': '\u0B9A', // ജ -> ச (Tolkappiyam: ஜனம் -> சனம், ஜீவன் -> சீவன்)
       '\u0D1E': '\u0B9E', // ஞ
       '\u0D1F': '\u0B9F', '\u0D20': '\u0B9F', '\u0D21': '\u0B9F', '\u0D22': '\u0B9F', // ட
       '\u0D23': '\u0BA3', // ண
       '\u0D24': '\u0BA4', '\u0D25': '\u0BA4', '\u0D26': '\u0BA4', '\u0D27': '\u0BA4', // த
-      '\u0D28': '\u0BA8', // ந
-      '\u0D29': '\u0BA9', // ன
+      '\u0D28': '\u0BA8', '\u0D29': '\u0BA9',
       '\u0D2A': '\u0BAA', '\u0D2C': '\u0BAA', '\u0D2D': '\u0BAA', // ப
       '\u0D2B': '\u0B83\u0BAA', // ഫ -> ஃப
-      '\u0D2E': '\u0BAE', // ம
-      '\u0D2F': '\u0BAF', // ய
-      '\u0D30': '\u0BB0', // ர
-      '\u0D31': '\u0BB1', // ற
-      '\u0D32': '\u0BB2', // ல
-      '\u0D33': '\u0BB3', // ள
-      '\u0D34': '\u0BB4', // ழ
-      '\u0D35': '\u0BB5', // வ
-      '\u0D36': '\u0BB6', // ஶ
-      '\u0D37': '\u0BB7', // ஷ
-      '\u0D38': '\u0BB8', // ஸ
-      '\u0D39': '\u0BB9', // ஹ
+      '\u0D2E': '\u0BAE', '\u0D2F': '\u0BAF', '\u0D30': '\u0BB0', '\u0D31': '\u0BB1',
+      '\u0D32': '\u0BB2', '\u0D33': '\u0BB3', '\u0D34': '\u0BB4', '\u0D35': '\u0BB5',
+      '\u0D36': '\u0B9A', // ശ -> ச (Tolkappiyam: சிவன், சாந்தி, சிரமம்)
+      '\u0D37': '\u0BB7', // ഷ -> ஷ
+      '\u0D38': '\u0B9A', // സ -> ச (Tolkappiyam: சுகம், சூரியன், சபை)
+      '\u0D39': '\u0B95', // ഹ -> க (medial)
 
       // Vowel signs
       '\u0D3E': '\u0BBE', // ா
