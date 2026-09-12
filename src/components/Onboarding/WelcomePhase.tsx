@@ -204,6 +204,7 @@ export default function WelcomePhase({ onContinue, skipGreeting }: { onContinue:
                                 backgroundColor: 'var(--onboarding-input-bg)',
                                 borderRadius: '16px',
                                 padding: '8px 0',
+                                overflow: 'hidden',
                             }}>
                                 <List sx={{
                                     maxHeight: '344px',
@@ -227,8 +228,23 @@ export default function WelcomePhase({ onContinue, skipGreeting }: { onContinue:
                                         <ListItem disablePadding>
                                             <ListItemButton 
                                                 onClick={() => handleLanguageSelect(l.code)} 
-                                                sx={{ py: 1, px: 3, bgcolor: 'transparent', '@media (hover: hover)': { '&:hover': { bgcolor: 'transparent' } } }}
-                                                disableRipple
+                                                sx={{
+                                                    py: 1.25,
+                                                    px: 3,
+                                                    color: 'var(--onboarding-text)',
+                                                    transition: 'background-color 0.2s ease',
+                                                    '@media (hover: hover)': {
+                                                        '&:hover': {
+                                                            bgcolor: 'var(--onboarding-glow, rgba(255, 255, 255, 0.05))',
+                                                        },
+                                                    },
+                                                    '& .MuiTouchRipple-root': {
+                                                        color: 'var(--onboarding-text)',
+                                                    },
+                                                    '& .MuiTouchRipple-rippleVisible': {
+                                                        opacity: 0.25,
+                                                    },
+                                                }}
                                             >
                                                 <ListItemText 
                                                     primary={
