@@ -6,23 +6,6 @@
   <title>Nammil</title>
   <link rel="preload" href="/Fonts/ElvanSans-Regular.ttf" as="font" type="font/ttf" crossorigin />
   <link rel="preload" href="/app_icon.png" as="image" />
-  <script>
-    (function() {
-      function show() {
-        document.documentElement.classList.add('fonts-loaded');
-      }
-      if (document.fonts) {
-        document.fonts.load("1em 'Elvan Sans'").then(show).catch(show);
-        setTimeout(show, 150);
-      } else {
-        show();
-      }
-      try {
-        var lang = localStorage.getItem('nammil-language') || 'en';
-        window.__INIT_NAME__ = (lang === 'ta' || lang === 'ml_tam') ? 'நம்மில்' : ((lang === 'ml' || lang === 'ta_ml') ? 'നമ്മിൽ' : 'Nammil');
-      } catch(e) {}
-    })();
-  </script>
   <style>
     :root {
       color-scheme: light dark;
@@ -51,7 +34,17 @@
         color: #1A1A1A;
       }
     }
-    .splash-screen-root {
+    html.theme-dark, html.theme-dark body {
+      background-color: #0A0A0A;
+      color: #FFFFFF;
+    }
+    html.theme-light, html.theme-light body {
+      background-color: #FAFAFA;
+      color: #1A1A1A;
+    }
+
+    /* Fixed Splash Overlay: Lives outside #root, never unmounted by React, zero flicker */
+    #splash-overlay {
       position: fixed;
       inset: 0;
       width: 100vw;
@@ -67,19 +60,25 @@
       margin: 0;
       padding: 0;
       box-sizing: border-box;
-      opacity: 0;
-      transition: opacity 0.12s ease-in-out;
+      z-index: 99999;
       -webkit-app-region: no-drag;
-    }
-    .fonts-loaded .splash-screen-root {
-      opacity: 1;
+      transition: opacity 0.4s cubic-bezier(0.4, 0, 0.2, 1);
     }
     @media (prefers-color-scheme: light) {
-      .splash-screen-root {
+      #splash-overlay {
         background-color: #FAFAFA;
         color: #1A1A1A;
       }
     }
+    html.theme-dark #splash-overlay {
+      background-color: #0A0A0A;
+      color: #FFFFFF;
+    }
+    html.theme-light #splash-overlay {
+      background-color: #FAFAFA;
+      color: #1A1A1A;
+    }
+
     /* Floating background shapes from Neram */
     .splash-shape {
       position: absolute;
@@ -91,6 +90,12 @@
       .splash-shape {
         background-color: #EAEAEA;
       }
+    }
+    html.theme-dark .splash-shape {
+      background-color: rgba(255, 255, 255, 0.03);
+    }
+    html.theme-light .splash-shape {
+      background-color: #EAEAEA;
     }
     .shape-1 {
       top: 2%;
@@ -137,6 +142,8 @@
       from { transform: translateY(0px); }
       to { transform: translateY(-15px); }
     }
+
+    /* Center Content */
     .splash-center {
       display: flex;
       flex-direction: column;
@@ -161,6 +168,8 @@
       user-select: none;
       pointer-events: none;
     }
+
+    /* Brand Name Wrapper */
     .splash-brand-wrap {
       height: 24px;
       min-height: 24px;
@@ -185,12 +194,22 @@
       text-align: center;
       white-space: nowrap;
       display: block;
+      opacity: 0;
+      transition: opacity 0.25s ease-in-out;
     }
     @media (prefers-color-scheme: light) {
       .splash-brand-name {
         color: rgba(0, 0, 0, 0.85);
       }
     }
+    html.theme-dark .splash-brand-name {
+      color: rgba(255, 255, 255, 0.9);
+    }
+    html.theme-light .splash-brand-name {
+      color: rgba(0, 0, 0, 0.85);
+    }
+
+    /* Footer */
     .splash-footer {
       position: absolute;
       bottom: 47px;
@@ -224,31 +243,107 @@
         color: rgba(0, 0, 0, 0.45);
       }
     }
+    html.theme-dark .splash-footer-brand {
+      color: rgba(255, 255, 255, 0.45);
+    }
+    html.theme-light .splash-footer-brand {
+      color: rgba(0, 0, 0, 0.45);
+    }
   </style>
+  <script>
+    // Early theme & language sync from localStorage
+    try {
+      var savedTheme = localStorage.getItem('nammil-theme');
+      if (savedTheme === 'light') document.documentElement.classList.add('theme-light');
+      else if (savedTheme === 'dark') document.documentElement.classList.add('theme-dark');
+    } catch(e) {}
+  </script>
 </head>
 <body>
-  <div id="root">
-    <div class="splash-screen-root">
-      <div class="splash-shape shape-1"></div>
-      <div class="splash-shape shape-2"></div>
-      <div class="splash-shape shape-3"></div>
-      <div class="splash-shape shape-4"></div>
-      <div class="splash-center">
-        <img src="/app_icon.png" alt="Nammil" class="splash-logo" />
-        <div class="splash-brand-wrap">
-          <span class="splash-brand-name" id="pre-brand-name">Nammil</span>
-          <script>
-            if (window.__INIT_NAME__) {
-              document.getElementById('pre-brand-name').textContent = window.__INIT_NAME__;
-            }
-          </script>
-        </div>
-      </div>
-      <div class="splash-footer">
-        <span class="splash-footer-brand">Elvan Navil</span>
+  <!-- Fixed splash overlay: Never destroyed by React mounting, zero flicker -->
+  <div id="splash-overlay">
+    <div class="splash-shape shape-1"></div>
+    <div class="splash-shape shape-2"></div>
+    <div class="splash-shape shape-3"></div>
+    <div class="splash-shape shape-4"></div>
+    <div class="splash-center">
+      <img src="/app_icon.png" alt="Nammil" class="splash-logo" />
+      <div class="splash-brand-wrap">
+        <span class="splash-brand-name" id="splash-brand-name"></span>
       </div>
     </div>
+    <div class="splash-footer">
+      <span class="splash-footer-brand">Elvan Navil</span>
+    </div>
   </div>
+
+  <div id="root"></div>
   <script type="module" src="/src/main.tsx"></script>
+
+  <script>
+    (function() {
+      var BRAND_NAMES = { ta: 'நம்மில்', en: 'Nammil', ml: 'നമ്മിൽ' };
+      var LANG_ORDER = {
+        ta: ['ta', 'en', 'ml'],
+        ta_latn: ['en', 'ta', 'ml'],
+        ta_ml: ['ml', 'ta', 'en'],
+        en: ['en', 'ta', 'ml'],
+        ml: ['ml', 'en', 'ta'],
+        ml_latn: ['en', 'ml', 'ta'],
+        ml_tam: ['ta', 'ml', 'en'],
+        system: ['en', 'ta', 'ml']
+      };
+
+      var userLang = 'en';
+      try {
+        userLang = localStorage.getItem('nammil-language') || 'en';
+      } catch(e) {}
+      var order = LANG_ORDER[userLang] || LANG_ORDER['en'];
+
+      var brandEl = document.getElementById('splash-brand-name');
+      var splashOverlay = document.getElementById('splash-overlay');
+
+      // Phase 1: In first, ONLY LOGO ALONE is shown! (0ms - 400ms)
+      // Phase 2: After only, the text appears and cycles! (400ms+)
+      setTimeout(function() {
+        if (!brandEl) return;
+        brandEl.textContent = BRAND_NAMES[order[0]] || 'Nammil';
+        brandEl.style.opacity = '1';
+
+        // Cycle through remaining languages
+        var idx = 0;
+        function nextLanguage() {
+          if (idx < order.length - 1) {
+            setTimeout(function() {
+              brandEl.style.opacity = '0';
+              setTimeout(function() {
+                idx++;
+                brandEl.textContent = BRAND_NAMES[order[idx]] || 'Nammil';
+                brandEl.style.opacity = '1';
+                nextLanguage();
+              }, 220);
+            }, 550);
+          } else {
+            // Finished cycle — hold for 400ms, then dispatch splash-finished
+            setTimeout(function() {
+              window.dispatchEvent(new CustomEvent('splash-finished'));
+            }, 400);
+          }
+        }
+        nextLanguage();
+      }, 400);
+
+      window.__dismissSplash = function() {
+        if (!splashOverlay) return;
+        splashOverlay.style.opacity = '0';
+        splashOverlay.style.pointerEvents = 'none';
+        setTimeout(function() {
+          if (splashOverlay && splashOverlay.parentNode) {
+            splashOverlay.parentNode.removeChild(splashOverlay);
+          }
+        }, 450);
+      };
+    })();
+  </script>
 </body>
 </html>

@@ -49,18 +49,34 @@ function App() {
           if (settings.isFirstBoot === true) setIsFirstBoot(true);
         }
         setSettingsLoaded(true);
-        // Fallback timer to transition into main app smoothly
-        setTimeout(() => setShowSplash(false), 2600);
       }).catch(() => {
         setSettingsLoaded(true);
-        setTimeout(() => setShowSplash(false), 2600);
       });
     } else {
       setSettingsLoaded(true);
       setActiveTab('wa-default');
-      setTimeout(() => setShowSplash(false), 2600);
     }
   }, [setLang]);
+
+  // Listen for splash-finished event from index.html splash overlay
+  useEffect(() => {
+    const handleSplashFinished = () => {
+      setShowSplash(false);
+      if ((window as any).__dismissSplash) {
+        (window as any).__dismissSplash();
+      }
+    };
+
+    window.addEventListener('splash-finished', handleSplashFinished);
+
+    // Fallback safety timeout (2.8s)
+    const fallback = setTimeout(handleSplashFinished, 2800);
+
+    return () => {
+      window.removeEventListener('splash-finished', handleSplashFinished);
+      clearTimeout(fallback);
+    };
+  }, []);
 
   // Only attach WhatsApp view after splash finishes and not in first boot onboarding
   useEffect(() => {
@@ -127,10 +143,7 @@ function App() {
 
   if (!settingsLoaded || showSplash) {
     return (
-      <SplashScreen 
-        userTheme={userTheme} 
-        onFinish={() => setShowSplash(false)} 
-      />
+      <Box sx={{ width: '100vw', height: '100vh', bgcolor: actualMode === 'dark' ? '#0A0A0A' : '#FAFAFA' }} />
     );
   }
 
