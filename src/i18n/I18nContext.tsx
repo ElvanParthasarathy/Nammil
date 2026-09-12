@@ -1,5 +1,6 @@
 import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
 import { transliterate, capitalizeWords } from 'navil-engine';
+import { taToMlym, mlymToTaml } from './mozhiyaakkam';
 import { en } from './en';
 import { ta } from './ta';
 import { ml } from './ml';
@@ -12,6 +13,26 @@ function toNavilLatn(text: string): string {
   if (cached !== undefined) return cached;
   const result = capitalizeWords(transliterate(text));
   navilCache.set(text, result);
+  return result;
+}
+
+const taToMlymCache = new Map<string, string>();
+function toMlymScript(text: string): string {
+  if (!text) return '';
+  const cached = taToMlymCache.get(text);
+  if (cached !== undefined) return cached;
+  const result = taToMlym(text);
+  taToMlymCache.set(text, result);
+  return result;
+}
+
+const mlymToTamlCache = new Map<string, string>();
+function toTamlScript(text: string): string {
+  if (!text) return '';
+  const cached = mlymToTamlCache.get(text);
+  if (cached !== undefined) return cached;
+  const result = mlymToTaml(text);
+  mlymToTamlCache.set(text, result);
   return result;
 }
 
@@ -58,20 +79,25 @@ export const I18nProvider = ({ children, initialLang = 'system' }: { children: R
     if (actualLang.startsWith('ta')) {
       const obj = (ta as any)[key];
       if (!obj) return (en as any)[key] || key;
+      const tamilText = typeof obj === 'string' ? obj : (obj.ta || '');
       if (actualLang === 'ta_latn') {
-        const tamilText = typeof obj === 'string' ? obj : (obj.ta || '');
         return toNavilLatn(tamilText);
       }
-      if (actualLang === 'ta_ml') return obj.ml || obj.ta;
-      return typeof obj === 'string' ? obj : obj.ta;
+      if (actualLang === 'ta_ml') {
+        return toMlymScript(tamilText);
+      }
+      return tamilText;
     }
     
     if (actualLang.startsWith('ml')) {
       const obj = (ml as any)[key];
       if (!obj) return (en as any)[key] || key;
-      if (actualLang === 'ml_latn') return obj.latn;
-      if (actualLang === 'ml_tam') return obj.ta;
-      return obj.ml;
+      const mlymText = typeof obj === 'string' ? obj : (obj.ml || '');
+      if (actualLang === 'ml_latn') return obj.latn || '';
+      if (actualLang === 'ml_tam') {
+        return toTamlScript(mlymText);
+      }
+      return mlymText;
     }
 
     return (en as any)[key] || key;
