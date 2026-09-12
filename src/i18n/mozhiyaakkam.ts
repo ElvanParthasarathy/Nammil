@@ -248,7 +248,7 @@ function isLetterChar(c: string): boolean {
 
 function getTamilBaseConsonant(c: string): string | null {
   if (c === '\u0D38') return '\u0BB8'; // സ -> ஸ
-  if (c === '\u0D36') return '\u0B9A'; // ശ -> ச (for ശ്ര -> சிர)
+  if (c === '\u0D36') return '\u0BB6'; // ശ -> ஶ
   if (c >= '\u0D15' && c <= '\u0D18') return '\u0B95'; // க
   if (c >= '\u0D1A' && c <= '\u0D1D' && c !== '\u0D1C') return '\u0B9A'; // ச
   if (c === '\u0D1C') return '\u0B9C'; // ஜ
@@ -335,48 +335,46 @@ export function mlymToTaml(text: string): string {
 
       if (base1) {
         // 1. C1 + ് + ര (Ra):
-        // പ്ര -> பிர, പ്രി -> பிரி, ശ്ര -> சிர, ക്ര -> கிர, ത്ര -> திர
-        // Universal at word start (or for ശ്ര everywhere: ആശ്രമം -> ஆசிரமம்)
+        // പ്ര -> பிர, പ്രി -> பிரி, ക്ര -> கிர, ത്ര -> திர
+        // Universal at word start (or for ശ്ര everywhere: ആശ്രമം -> ஆசிரமம், ശ്രമം -> சிரமம்)
         if (c3 === '\u0D30' && (isWordStart || c1 === '\u0D36' || c1 === '\u0D38')) {
-          sb.push(base1 + '\u0BBF'); // inserts ி
+          sb.push((c1 === '\u0D36' ? '\u0B9A' : base1) + '\u0BBF'); // inserts ி (for ശ്ര -> சிர)
           sb.push('\u0BB0');         // ர
           i += 3;
           continue;
         }
 
-        // 2. Word-initial C1 + ് + യ (Ya) -> C1 + ி + ய (e.g. ത്യാ -> தியா, ന്യാ -> நியா, വ്യാ -> வியா)
-        if (isWordStart && c3 === '\u0D2F') {
-          sb.push(base1 + '\u0BBF'); // inserts ி
-          sb.push('\u0BAF');         // ய
-          i += 3;
-          continue;
+        // 2. C1 + ് + യ (Ya) -> Svarabhakti:
+        // - Word-medial Dental + ് + യ -> த் + தி + ய (thtthiya, e.g. സാങ്കേതികവിദ്യ: -> ஸாங்கேதிகவித்திய:, ആദിത്യ -> ஆதித்திய, സത്യ -> ஸத்திய, പ്രത്യേകം -> பிரத்தியேகம்)
+        // - Word-initial Dental + ് + യ -> தியா (e.g. ത്യാഗം -> தியாகம்)
+        // - Other Word-initial C1 + ് + യ -> C1 + ி + ய (e.g. ന്യാ -> நியா, വ്യാ -> வியா)
+        if (c3 === '\u0D2F') {
+          const code1 = c1.charCodeAt(0);
+          const isDental = code1 >= 0x0D24 && code1 <= 0x0D27; // ത, ഥ, ദ, ധ
+          if (isDental) {
+            if (!isWordStart) {
+              sb.push('\u0BA4\u0BCD\u0BA4\u0BBF\u0BAF'); // த்திய
+              i += 3;
+              continue;
+            } else {
+              sb.push('\u0BA4\u0BBF\u0BAF'); // தியா
+              i += 3;
+              continue;
+            }
+          } else if (isWordStart) {
+            sb.push(base1 + '\u0BBF'); // inserts ி
+            sb.push('\u0BAF');         // ய
+            i += 3;
+            continue;
+          }
         }
 
         // 3. Word-initial C1 + ് + വ (Va) -> C1 + ு + வ (e.g. സ്വാ -> சுவா, ദ്வா -> துவா)
         if (isWordStart && c3 === '\u0D35') {
-          sb.push(base1 + '\u0BC1'); // inserts ு
+          sb.push((c1 === '\u0D38' ? '\u0B9A' : base1) + '\u0BC1'); // inserts ு
           sb.push('\u0BB5');         // வ
           i += 3;
           continue;
-        }
-
-        // 4. Word-initial സ/ശ + ് + ന/മ/ല (Sibilant + Nasal/Liquid)
-        if (isWordStart && (c1 === '\u0D38' || c1 === '\u0D36')) {
-          if (c3 === '\u0D28') { // സ്ന -> சின (சினேகம்)
-            sb.push('\u0B9A\u0BBF\u0BA9');
-            i += 3;
-            continue;
-          }
-          if (c3 === '\u0D2E') { // സ്ம -> சும (சுமரணை)
-            sb.push('\u0B9A\u0BC1\u0BAE');
-            i += 3;
-            continue;
-          }
-          if (c3 === '\u0D32') { // ശ്ല -> சுல (சுலோகம்)
-            sb.push('\u0B9A\u0BC1\u0BB2');
-            i += 3;
-            continue;
-          }
         }
 
         // 5. C1 + ് + ല/ള (Liquid La / Lla):
@@ -410,8 +408,8 @@ export function mlymToTaml(text: string): string {
           continue;
         }
 
-        // 2. Ending in ശ (sha) -> சை (e.g. ദോശ -> தோசை, ആശ -> ஆசை)
-        if (c === '\u0D36') {
+        // 2. Food item ദോശ -> தோசை (preserving Grantha ஶ for other words like സന്ദേശ -> ஸந்தேஶ)
+        if (c === '\u0D36' && i >= 2 && text.slice(i - 2, i + 1) === '\u0D26\u0D4B\u0D36') {
           sb.push('\u0B9A\u0BC8');
           i++;
           continue;
