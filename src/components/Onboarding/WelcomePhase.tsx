@@ -231,18 +231,16 @@ export default function WelcomePhase({ onContinue, skipGreeting }: { onContinue:
                                                 sx={{
                                                     py: 1.25,
                                                     px: 3,
+                                                    bgcolor: 'transparent',
                                                     color: 'var(--onboarding-text)',
-                                                    transition: 'background-color 0.2s ease',
-                                                    '@media (hover: hover)': {
-                                                        '&:hover': {
-                                                            bgcolor: 'var(--onboarding-glow, rgba(255, 255, 255, 0.05))',
-                                                        },
+                                                    '&:hover': {
+                                                        bgcolor: 'transparent',
                                                     },
                                                     '& .MuiTouchRipple-root': {
                                                         color: 'var(--onboarding-text)',
                                                     },
                                                     '& .MuiTouchRipple-rippleVisible': {
-                                                        opacity: 0.25,
+                                                        opacity: 0.3,
                                                     },
                                                 }}
                                             >
