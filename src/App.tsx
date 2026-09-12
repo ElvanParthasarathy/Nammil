@@ -69,8 +69,8 @@ function App() {
 
     window.addEventListener('splash-finished', handleSplashFinished);
 
-    // Fallback safety timeout (2.8s)
-    const fallback = setTimeout(handleSplashFinished, 2800);
+    // Fallback safety timeout (800ms)
+    const fallback = setTimeout(handleSplashFinished, 800);
 
     return () => {
       window.removeEventListener('splash-finished', handleSplashFinished);

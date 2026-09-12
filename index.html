@@ -4,7 +4,6 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Nammil</title>
-  <link rel="preload" href="./Fonts/ElvanSans-Regular.ttf" as="font" type="font/ttf" crossorigin />
   <link rel="preload" href="./app_icon.png" as="image" />
   <style>
     :root {
@@ -76,7 +75,7 @@
       box-sizing: border-box;
       z-index: 99999;
       -webkit-app-region: no-drag;
-      transition: opacity 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+      transition: opacity 0.2s cubic-bezier(0.4, 0, 0.2, 1);
     }
     @media (prefers-color-scheme: light) {
       #splash-overlay {
@@ -91,70 +90,6 @@
     html.theme-light #splash-overlay {
       background-color: #FAFAFA;
       color: #1A1A1A;
-    }
-
-    /* Floating background shapes from Neram */
-    .splash-shape {
-      position: absolute;
-      background-color: rgba(255, 255, 255, 0.03);
-      pointer-events: none;
-      z-index: 0;
-    }
-    @media (prefers-color-scheme: light) {
-      .splash-shape {
-        background-color: #EAEAEA;
-      }
-    }
-    html.theme-dark .splash-shape {
-      background-color: rgba(255, 255, 255, 0.03);
-    }
-    html.theme-light .splash-shape {
-      background-color: #EAEAEA;
-    }
-    .shape-1 {
-      top: 2%;
-      right: -10%;
-      width: 50vw;
-      height: 50vw;
-      border-radius: 80px;
-      animation: rotate1 60s linear infinite;
-      transform-origin: 85% 15%;
-    }
-    .shape-2 {
-      bottom: 5%;
-      left: -10%;
-      width: 70vw;
-      height: 70vw;
-      border-radius: 50%;
-      animation: float 4s ease-in-out infinite alternate;
-    }
-    .shape-3 {
-      top: 15%;
-      left: 5%;
-      width: 20vw;
-      height: 20vw;
-      border-radius: 30px;
-      animation: rotate2 40s linear infinite reverse;
-    }
-    .shape-4 {
-      top: 60%;
-      right: 10%;
-      width: 15vw;
-      height: 15vw;
-      border-radius: 50%;
-      animation: float 5s ease-in-out infinite alternate-reverse;
-    }
-    @keyframes rotate1 {
-      from { transform: rotate(0deg); }
-      to { transform: rotate(360deg); }
-    }
-    @keyframes rotate2 {
-      from { transform: rotate(0deg); }
-      to { transform: rotate(360deg); }
-    }
-    @keyframes float {
-      from { transform: translateY(0px); }
-      to { transform: translateY(-15px); }
     }
 
     /* Center Content */
@@ -231,24 +166,11 @@
       if (savedTheme === 'light') document.documentElement.classList.add('theme-light');
       else if (savedTheme === 'dark') document.documentElement.classList.add('theme-dark');
     } catch(e) {}
-
-    // Preload & decode font immediately on frame 0
-    window.__fontPromise = (document.fonts && document.fonts.load)
-      ? Promise.all([
-          document.fonts.load("500 20px 'Elvan Sans'"),
-          document.fonts.load("400 17px 'Elvan Sans'"),
-          document.fonts.ready
-        ])
-      : Promise.resolve();
   </script>
 </head>
 <body>
   <!-- Fixed splash overlay: Never destroyed by React mounting, zero flicker -->
   <div id="splash-overlay">
-    <div class="splash-shape shape-1"></div>
-    <div class="splash-shape shape-2"></div>
-    <div class="splash-shape shape-3"></div>
-    <div class="splash-shape shape-4"></div>
     <div class="splash-center">
       <img src="./app_icon.png" alt="Nammil" class="splash-logo" />
     </div>
@@ -264,10 +186,10 @@
     (function() {
       var splashOverlay = document.getElementById('splash-overlay');
 
-      // Clean, native splash hold (800ms) then dismiss
+      // Fast, lightweight splash hold (300ms) then dismiss
       setTimeout(function() {
         window.dispatchEvent(new CustomEvent('splash-finished'));
-      }, 800);
+      }, 300);
 
       window.__dismissSplash = function() {
         if (!splashOverlay) return;
@@ -277,7 +199,7 @@
           if (splashOverlay && splashOverlay.parentNode) {
             splashOverlay.parentNode.removeChild(splashOverlay);
           }
-        }, 450);
+        }, 220);
       };
     })();
   </script>
