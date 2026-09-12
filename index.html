@@ -4,18 +4,32 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Nammil</title>
-  <link rel="preload" href="/Fonts/ElvanSans-Regular.ttf" as="font" type="font/ttf" crossorigin />
-  <link rel="preload" href="/app_icon.png" as="image" />
+  <link rel="preload" href="./Fonts/ElvanSans-Regular.ttf" as="font" type="font/ttf" crossorigin />
+  <link rel="preload" href="./app_icon.png" as="image" />
   <style>
     :root {
       color-scheme: light dark;
     }
     @font-face {
       font-family: 'Elvan Sans';
-      src: url('/Fonts/ElvanSans-Regular.ttf') format('truetype');
-      font-weight: normal;
+      src: url('./Fonts/ElvanSans-Regular.ttf') format('truetype');
+      font-weight: 400;
       font-style: normal;
-      font-display: swap;
+      font-display: block;
+    }
+    @font-face {
+      font-family: 'Elvan Sans';
+      src: url('./Fonts/ElvanSans-Regular.ttf') format('truetype');
+      font-weight: 500;
+      font-style: normal;
+      font-display: block;
+    }
+    @font-face {
+      font-family: 'Elvan Sans';
+      src: url('./Fonts/ElvanSans-Regular.ttf') format('truetype');
+      font-weight: 100 900;
+      font-style: normal;
+      font-display: block;
     }
     html, body {
       margin: 0;
@@ -237,6 +251,8 @@
       color: rgba(255, 255, 255, 0.45);
       text-align: center;
       display: block;
+      opacity: 0;
+      transition: opacity 0.25s ease-in-out;
     }
     @media (prefers-color-scheme: light) {
       .splash-footer-brand {
@@ -257,6 +273,15 @@
       if (savedTheme === 'light') document.documentElement.classList.add('theme-light');
       else if (savedTheme === 'dark') document.documentElement.classList.add('theme-dark');
     } catch(e) {}
+
+    // Preload & decode font immediately on frame 0
+    window.__fontPromise = (document.fonts && document.fonts.load)
+      ? Promise.all([
+          document.fonts.load("500 20px 'Elvan Sans'"),
+          document.fonts.load("400 17px 'Elvan Sans'"),
+          document.fonts.ready
+        ])
+      : Promise.resolve();
   </script>
 </head>
 <body>
@@ -267,13 +292,13 @@
     <div class="splash-shape shape-3"></div>
     <div class="splash-shape shape-4"></div>
     <div class="splash-center">
-      <img src="/app_icon.png" alt="Nammil" class="splash-logo" />
+      <img src="./app_icon.png" alt="Nammil" class="splash-logo" />
       <div class="splash-brand-wrap">
         <span class="splash-brand-name" id="splash-brand-name"></span>
       </div>
     </div>
     <div class="splash-footer">
-      <span class="splash-footer-brand">Elvan Navil</span>
+      <span class="splash-footer-brand" id="splash-footer-brand">Elvan Navil</span>
     </div>
   </div>
 
@@ -301,25 +326,40 @@
       var order = LANG_ORDER[userLang] || LANG_ORDER['en'];
 
       var brandEl = document.getElementById('splash-brand-name');
+      var footerEl = document.getElementById('splash-footer-brand');
       var splashOverlay = document.getElementById('splash-overlay');
 
       // Phase 1: In first, ONLY LOGO ALONE is shown! (0ms - 400ms)
-      // Phase 2: After only, the text appears and cycles! (400ms+)
-      setTimeout(function() {
-        if (!brandEl) return;
-        brandEl.textContent = BRAND_NAMES[order[0]] || 'Nammil';
-        brandEl.style.opacity = '1';
+      // Phase 2: After only, the text appears and cycles once font is fully ready!
+      var minDelay = new Promise(function(resolve) {
+        setTimeout(resolve, 400);
+      });
+      var fontTimeout = new Promise(function(resolve) {
+        setTimeout(resolve, 800);
+      });
+      var fontReady = Promise.race([window.__fontPromise || Promise.resolve(), fontTimeout]);
+
+      Promise.all([minDelay, fontReady]).then(function() {
+        if (brandEl) {
+          brandEl.textContent = BRAND_NAMES[order[0]] || 'Nammil';
+          brandEl.style.opacity = '1';
+        }
+        if (footerEl) {
+          footerEl.style.opacity = '1';
+        }
 
         // Cycle through remaining languages
         var idx = 0;
         function nextLanguage() {
           if (idx < order.length - 1) {
             setTimeout(function() {
-              brandEl.style.opacity = '0';
+              if (brandEl) brandEl.style.opacity = '0';
               setTimeout(function() {
                 idx++;
-                brandEl.textContent = BRAND_NAMES[order[idx]] || 'Nammil';
-                brandEl.style.opacity = '1';
+                if (brandEl) {
+                  brandEl.textContent = BRAND_NAMES[order[idx]] || 'Nammil';
+                  brandEl.style.opacity = '1';
+                }
                 nextLanguage();
               }, 220);
             }, 550);
@@ -331,7 +371,7 @@
           }
         }
         nextLanguage();
-      }, 400);
+      });
 
       window.__dismissSplash = function() {
         if (!splashOverlay) return;
