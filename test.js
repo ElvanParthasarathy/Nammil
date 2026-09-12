@@ -1,1 +1,0 @@
-const { app } = require('electron'); app.whenReady().then(() = const sm = new (require('./services/SettingsManager.cjs'))(app, require('electron').nativeTheme); console.log(sm.getMediaFolder()); app.quit(); })  
