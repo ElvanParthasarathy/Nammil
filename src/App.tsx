@@ -123,7 +123,12 @@ function App() {
   const theme = getTheme(actualMode);
 
   if (!settingsLoaded || showSplash) {
-    return <SplashScreen userTheme={userTheme} />;
+    return (
+      <SplashScreen 
+        userTheme={userTheme} 
+        onFinish={() => setShowSplash(false)} 
+      />
+    );
   }
 
   if (isFirstBoot) {

@@ -1,8 +1,10 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { Box, Typography } from '@mui/material';
+import { Box, Typography, Button } from '@mui/material';
+import { Wrench } from '@phosphor-icons/react';
 import { useI18n } from '../i18n/I18nContext';
 import { getTheme } from '../theme';
 import NammilLogo from '../assets/nammil_outline.webp';
+import SplashDesigner, { SplashConfig, DEFAULT_SPLASH_CONFIG } from './SplashDesigner';
 
 import './Onboarding/Onboarding.css';
 
@@ -25,24 +27,42 @@ const LANG_ORDER: Record<string, string[]> = {
   system:  ['en', 'ta', 'ml'],
 };
 
-export default function SplashScreen({ userTheme }: { userTheme: string }) {
+interface SplashScreenProps {
+  userTheme: string;
+  onFinish?: () => void;
+}
+
+export default function SplashScreen({ userTheme, onFinish }: SplashScreenProps) {
   const { lang } = useI18n();
   const prefersDarkMode = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
   const actualMode = userTheme === 'system' ? (prefersDarkMode ? 'dark' : 'light') : userTheme;
   const theme = getTheme(actualMode);
 
-  const contentColor = actualMode === 'dark' ? 'rgba(255,255,255,0.7)' : 'rgba(0,0,0,0.6)';
-
+  const contentColor = actualMode === 'dark' ? 'rgba(255,255,255,0.9)' : 'rgba(0,0,0,0.85)';
   const order = LANG_ORDER[lang] || LANG_ORDER['en'];
+
+  // Designer Config State (persisted in localStorage)
+  const [config, setConfig] = useState<SplashConfig>(() => {
+    try {
+      const saved = localStorage.getItem('nammil-splash-designer-config');
+      if (saved) return { ...DEFAULT_SPLASH_CONFIG, ...JSON.parse(saved) };
+    } catch {}
+    return DEFAULT_SPLASH_CONFIG;
+  });
+
+  const [isDesignerOpen, setIsDesignerOpen] = useState(true);
+  const [isPaused, setIsPaused] = useState(true); // Paused by default for designing
+  const [previewLang, setPreviewLang] = useState('cycle');
 
   const [nameIndex, setNameIndex] = useState(0);
   const [visible, setVisible] = useState(true);
   const doneRef = useRef(false);
 
   useEffect(() => {
+    if (isPaused || previewLang !== 'cycle') return;
     if (doneRef.current) return;
 
-    // Smooth cycle: 400ms visible + 250ms fade = 650ms per name
+    // Smooth cycle: 450ms visible + 250ms fade = 700ms per name
     const timer = setTimeout(() => {
       if (nameIndex < order.length - 1) {
         setVisible(false);
@@ -51,15 +71,19 @@ export default function SplashScreen({ userTheme }: { userTheme: string }) {
           setVisible(true);
         }, 250);
       } else {
-        // Reached the last language — stop cycling
         doneRef.current = true;
       }
-    }, 400);
+    }, 450);
 
     return () => clearTimeout(timer);
-  }, [nameIndex, order.length]);
+  }, [nameIndex, order.length, isPaused, previewLang]);
 
-  const currentName = BRAND_NAMES[order[nameIndex]] || BRAND_NAMES['en'];
+  let currentName = BRAND_NAMES['en'];
+  if (previewLang !== 'cycle') {
+    currentName = BRAND_NAMES[previewLang] || BRAND_NAMES['en'];
+  } else {
+    currentName = BRAND_NAMES[order[nameIndex]] || BRAND_NAMES['en'];
+  }
 
   return (
     <div className={`onboarding-container ${actualMode === 'dark' ? 'dark' : ''}`}>
@@ -67,27 +91,71 @@ export default function SplashScreen({ userTheme }: { userTheme: string }) {
       <div className="onboarding-shape shape-2" />
       <div className="onboarding-shape shape-3" />
       <div className="onboarding-shape shape-4" />
+
+      {/* Floating Toggle Button when Designer is Closed */}
+      {!isDesignerOpen && (
+        <Button
+          onClick={() => setIsDesignerOpen(true)}
+          startIcon={<Wrench size={16} weight="fill" />}
+          sx={{
+            position: 'fixed',
+            top: 16,
+            right: 16,
+            zIndex: 99999,
+            bgcolor: 'rgba(20, 24, 30, 0.85)',
+            backdropFilter: 'blur(12px)',
+            border: '1px solid rgba(255, 255, 255, 0.15)',
+            color: '#00e676',
+            borderRadius: '20px',
+            textTransform: 'none',
+            fontSize: '12px',
+            fontWeight: 700,
+            px: 1.5,
+            py: 0.5,
+            boxShadow: '0 4px 16px rgba(0,0,0,0.4)',
+            '&:hover': { bgcolor: 'rgba(30, 36, 45, 0.95)', borderColor: '#00e676' },
+          }}
+        >
+          Dev Designer
+        </Button>
+      )}
+
+      {/* Interactive Dev Designer Panel */}
+      {isDesignerOpen && (
+        <SplashDesigner
+          config={config}
+          onChange={setConfig}
+          previewLang={previewLang}
+          onPreviewLangChange={setPreviewLang}
+          isPaused={isPaused}
+          onTogglePause={() => setIsPaused(p => !p)}
+          onCloseDesigner={() => setIsDesignerOpen(false)}
+          onEnterApp={onFinish}
+        />
+      )}
       
+      {/* Centered Content: Logo with Changing Language Below */}
       <Box 
         sx={{ 
           width: '100vw', 
           height: '100vh', 
           display: 'flex', 
-          flexDirection: 'row',
+          flexDirection: 'column', // VERTICAL: Brand name placed below logo
           justifyContent: 'center', 
           alignItems: 'center', 
+          transform: `translateY(${config.centerOffsetY}px)`,
           color: actualMode === 'dark' ? '#FFFFFF' : theme.palette.text.primary,
           position: 'relative',
           zIndex: 10000,
           pointerEvents: 'none'
         }}
       >
-        {/* Logo — always visible */}
+        {/* Logo — Always centered on top */}
         <Box 
           sx={{ 
-            width: 75,
-            height: 75,
-            mr: 0,
+            width: config.logoSize,
+            height: config.logoSize,
+            mb: `${config.logoMarginBottom}px`,
             flexShrink: 0,
             transform: 'translateZ(0)',
             willChange: 'transform',
@@ -100,28 +168,30 @@ export default function SplashScreen({ userTheme }: { userTheme: string }) {
             maskSize: 'contain',
             maskRepeat: 'no-repeat',
             maskPosition: 'center',
+            filter: 'drop-shadow(0 4px 12px rgba(0,0,0,0.25))',
           }} 
         />
 
-        {/* App name — fast cycle through languages, stops on last */}
+        {/* App name — Placed directly below the logo */}
         <Box 
           sx={{ 
-            width: currentName.includes('നമ്മിൽ') ? '170px' : currentName.includes('நம்மில்') ? '160px' : '150px', 
             display: 'flex', 
-            justifyContent: 'flex-start',
-            transition: 'width 0.25s ease-in-out'
+            justifyContent: 'center',
+            alignItems: 'center',
+            minHeight: `${Math.round(config.brandFontSize * 1.3)}px`,
           }}
         >
           <Typography 
-            fontWeight="bold" 
             sx={{ 
-              fontSize: '40px',
-              letterSpacing: 0,
+              fontSize: `${config.brandFontSize}px`,
+              fontWeight: config.brandFontWeight,
+              letterSpacing: `${config.brandLetterSpacing}px`,
               fontFamily: "'Elvan Sans', sans-serif",
               color: contentColor,
-              opacity: visible ? 1 : 0,
+              opacity: (previewLang !== 'cycle' || visible) ? 1 : 0,
               transition: 'opacity 0.25s ease-in-out',
               whiteSpace: 'nowrap',
+              textAlign: 'center',
             }}
           >
             {currentName}
@@ -129,11 +199,11 @@ export default function SplashScreen({ userTheme }: { userTheme: string }) {
         </Box>
       </Box>
 
-      {/* Elvan Navil Branding at the bottom */}
+      {/* Elvan Navil Parent Branding at the bottom */}
       <Box
         sx={{
           position: 'absolute',
-          bottom: '50px',
+          bottom: `${config.footerBottom}px`,
           width: '100%',
           display: 'flex',
           justifyContent: 'center',
@@ -144,11 +214,11 @@ export default function SplashScreen({ userTheme }: { userTheme: string }) {
       >
         <Typography 
           sx={{ 
-            fontSize: '18px', 
+            fontSize: `${config.footerFontSize}px`, 
             fontFamily: "'Elvan Sans', sans-serif",
-            letterSpacing: '-0.2px',
-            fontWeight: 500,
-            color: actualMode === 'dark' ? 'rgba(255, 255, 255, 0.4)' : 'rgba(0, 0, 0, 0.4)',
+            letterSpacing: `${config.footerLetterSpacing}px`,
+            fontWeight: config.footerFontWeight,
+            color: actualMode === 'dark' ? `rgba(255, 255, 255, ${config.footerOpacity})` : `rgba(0, 0, 0, ${config.footerOpacity})`,
           }}
         >
           Elvan Navil
