@@ -174,53 +174,13 @@
       width: 82px;
       height: 82px;
       object-fit: contain;
-      margin: 0 0 10px 0 !important;
+      margin: 0 !important;
       padding: 0;
       display: block;
       flex-shrink: 0;
       filter: drop-shadow(0 4px 12px rgba(0, 0, 0, 0.25));
       user-select: none;
       pointer-events: none;
-    }
-
-    /* Brand Name Wrapper */
-    .splash-brand-wrap {
-      height: 24px;
-      min-height: 24px;
-      max-height: 24px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
-    .splash-brand-name {
-      font-size: 20px;
-      font-weight: 500;
-      font-family: 'Elvan Sans', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-      letter-spacing: 0px;
-      line-height: 24px;
-      height: 24px;
-      margin: 0;
-      padding: 0;
-      color: rgba(255, 255, 255, 0.9);
-      text-align: center;
-      white-space: nowrap;
-      display: block;
-      opacity: 0;
-      transition: opacity 0.25s ease-in-out;
-    }
-    @media (prefers-color-scheme: light) {
-      .splash-brand-name {
-        color: rgba(0, 0, 0, 0.85);
-      }
-    }
-    html.theme-dark .splash-brand-name {
-      color: rgba(255, 255, 255, 0.9);
-    }
-    html.theme-light .splash-brand-name {
-      color: rgba(0, 0, 0, 0.85);
     }
 
     /* Footer */
@@ -251,8 +211,7 @@
       color: rgba(255, 255, 255, 0.45);
       text-align: center;
       display: block;
-      opacity: 0;
-      transition: opacity 0.25s ease-in-out;
+      opacity: 0.45;
     }
     @media (prefers-color-scheme: light) {
       .splash-footer-brand {
@@ -293,12 +252,9 @@
     <div class="splash-shape shape-4"></div>
     <div class="splash-center">
       <img src="./app_icon.png" alt="Nammil" class="splash-logo" />
-      <div class="splash-brand-wrap">
-        <span class="splash-brand-name" id="splash-brand-name"></span>
-      </div>
     </div>
     <div class="splash-footer">
-      <span class="splash-footer-brand" id="splash-footer-brand">Elvan Navil</span>
+      <span class="splash-footer-brand">Elvan Navil</span>
     </div>
   </div>
 
@@ -307,71 +263,12 @@
 
   <script>
     (function() {
-      var BRAND_NAMES = { ta: 'நம்மில்', en: 'Nammil', ml: 'നമ്മിൽ' };
-      var LANG_ORDER = {
-        ta: ['ta', 'en', 'ml'],
-        ta_latn: ['en', 'ta', 'ml'],
-        ta_ml: ['ml', 'ta', 'en'],
-        en: ['en', 'ta', 'ml'],
-        ml: ['ml', 'en', 'ta'],
-        ml_latn: ['en', 'ml', 'ta'],
-        ml_tam: ['ta', 'ml', 'en'],
-        system: ['en', 'ta', 'ml']
-      };
-
-      var userLang = 'en';
-      try {
-        userLang = localStorage.getItem('nammil-language') || 'en';
-      } catch(e) {}
-      var order = LANG_ORDER[userLang] || LANG_ORDER['en'];
-
-      var brandEl = document.getElementById('splash-brand-name');
-      var footerEl = document.getElementById('splash-footer-brand');
       var splashOverlay = document.getElementById('splash-overlay');
 
-      // Phase 1: In first, ONLY LOGO ALONE is shown! (0ms - 400ms)
-      // Phase 2: After only, the text appears and cycles once font is fully ready!
-      var minDelay = new Promise(function(resolve) {
-        setTimeout(resolve, 400);
-      });
-      var fontTimeout = new Promise(function(resolve) {
-        setTimeout(resolve, 800);
-      });
-      var fontReady = Promise.race([window.__fontPromise || Promise.resolve(), fontTimeout]);
-
-      Promise.all([minDelay, fontReady]).then(function() {
-        if (brandEl) {
-          brandEl.textContent = BRAND_NAMES[order[0]] || 'Nammil';
-          brandEl.style.opacity = '1';
-        }
-        if (footerEl) {
-          footerEl.style.opacity = '1';
-        }
-
-        // Cycle through remaining languages
-        var idx = 0;
-        function nextLanguage() {
-          if (idx < order.length - 1) {
-            setTimeout(function() {
-              if (brandEl) brandEl.style.opacity = '0';
-              setTimeout(function() {
-                idx++;
-                if (brandEl) {
-                  brandEl.textContent = BRAND_NAMES[order[idx]] || 'Nammil';
-                  brandEl.style.opacity = '1';
-                }
-                nextLanguage();
-              }, 220);
-            }, 550);
-          } else {
-            // Finished cycle — hold for 400ms, then dispatch splash-finished
-            setTimeout(function() {
-              window.dispatchEvent(new CustomEvent('splash-finished'));
-            }, 400);
-          }
-        }
-        nextLanguage();
-      });
+      // Clean, native splash hold (800ms) then dismiss
+      setTimeout(function() {
+        window.dispatchEvent(new CustomEvent('splash-finished'));
+      }, 800);
 
       window.__dismissSplash = function() {
         if (!splashOverlay) return;

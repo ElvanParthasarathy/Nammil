@@ -228,7 +228,7 @@ html.dark .onboarding-logo-themed, html[data-theme="dark"] .onboarding-logo-them
     width: 82px;
     height: 82px;
     object-fit: contain;
-    margin: 0 0 10px 0 !important;
+    margin: 0 !important;
     padding: 0;
     display: block;
     flex-shrink: 0;
