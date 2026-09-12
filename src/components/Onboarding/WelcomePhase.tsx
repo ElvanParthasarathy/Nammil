@@ -15,6 +15,29 @@ export default function WelcomePhase({ onContinue, skipGreeting }: { onContinue:
     const [greetingIndex, setGreetingIndex] = useState(-1); // -1 is for the logo
     const [greetingOpacity, setGreetingOpacity] = useState(0);
     const [showLanguage, setShowLanguage] = useState(false);
+    const [ripples, setRipples] = useState<{ [key: string]: { x: number; y: number; size: number; id: number } }>({});
+
+    const handlePointerDown = (code: string, e: React.PointerEvent<HTMLElement>) => {
+        if (e.button !== 0) return;
+        const rect = e.currentTarget.getBoundingClientRect();
+        const x = e.clientX - rect.left;
+        const y = e.clientY - rect.top;
+        const size = Math.max(rect.width, rect.height) * 2.5;
+
+        setRipples(prev => ({
+            ...prev,
+            [code]: { x, y, size, id: Date.now() }
+        }));
+
+        setTimeout(() => {
+            setRipples(prev => {
+                if (!prev[code]) return prev;
+                const next = { ...prev };
+                delete next[code];
+                return next;
+            });
+        }, 600);
+    };
 
     const handleLanguageSelect = (code: string) => {
         setLang(code);
@@ -227,24 +250,37 @@ export default function WelcomePhase({ onContinue, skipGreeting }: { onContinue:
                                     <React.Fragment key={l.code}>
                                         <ListItem disablePadding>
                                             <ListItemButton 
+                                                onPointerDown={(e) => handlePointerDown(l.code, e)}
                                                 onClick={() => handleLanguageSelect(l.code)} 
+                                                disableRipple
                                                 sx={{
                                                     py: 1.25,
                                                     px: 3,
+                                                    position: 'relative',
+                                                    overflow: 'hidden',
                                                     bgcolor: 'transparent',
                                                     color: 'var(--onboarding-text)',
+                                                    cursor: 'pointer',
+                                                    userSelect: 'none',
                                                     '&:hover': {
                                                         bgcolor: 'transparent',
                                                     },
-                                                    '& .MuiTouchRipple-root': {
-                                                        color: 'var(--onboarding-text)',
-                                                    },
-                                                    '& .MuiTouchRipple-rippleVisible': {
-                                                        opacity: 0.3,
-                                                    },
                                                 }}
                                             >
+                                                {ripples[l.code] && (
+                                                    <span
+                                                        key={ripples[l.code].id}
+                                                        className="onboarding-ripple-wave"
+                                                        style={{
+                                                            left: ripples[l.code].x,
+                                                            top: ripples[l.code].y,
+                                                            width: ripples[l.code].size,
+                                                            height: ripples[l.code].size,
+                                                        }}
+                                                    />
+                                                )}
                                                 <ListItemText 
+                                                    sx={{ position: 'relative', zIndex: 2, pointerEvents: 'none' }}
                                                     primary={
                                                         <span style={{ fontSize: '15px', fontWeight: lang === l.code ? 600 : 500, color: 'var(--onboarding-text)' }}>
                                                             {l.label}
@@ -259,7 +295,7 @@ export default function WelcomePhase({ onContinue, skipGreeting }: { onContinue:
                                                     }
                                                 />
                                                 {lang === l.code && (
-                                                    <ListItemIcon sx={{ minWidth: 'auto' }}>
+                                                    <ListItemIcon sx={{ minWidth: 'auto', position: 'relative', zIndex: 2, pointerEvents: 'none' }}>
                                                         <CheckCircle size={18} weight="fill" color="var(--onboarding-text)" />
                                                     </ListItemIcon>
                                                 )}

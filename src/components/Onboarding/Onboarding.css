@@ -391,3 +391,28 @@ html.dark .onboarding-logo-themed, html[data-theme="dark"] .onboarding-logo-them
 .delay-1 { animation-delay: 0.1s; }
 .delay-2 { animation-delay: 0.2s; }
 .delay-3 { animation-delay: 0.3s; }
+
+/* Language Item Touch / Click Ripple */
+.onboarding-ripple-wave {
+    position: absolute;
+    border-radius: 50%;
+    transform: translate(-50%, -50%) scale(0);
+    background-color: var(--onboarding-text);
+    pointer-events: none;
+    z-index: 1;
+    animation: onboardingRipple 0.55s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
+}
+
+@keyframes onboardingRipple {
+    0% {
+        transform: translate(-50%, -50%) scale(0);
+        opacity: 0.35;
+    }
+    40% {
+        opacity: 0.25;
+    }
+    100% {
+        transform: translate(-50%, -50%) scale(1);
+        opacity: 0;
+    }
+}
