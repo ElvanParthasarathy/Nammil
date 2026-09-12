@@ -11,6 +11,7 @@ import MediaLibrary from './components/Media/index';
 import NotificationsPage, { NotificationItem } from './components/NotificationsPage/index';
 import { useI18n } from './i18n/I18nContext';
 import Onboarding from './components/Onboarding/index';
+import './components/Onboarding/Onboarding.css';
 
 function App() {
   const { setLang } = useI18n();
@@ -53,9 +54,9 @@ function App() {
     }
   }, [setLang]);
 
-  // Attach WhatsApp view as soon as settings are loaded and not in first boot onboarding
+  // Attach WhatsApp view after settings load and not in first boot onboarding
   useEffect(() => {
-    if (!isFirstBoot && settingsLoaded && (window as any).electronAPI) {
+    if (settingsLoaded && !isFirstBoot && (window as any).electronAPI) {
       const targetView = activeTab.startsWith('wa-') ? activeTab.replace('wa-', '') : activeTab;
       (window as any).electronAPI.switchTab(targetView);
     }
@@ -118,17 +119,21 @@ function App() {
 
   if (!settingsLoaded) {
     return (
-      <div className="pre-splash">
-        <div className="pre-shape shape-1"></div>
-        <div className="pre-shape shape-2"></div>
-        <div className="pre-shape shape-3"></div>
-        <div className="pre-shape shape-4"></div>
-        <div className="pre-center">
-          <img src="/app_icon.png" alt="Nammil" className="pre-logo" />
-          <div className="pre-name">Nammil</div>
+      <div className={`onboarding-container ${actualMode === 'dark' ? 'dark' : ''}`}>
+        <div className="onboarding-shape shape-1" />
+        <div className="onboarding-shape shape-2" />
+        <div className="onboarding-shape shape-3" />
+        <div className="onboarding-shape shape-4" />
+        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', height: '100vh', transform: 'translateY(-20px)' }}>
+          <img src="/app_icon.png" alt="Nammil" style={{ width: 72, height: 72, marginBottom: 16, filter: 'drop-shadow(0 4px 12px rgba(0,0,0,0.25))' }} />
+          <div style={{ fontSize: 28, fontWeight: 600, fontFamily: "'Elvan Sans', sans-serif", letterSpacing: -0.2, color: actualMode === 'dark' ? '#fff' : '#000' }}>
+            Nammil
+          </div>
         </div>
-        <div className="pre-footer">
-          <span className="pre-footer-brand">Elvan Navil</span>
+        <div style={{ position: 'absolute', bottom: 50, width: '100%', display: 'flex', justifyContent: 'center' }}>
+          <span style={{ fontSize: 18, fontFamily: "'Elvan Sans', sans-serif", fontWeight: 500, letterSpacing: -0.2, color: actualMode === 'dark' ? 'rgba(255,255,255,0.4)' : 'rgba(0,0,0,0.4)' }}>
+            Elvan Navil
+          </span>
         </div>
       </div>
     );
