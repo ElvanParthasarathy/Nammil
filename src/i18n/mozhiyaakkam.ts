@@ -338,7 +338,64 @@ export function mlymToTaml(text: string): string {
             continue;
           }
         }
+
+        // 5. C1 + ് + ല/ള (Liquid La / Lla):
+        // Svarabhakti (இடைப்பிறவரல்):
+        // - After Anusvara (e.g. ഇംഗ്ലീഷ് -> இங்கிலீஷ், ഇംഗ്ലണ്ട് -> இங்கிலண்டு)
+        // - At word start (e.g. ക്ലാസ്സ് -> கிலாசு, പ്ലാവ് -> பிலாவு)
+        if ((c3 === '\u0D32' || c3 === '\u0D33') && c1 !== '\u0D32' && c1 !== '\u0D33') {
+          if (isWordStart || (i > 0 && (text[i - 1] === '\u0D02' || !isLetterChar(text[i - 1])))) {
+            sb.push(base1 + '\u0BBF'); // inserts ி
+            sb.push(c3 === '\u0D33' ? '\u0BB3' : '\u0BB2'); // ல / ள
+            i += 3;
+            continue;
+          }
+        }
       }
+    }
+
+    // Anusvara (ം) Homorganic Nasal (இனவெழுத்து) assimilation:
+    // When followed by a stop consonant, ം assimilates to the homorganic nasal:
+    // Velar (ക,ഖ,ഗ,ഘ) -> ங் (e.g. ഇംഗ്ലീഷ് -> இங்கிலீஷ், സംഗീതം -> சங்கீதம்)
+    // Palatal (ച,ഛ,ജ,ഝ) -> ஞ் (e.g. പഞ്ചായത്ത് -> பஞ்சாயத்து)
+    // Retroflex (ട,ഠ,ഡ,ഢ) -> ண்
+    // Dental (ത,ഥ,ദ,ധ) -> ந் (e.g. സന്തോഷம் -> சந்தோஷம்)
+    // Labial (പ,ഫ,ബ,ഭ,മ) -> ம் (e.g. ആരംഭം -> ஆரம்பம்)
+    if (c === '\u0D02') {
+      const nextChar = i + 1 < n ? text[i + 1] : null;
+      if (nextChar !== null) {
+        const nextCode = nextChar.charCodeAt(0);
+        if (nextCode >= 0x0D15 && nextCode <= 0x0D18) {
+          // Velar: ക, ഖ, ഗ, ഘ -> ங்
+          sb.push('\u0B99\u0BCD');
+          i++;
+          continue;
+        } else if (nextCode >= 0x0D1A && nextCode <= 0x0D1D) {
+          // Palatal: ച, ഛ, ജ, ഝ -> ஞ்
+          sb.push('\u0B9E\u0BCD');
+          i++;
+          continue;
+        } else if (nextCode >= 0x0D1F && nextCode <= 0x0D22) {
+          // Retroflex: ட, ഠ, ഡ, ഢ -> ண்
+          sb.push('\u0BA3\u0BCD');
+          i++;
+          continue;
+        } else if (nextCode >= 0x0D24 && nextCode <= 0x0D27) {
+          // Dental: ത, ഥ, ദ, ധ -> ந்
+          sb.push('\u0BA8\u0BCD');
+          i++;
+          continue;
+        } else if (nextCode >= 0x0D2A && nextCode <= 0x0D2E) {
+          // Labial: പ, ഫ, ബ, ഭ, മ -> ம்
+          sb.push('\u0BAE\u0BCD');
+          i++;
+          continue;
+        }
+      }
+      // Default: Anusvara is ம் (word-final or before non-stops)
+      sb.push('\u0BAE\u0BCD');
+      i++;
+      continue;
     }
 
     // Word-final Virama '്':
@@ -373,8 +430,7 @@ export function mlymToTaml(text: string): string {
       '\u0D13': '\u0B93', // ഓ -> ஓ
       '\u0D14': '\u0B94', // ഔ -> ஔ
 
-      // Anusvara & Visarga
-      '\u0D02': '\u0BAE\u0BCD', // ം -> ம்
+      // Visarga
       '\u0D03': '\u0B83',       // ഃ -> ஃ (Aytham)
 
       // Chillu letters
