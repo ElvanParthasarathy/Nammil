@@ -22,7 +22,12 @@ export default function WelcomePhase({ onContinue, skipGreeting }: { onContinue:
         const rect = e.currentTarget.getBoundingClientRect();
         const x = e.clientX - rect.left;
         const y = e.clientY - rect.top;
-        const size = Math.max(rect.width, rect.height) * 2.5;
+        
+        // Exact proportional radius to farthest corner for gentle, natural ripple
+        const cornerX = Math.max(x, rect.width - x);
+        const cornerY = Math.max(y, rect.height - y);
+        const radius = Math.hypot(cornerX, cornerY);
+        const size = radius * 2;
 
         setRipples(prev => ({
             ...prev,
@@ -36,7 +41,7 @@ export default function WelcomePhase({ onContinue, skipGreeting }: { onContinue:
                 delete next[code];
                 return next;
             });
-        }, 600);
+        }, 850);
     };
 
     const handleLanguageSelect = (code: string) => {
@@ -94,7 +99,7 @@ export default function WelcomePhase({ onContinue, skipGreeting }: { onContinue:
                 flex: 1,
                 justifyContent: 'center',
                 alignItems: 'center',
-                maxWidth: '840px', // increased for two panels
+                maxWidth: '890px', // wide horizontal layout
                 margin: '0 auto',
                 width: '100%',
                 position: 'relative',
@@ -158,7 +163,7 @@ export default function WelcomePhase({ onContinue, skipGreeting }: { onContinue:
                             width: '100%',
                             alignItems: 'center',
                             justifyContent: 'space-between',
-                            gap: '48px',
+                            gap: '56px',
                             flexWrap: 'wrap'
                         }}>
                             
@@ -230,7 +235,7 @@ export default function WelcomePhase({ onContinue, skipGreeting }: { onContinue:
                                 overflow: 'hidden',
                             }}>
                                 <List sx={{
-                                    maxHeight: '368px',
+                                    maxHeight: '320px',
                                     overflowY: 'auto',
                                     p: 0,
                                     '&::-webkit-scrollbar': { width: '6px' },
@@ -307,7 +312,7 @@ export default function WelcomePhase({ onContinue, skipGreeting }: { onContinue:
                             </List>
                             </div>
 
-                            <div style={{ width: '100%', maxWidth: '380px', marginTop: '24px' }}>
+                            <div style={{ width: '100%', maxWidth: '380px', marginTop: '16px' }}>
                                 <OnboardingButton onClick={onContinue}>
                                     {t(k.OB_CONTINUE)}
                                 </OnboardingButton>
