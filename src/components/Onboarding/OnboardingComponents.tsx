@@ -16,6 +16,8 @@ export const OnboardingLayout = ({ children, hideLogo, maxWidth = "xs" }: { chil
                 display: 'flex', 
                 flexDirection: 'column', 
                 minHeight: '100%',
+                boxSizing: 'border-box',
+                pt: '48px',
                 position: 'relative',
                 zIndex: 1,
                 justifyContent: 'center',

@@ -18,9 +18,9 @@ class WindowManager {
 
     this.mainWindow = new BrowserWindow({
       width: isFirstBoot ? 980 : 1280,
-      height: isFirstBoot ? 570 : 720,
+      height: isFirstBoot ? 460 : 720,
       minWidth: isFirstBoot ? 980 : 940,
-      minHeight: isFirstBoot ? 570 : 600,
+      minHeight: isFirstBoot ? 460 : 600,
       resizable: !isFirstBoot,
       maximizable: !isFirstBoot,
       show: false, // Hide until maximized
