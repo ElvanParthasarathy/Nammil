@@ -128,6 +128,36 @@ export default function SplashScreen({ userTheme }: { userTheme: string }) {
           </Typography>
         </Box>
       </Box>
+
+      {/* Elvan Navil Branding at the bottom */}
+      <Box
+        sx={{
+          position: 'absolute',
+          bottom: '40px',
+          width: '100%',
+          display: 'flex',
+          flexDirection: 'column',
+          alignItems: 'center',
+          color: contentColor,
+          zIndex: 10000,
+          pointerEvents: 'none'
+        }}
+      >
+        <Typography sx={{ fontSize: '12px', opacity: 0.6, letterSpacing: '1px' }}>
+          from
+        </Typography>
+        <Typography 
+          fontWeight="bold" 
+          sx={{ 
+            fontSize: '18px', 
+            fontFamily: "'Elvan Sans', sans-serif",
+            letterSpacing: '2px',
+            textTransform: 'uppercase'
+          }}
+        >
+          Elvan Navil
+        </Typography>
+      </Box>
     </div>
   );
 }
