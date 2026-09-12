@@ -237,6 +237,14 @@ html.dark .onboarding-logo-themed, html[data-theme="dark"] .onboarding-logo-them
     pointer-events: none;
 }
 
+.splash-screen-root.light .splash-logo {
+    filter: none;
+}
+
+.splash-screen-root.dark .splash-logo {
+    filter: drop-shadow(0 4px 12px rgba(0, 0, 0, 0.25));
+}
+
 .splash-brand-wrap {
     height: 24px;
     min-height: 24px;

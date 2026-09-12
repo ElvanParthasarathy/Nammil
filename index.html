@@ -178,6 +178,17 @@
       user-select: none;
       pointer-events: none;
     }
+    @media (prefers-color-scheme: light) {
+      .splash-logo {
+        filter: none;
+      }
+    }
+    html.theme-light .splash-logo {
+      filter: none;
+    }
+    html.theme-dark .splash-logo {
+      filter: drop-shadow(0 4px 12px rgba(0, 0, 0, 0.25));
+    }
 
     /* Footer */
     .splash-footer {
