@@ -336,9 +336,9 @@ export function mlymToTaml(text: string): string {
       if (base1) {
         // 1. C1 + ് + ര (Ra):
         // പ്ര -> பிர, പ്രി -> பிரி, ക്ര -> கிர, ത്ര -> திர
-        // Universal at word start (or for ശ്ര everywhere: ആശ്രമം -> ஆசிரமம், ശ്രമം -> சிரமம்)
+        // Universal at word start (or for ശ്ര everywhere: ആശ്രമം -> ஆஶிரமம், ശ്രമം -> ஶிரமம்)
         if (c3 === '\u0D30' && (isWordStart || c1 === '\u0D36' || c1 === '\u0D38')) {
-          sb.push((c1 === '\u0D36' ? '\u0B9A' : base1) + '\u0BBF'); // inserts ி (for ശ്ര -> சிர)
+          sb.push(base1 + '\u0BBF'); // inserts ி (for ശ്ര -> ஶிர)
           sb.push('\u0BB0');         // ர
           i += 3;
           continue;
@@ -369,9 +369,9 @@ export function mlymToTaml(text: string): string {
           }
         }
 
-        // 3. Word-initial C1 + ് + വ (Va) -> C1 + ு + வ (e.g. സ്വാ -> சுவா, ദ്வா -> துவா)
+        // 3. Word-initial C1 + ് + വ (Va) -> C1 + ு + வ (e.g. സ്വാ -> ஸுவா, ദ്வா -> துவா)
         if (isWordStart && c3 === '\u0D35') {
-          sb.push((c1 === '\u0D38' ? '\u0B9A' : base1) + '\u0BC1'); // inserts ு
+          sb.push(base1 + '\u0BC1'); // inserts ு
           sb.push('\u0BB5');         // வ
           i += 3;
           continue;
