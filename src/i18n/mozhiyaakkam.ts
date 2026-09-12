@@ -243,11 +243,12 @@ function takesKutriyalukaram(c: string): boolean {
 }
 
 function isLetterChar(c: string): boolean {
-  return /\p{L}/u.test(c);
+  return /[\p{L}\p{M}]/u.test(c);
 }
 
 function getTamilBaseConsonant(c: string): string | null {
-  if (c === '\u0D36' || c === '\u0D38') return '\u0B9A'; // ശ, സ -> ச
+  if (c === '\u0D38') return '\u0BB8'; // സ -> ஸ
+  if (c === '\u0D36') return '\u0B9A'; // ശ -> ச (for ശ്ര -> சிர)
   if (c >= '\u0D15' && c <= '\u0D18') return '\u0B95'; // க
   if (c >= '\u0D1A' && c <= '\u0D1D' && c !== '\u0D1C') return '\u0B9A'; // ச
   if (c === '\u0D1C') return '\u0B9C'; // ஜ
@@ -285,6 +286,45 @@ export function mlymToTaml(text: string): string {
   while (i < n) {
     const c = text[i];
     const isWordStart = i === 0 || !isLetterChar(text[i - 1]);
+
+    // Word-initial Prosthetic Vowel (மொழிமுதல் முன்னிலை உயிர்):
+    // In Tamil, words cannot start with ற, ர, ல, ள (Tolkappiyam Mozhimarabu).
+    // Prepend 'இ' (or 'உ' before u/o vowels).
+    if (isWordStart) {
+      if (c === '\u0D31') { // റ -> இர / உர
+        const next = i + 1 < n ? text[i + 1] : '';
+        if (next === '\u0D41' || next === '\u0D42') { // ു, ൂ
+          sb.push('\u0B89'); // உ
+        } else {
+          sb.push('\u0B87'); // இ
+        }
+        sb.push('\u0BB0'); // ர
+        i++;
+        continue;
+      }
+      if (c === '\u0D30') { // ര -> இர / உர
+        const next = i + 1 < n ? text[i + 1] : '';
+        if (next === '\u0D41' || next === '\u0D42') { // ു, ൂ
+          sb.push('\u0B89'); // உ
+        } else {
+          sb.push('\u0B87'); // இ
+        }
+        sb.push('\u0BB0'); // ர
+        i++;
+        continue;
+      }
+      if (c === '\u0D32' || c === '\u0D33') { // ല, ള -> இல / உல
+        const next = i + 1 < n ? text[i + 1] : '';
+        if (next === '\u0D4A' || next === '\u0D4B' || next === '\u0D41' || next === '\u0D42') { // ൊ, ോ, ു, ൂ
+          sb.push('\u0B89'); // உ
+        } else {
+          sb.push('\u0B87'); // இ
+        }
+        sb.push(c === '\u0D33' ? '\u0BB3' : '\u0BB2'); // ள / ல
+        i++;
+        continue;
+      }
+    }
 
     // Word-initial / Svarabhakti cluster resolution (மொழிமுதல் மெய்ம்மயக்கமின்மை):
     // E.g. പ്ര -> பிர, പ്രി -> பிரி, ശ്ര -> சிர (ശ്രമം -> சிரமம், ശ്രദ്ധ -> சிரத்தை)
