@@ -22,6 +22,7 @@ export const OnboardingLayout = ({ children, hideLogo, maxWidth = "xs" }: { chil
                 justifyContent: 'center',
                 alignItems: 'center',
                 px: { xs: 3, sm: 4 },
+                py: 3,
             }}>
                 {children}
             </Container>
