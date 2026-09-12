@@ -52,8 +52,14 @@ class WindowManager {
         this.mainWindow.restore();
       }
       this.mainWindow.focus();
-      this.mainWindow.setAlwaysOnTop(false);
-      this.app.focus();
+      
+      // Delay removing alwaysOnTop to ensure Windows brings it to front
+      setTimeout(() => {
+        if (this.mainWindow && !this.mainWindow.isDestroyed()) {
+          this.mainWindow.setAlwaysOnTop(false);
+          this.app.focus();
+        }
+      }, 500);
     });
 
     // Load frontend

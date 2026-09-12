@@ -53,8 +53,12 @@ app.on('second-instance', () => {
     mainWindow.setAlwaysOnTop(true);
     mainWindow.show();
     mainWindow.focus();
-    mainWindow.setAlwaysOnTop(false);
-    app.focus();
+    setTimeout(() => {
+      if (mainWindow && !mainWindow.isDestroyed()) {
+        mainWindow.setAlwaysOnTop(false);
+        app.focus();
+      }
+    }, 500);
   }
 });
 
