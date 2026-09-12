@@ -15,7 +15,6 @@ interface OnboardingProps {
 const Onboarding: React.FC<OnboardingProps> = ({ onComplete }) => {
   const { t } = useI18n();
   const [step, setStep] = useState<'welcome' | 'setup'>('welcome');
-  const [hasSeenGreeting, setHasSeenGreeting] = useState(false);
   const [accountName, setAccountName] = useState('Personal');
   const [mediaFolder, setMediaFolder] = useState('');
   const [isLoading, setIsLoading] = useState(false);
@@ -67,11 +66,7 @@ const Onboarding: React.FC<OnboardingProps> = ({ onComplete }) => {
     <>
       <div style={{ display: step === 'welcome' ? 'block' : 'none', height: '100%' }}>
         <WelcomePhase 
-            skipGreeting={hasSeenGreeting} 
-            onContinue={() => {
-                setHasSeenGreeting(true);
-                setStep('setup');
-            }} 
+            onContinue={() => setStep('setup')} 
         />
       </div>
 

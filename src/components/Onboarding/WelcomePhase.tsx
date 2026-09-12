@@ -1,20 +1,12 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { OnboardingLayout, OnboardingButton } from './OnboardingComponents';
 import { CheckCircle, GlobeHemisphereWest } from '@phosphor-icons/react';
 import { List, ListItem, ListItemButton, ListItemText, ListItemIcon, Divider } from '@mui/material';
 import { useI18n } from '../../i18n/I18nContext';
 import { k } from '../../i18n/k';
-import NammilLogo from '../../assets/nammil_outline.webp';
 
-const GREETINGS = ["வணக்கம்!", "Hello!", "നമസ്കാരം!"];
-
-export default function WelcomePhase({ onContinue, skipGreeting }: { onContinue: () => void, skipGreeting?: boolean }) {
+export default function WelcomePhase({ onContinue }: { onContinue: () => void, skipGreeting?: boolean }) {
     const { t, lang, setLang } = useI18n();
-    
-    const [phase, setPhase] = useState<'greeting' | 'language'>(skipGreeting ? 'language' : 'greeting');
-    const [greetingIndex, setGreetingIndex] = useState(-1); // -1 is for the logo
-    const [greetingOpacity, setGreetingOpacity] = useState(0);
-    const [showLanguage, setShowLanguage] = useState(false);
     const [ripples, setRipples] = useState<{ [key: string]: { x: number; y: number; size: number; id: number } }>({});
 
     const handlePointerDown = (code: string, e: React.PointerEvent<HTMLElement>) => {
@@ -51,46 +43,6 @@ export default function WelcomePhase({ onContinue, skipGreeting }: { onContinue:
         }
     };
 
-    useEffect(() => {
-        let loopCount = 0;
-        let isMounted = true;
-
-        const runGreetingLoop = async () => {
-            while (isMounted && phase === 'greeting') {
-                // Fade in
-                setGreetingOpacity(1);
-                await new Promise(r => setTimeout(r, 700));
-                
-                // Fade out
-                setGreetingOpacity(0);
-                await new Promise(r => setTimeout(r, 400));
-                
-                if (!isMounted) break;
-
-                // Move to next greeting or switch to language phase
-                loopCount++;
-                if (loopCount >= GREETINGS.length + 1) {
-                    setPhase('language');
-                    break;
-                } else {
-                    setGreetingIndex((prev) => prev + 1);
-                }
-            }
-        };
-
-        if (phase === 'greeting') {
-            runGreetingLoop();
-        }
-
-        return () => { isMounted = false; };
-    }, [phase]);
-
-    useEffect(() => {
-        if (phase === 'language') {
-            setTimeout(() => setShowLanguage(true), 100);
-        }
-    }, [phase]);
-
     return (
         <OnboardingLayout hideLogo maxWidth="md">
             <div style={{
@@ -105,67 +57,22 @@ export default function WelcomePhase({ onContinue, skipGreeting }: { onContinue:
                 position: 'relative',
                 padding: '0 24px' // add some padding for smaller windows
             }}>
-                
-                {/* PHASE 1: GREETING ANIMATION */}
-                {phase === 'greeting' && (
-                    <div style={{
-                        opacity: greetingOpacity,
-                        transition: 'opacity 0.4s ease-in-out',
-                        display: 'flex',
-                        flexDirection: 'column',
-                        alignItems: 'center',
-                        justifyContent: 'center',
-                        flex: 1
-                    }}>
-                        {greetingIndex === -1 ? (
-                            <div style={{ 
-                                width: 75,
-                                height: 75,
-                                backgroundColor: 'var(--onboarding-text)',
-                                WebkitMaskImage: `url(${NammilLogo})`,
-                                WebkitMaskSize: 'contain',
-                                WebkitMaskRepeat: 'no-repeat',
-                                WebkitMaskPosition: 'center',
-                                maskImage: `url(${NammilLogo})`,
-                                maskSize: 'contain',
-                                maskRepeat: 'no-repeat',
-                                maskPosition: 'center'
-                            }} />
-                        ) : (
-                            <h1 style={{
-                                fontSize: '48px',
-                                fontWeight: '300',
-                                color: 'var(--onboarding-text)',
-                                margin: 0,
-                                letterSpacing: '-1px'
-                            }}>
-                                {GREETINGS[greetingIndex]}
-                            </h1>
-                        )}
-                    </div>
-                )}
-
-                {/* PHASE 2: LANGUAGE SELECTION SCREEN */}
-                {phase === 'language' && (
+                {/* LANGUAGE SELECTION SCREEN */}
+                <div style={{
+                    display: 'flex',
+                    flexDirection: 'column',
+                    width: '100%',
+                }}>
+                    {/* 2-PANEL LAYOUT */}
                     <div style={{
                         display: 'flex',
-                        flexDirection: 'column', // Changed to column to hold top branding + row panels
+                        flexDirection: 'row',
                         width: '100%',
-                        opacity: showLanguage ? 1 : 0,
-                        transform: showLanguage ? 'translateY(0)' : 'translateY(20px)',
-                        transition: 'all 0.8s cubic-bezier(0.2, 0.8, 0.2, 1)',
+                        alignItems: 'center',
+                        justifyContent: 'space-between',
+                        gap: '56px',
+                        flexWrap: 'wrap'
                     }}>
-                        
-                        {/* 2-PANEL LAYOUT */}
-                        <div style={{
-                            display: 'flex',
-                            flexDirection: 'row',
-                            width: '100%',
-                            alignItems: 'center',
-                            justifyContent: 'space-between',
-                            gap: '56px',
-                            flexWrap: 'wrap'
-                        }}>
                             
                             {/* LEFT PANEL: Info */}
                             <div style={{
@@ -320,7 +227,6 @@ export default function WelcomePhase({ onContinue, skipGreeting }: { onContinue:
                             </div>
                         </div>
                     </div>
-                )}
             </div>
         </OnboardingLayout>
     );
