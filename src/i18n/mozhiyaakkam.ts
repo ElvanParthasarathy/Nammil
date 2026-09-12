@@ -539,11 +539,20 @@ export function mlymToTaml(text: string): string {
         continue;
       }
 
-      // 10. Ending in യ (ya) after long vowel (e.g. ഛായ -> சாயை, മായ -> மாயை)
+      // 10. Ending in യ (ya) after long vowel:
+      // - Sanskrit feminine nouns (ഛായ -> சாயை, മായ -> மாயை)
+      // - Malayalam relative participle suffix -āya (-ായ -> -ான as in പൊതുവായ -> பொதுவான, പ്രധാനമായ -> பிரதானமான)
       if (c === '\u0D2F' && (prev === '\u0D3E' || prev === '\u0D47' || prev === '\u0D4B')) {
-        sb.push('\u0BAF\u0BC8');
-        i++;
-        continue;
+        const isSanskritNoun = i <= 3 && (text === '\u0D1B\u0D3E\u0D2F' || text === '\u0D2E\u0D3E\u0D2F' || text.endsWith(' \u0D1B\u0D3E\u0D2F') || text.endsWith(' \u0D2E\u0D3E\u0D2F'));
+        if (isSanskritNoun) {
+          sb.push('\u0BAF\u0BC8'); // சாயை, மாயை
+          i++;
+          continue;
+        } else if (prev === '\u0D3E' && i >= 3) {
+          sb.push('\u0BA9'); // -வான / -மான (e.g. പൊതുവായ -> பொதுவான)
+          i++;
+          continue;
+        }
       }
     }
 
@@ -591,16 +600,50 @@ export function mlymToTaml(text: string): string {
       continue;
     }
 
-    // 7b. Dental vs Alveolar Nasal (ந vs ன per Tolkappiyam):
-    // Word-initial is ந, medial single is ன (ജനം -> சனம், ദിനം -> தினம், നന്ദി -> நந்தி)
+    // 7b. Dental vs Alveolar vs Retroflex Nasal (ந vs ன vs ண per Tolkappiyam):
+    // Word-initial is ந, medial single is ன
+    // Before retroflex stop (ട, ഠ, ഡ, ഢ) -> ண (டன்னகரம்: பிராண்டு)
+    // Before dental stop (ത, ഥ, ദ, ധ) -> ந் (பந்து)
+    // Before alveolar stop (റ) -> ன் (என்றெ)
     if (c === '\u0D28') {
       if (isWordStart) {
         sb.push('\u0BA8'); // ந
+      } else if (i + 2 < n && text[i + 1] === '\u0D4D' && text[i + 2] >= '\u0D1F' && text[i + 2] <= '\u0D22') {
+        sb.push('\u0BA3'); // ண before retroflex stop (ட)
       } else if (i + 2 < n && text[i + 1] === '\u0D4D' && text[i + 2] >= '\u0D24' && text[i + 2] <= '\u0D27') {
-        sb.push('\u0BA8'); // ந் before dental stop
+        sb.push('\u0BA8'); // ந் before dental stop (த)
+      } else if (i + 2 < n && text[i + 1] === '\u0D4D' && text[i + 2] === '\u0D31') {
+        sb.push('\u0BA9'); // ன before alveolar stop (ற)
       } else {
         sb.push('\u0BA9'); // ன (medial intervocalic)
       }
+      i++;
+      continue;
+    }
+
+    // 7c. Chillu N (ൻ) homorganic nasal assimilation (டன்னகரம் / தந்நகரம் / றன்னகரம்):
+    // Before retroflex stop (ട, ഠ, ഡ, ഢ) -> ண் (டன்னகரம்: பிராண்டு, செக்கண்டு, ஸ்டாண்டு)
+    // Before dental stop (ത, ഥ, ദ, ധ) -> ந் (பந்து)
+    // Before alveolar stop (റ) -> ன் (என்றெ)
+    if (c === '\u0D7B') {
+      const nextChar = i + 1 < n ? text[i + 1] : null;
+      if (nextChar !== null) {
+        const nextCode = nextChar.charCodeAt(0);
+        if (nextCode >= 0x0D1F && nextCode <= 0x0D22) {
+          sb.push('\u0BA3\u0BCD'); // ண் before ட
+          i++;
+          continue;
+        } else if (nextCode >= 0x0D24 && nextCode <= 0x0D27) {
+          sb.push('\u0BA8\u0BCD'); // ந் before த
+          i++;
+          continue;
+        } else if (nextChar === '\u0D31') {
+          sb.push('\u0BA9\u0BCD'); // ன் before ற
+          i++;
+          continue;
+        }
+      }
+      sb.push('\u0BA9\u0BCD'); // ன்
       i++;
       continue;
     }
