@@ -261,13 +261,6 @@
           }
         }, 220);
       };
-
-      // Failsafe safety fallback in case React or Electron fails (10s)
-      setTimeout(function() {
-        if (splashOverlay && splashOverlay.parentNode) {
-          window.__dismissSplash();
-        }
-      }, 10000);
     })();
   </script>
 </body>

@@ -128,15 +128,9 @@ function App() {
       if (waReady) performDismiss();
     }, 600);
 
-    // Fallback safety timeout (7.5s max) in case of network issues or offline
-    const fallbackTimer = setTimeout(() => {
-      performDismiss();
-    }, 7500);
-
     return () => {
       if (typeof removeListener === 'function') removeListener();
       clearTimeout(minTimer);
-      clearTimeout(fallbackTimer);
     };
   }, [settingsLoaded, isFirstBoot, accounts]);
 

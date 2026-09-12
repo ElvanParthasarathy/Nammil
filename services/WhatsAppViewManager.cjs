@@ -42,9 +42,6 @@ class WhatsAppViewManager {
       }
     };
 
-    // Safety fallback: ensure splash is never blocked indefinitely (7.5s max)
-    setTimeout(notifyReady, 7500);
-
     const settings = this.orchestrator.settingsManager.getSettingsSync();
     let acceptLanguages = 'en-US,en';
     if (settings.language && settings.language !== 'system') {
@@ -193,16 +190,11 @@ class WhatsAppViewManager {
               return false;
             })()
           `);
-          if (hasContent || attempts >= 35) {
+          if (hasContent) {
             clearInterval(checkInterval);
             notifyReady();
           }
-        } catch (e) {
-          if (attempts >= 35) {
-            clearInterval(checkInterval);
-            notifyReady();
-          }
-        }
+        } catch (e) {}
       }, 150);
     });
 
