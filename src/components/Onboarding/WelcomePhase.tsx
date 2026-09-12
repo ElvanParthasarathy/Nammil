@@ -15,11 +15,11 @@ export default function WelcomePhase({ onContinue }: { onContinue: () => void, s
         const x = e.clientX - rect.left;
         const y = e.clientY - rect.top;
         
-        // Exact proportional radius to farthest corner for gentle, natural ripple
+        // Generous radius to farthest corner ensuring ripple covers all edges cleanly
         const cornerX = Math.max(x, rect.width - x);
         const cornerY = Math.max(y, rect.height - y);
         const radius = Math.hypot(cornerX, cornerY);
-        const size = radius * 2;
+        const size = Math.round(radius * 2.25);
 
         setRipples(prev => ({
             ...prev,
@@ -33,7 +33,7 @@ export default function WelcomePhase({ onContinue }: { onContinue: () => void, s
                 delete next[code];
                 return next;
             });
-        }, 850);
+        }, 700);
     };
 
     const handleLanguageSelect = (code: string) => {
@@ -166,6 +166,7 @@ export default function WelcomePhase({ onContinue }: { onContinue: () => void, s
                                                 onClick={() => handleLanguageSelect(l.code)} 
                                                 disableRipple
                                                 sx={{
+                                                    width: '100%',
                                                     py: 1.25,
                                                     px: 3,
                                                     position: 'relative',

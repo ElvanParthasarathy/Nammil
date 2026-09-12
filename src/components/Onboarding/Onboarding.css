@@ -400,19 +400,20 @@ html.dark .onboarding-logo-themed, html[data-theme="dark"] .onboarding-logo-them
     background-color: var(--onboarding-text);
     pointer-events: none;
     z-index: 1;
-    animation: onboardingRipple 0.75s cubic-bezier(0.1, 0.7, 0.1, 1) forwards;
+    animation: onboardingRipple 0.65s cubic-bezier(0.15, 0.8, 0.25, 1) forwards;
 }
 
 @keyframes onboardingRipple {
     0% {
         transform: translate(-50%, -50%) scale(0);
-        opacity: 0.22;
+        opacity: 0.25;
     }
-    30% {
+    50% {
+        transform: translate(-50%, -50%) scale(1);
         opacity: 0.20;
     }
     100% {
-        transform: translate(-50%, -50%) scale(1);
+        transform: translate(-50%, -50%) scale(1.05);
         opacity: 0;
     }
 }
