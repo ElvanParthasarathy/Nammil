@@ -11,6 +11,7 @@ class WindowManager {
 
   createWindow() {
     const isLight = this.nativeTheme.shouldUseDarkColors === false;
+    const bg = isLight ? '#FAFAFA' : '#0A0A0A';
     const iconPath = path.join(__dirname, '..', 'src', 'assets', 'app_icon.ico');
     const settings = this.settingsManager ? this.settingsManager.getSettingsSync() : {};
     const isFirstBoot = settings.isFirstBoot === true;
@@ -24,7 +25,7 @@ class WindowManager {
       maximizable: !isFirstBoot,
       show: false, // Hide until maximized
       center: true,
-      backgroundColor: '#ffffff',
+      backgroundColor: bg,
       titleBarStyle: 'hidden',
       titleBarOverlay: {
         color: 'rgba(0,0,0,0)',
