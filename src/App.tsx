@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { ThemeProvider } from '@mui/material/styles';
 import useMediaQuery from '@mui/material/useMediaQuery';
 import CssBaseline from '@mui/material/CssBaseline';
@@ -21,6 +21,12 @@ function App() {
   const [accounts, setAccounts] = useState([{ id: 'default', name: 'personal' }]);
   const [settingsLoaded, setSettingsLoaded] = useState(false);
   const [isFirstBoot, setIsFirstBoot] = useState(false);
+  const activeTabRef = useRef(activeTab);
+
+  useEffect(() => {
+    activeTabRef.current = activeTab;
+  }, [activeTab]);
+
   const [notifications, setNotifications] = useState<NotificationItem[]>(() => {
     try {
       const stored = localStorage.getItem('nammil-notifications');
@@ -58,27 +64,83 @@ function App() {
     }
   }, [setLang]);
 
-  // Listen for splash-finished event from index.html splash overlay
+  // Controls splash screen dismissal coordinated with WhatsApp loading
   useEffect(() => {
-    const handleSplashFinished = () => {
+    if (!settingsLoaded) return;
+
+    let isDismissed = false;
+    let minTimePassed = false;
+    let waReady = false;
+
+    const performDismiss = () => {
+      if (isDismissed) return;
+      isDismissed = true;
+
+      // 1. Attach WhatsApp view before fading out splash
+      if (!isFirstBoot && (window as any).electronAPI) {
+        const currentTab = activeTabRef.current;
+        const targetView = currentTab.startsWith('wa-') ? currentTab.replace('wa-', '') : currentTab;
+        (window as any).electronAPI.switchTab(targetView);
+      }
+
+      // 2. Smoothly dismiss splash screen
       setShowSplash(false);
       if ((window as any).__dismissSplash) {
         (window as any).__dismissSplash();
       }
     };
 
-    window.addEventListener('splash-finished', handleSplashFinished);
+    // If first boot (Onboarding), no WhatsApp view to wait for
+    if (isFirstBoot) {
+      const timer = setTimeout(performDismiss, 800);
+      return () => clearTimeout(timer);
+    }
 
-    // Fallback safety timeout (800ms)
-    const fallback = setTimeout(handleSplashFinished, 800);
+    // If not running in Electron (e.g. browser preview)
+    if (!(window as any).electronAPI) {
+      const timer = setTimeout(performDismiss, 600);
+      return () => clearTimeout(timer);
+    }
+
+    const targetId = accounts[0]?.id || 'default';
+
+    // Check if WhatsApp is already ready (e.g. warm reload)
+    if ((window as any).electronAPI.isWhatsAppReady) {
+      (window as any).electronAPI.isWhatsAppReady(targetId).then((ready: boolean) => {
+        if (ready) {
+          waReady = true;
+          if (minTimePassed) performDismiss();
+        }
+      }).catch(() => {});
+    }
+
+    // Listen for whatsapp-ready event from main process
+    const removeListener = (window as any).electronAPI.onWhatsAppReady ? (window as any).electronAPI.onWhatsAppReady((data: any) => {
+      if (!data || data.accountId === targetId || !data.accountId) {
+        waReady = true;
+        if (minTimePassed) performDismiss();
+      }
+    }) : () => {};
+
+    // Minimum display time for a smooth polished splash (600ms)
+    const minTimer = setTimeout(() => {
+      minTimePassed = true;
+      if (waReady) performDismiss();
+    }, 600);
+
+    // Fallback safety timeout (7.5s max) in case of network issues or offline
+    const fallbackTimer = setTimeout(() => {
+      performDismiss();
+    }, 7500);
 
     return () => {
-      window.removeEventListener('splash-finished', handleSplashFinished);
-      clearTimeout(fallback);
+      if (typeof removeListener === 'function') removeListener();
+      clearTimeout(minTimer);
+      clearTimeout(fallbackTimer);
     };
-  }, []);
+  }, [settingsLoaded, isFirstBoot, accounts]);
 
-  // Only attach WhatsApp view after splash finishes and not in first boot onboarding
+  // Switch view on tab change (only after splash finishes)
   useEffect(() => {
     if (!showSplash && !isFirstBoot && (window as any).electronAPI) {
       const targetView = activeTab.startsWith('wa-') ? activeTab.replace('wa-', '') : activeTab;

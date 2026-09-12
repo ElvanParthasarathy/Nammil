@@ -21,6 +21,30 @@ class WhatsAppViewManager {
       }
     });
 
+    const isDark = this.orchestrator.windowManager && this.orchestrator.windowManager.nativeTheme ? this.orchestrator.windowManager.nativeTheme.shouldUseDarkColors : true;
+    if (typeof view.setBackgroundColor === 'function') {
+      try {
+        view.setBackgroundColor(isDark ? '#0A0A0A' : '#FAFAFA');
+      } catch(e) {}
+    }
+    try {
+      view.webContents.setBackgroundThrottling(false);
+    } catch(e) {}
+
+    view.isReady = false;
+
+    const notifyReady = () => {
+      if (view.isReady) return;
+      view.isReady = true;
+      const mainWindow = this.orchestrator.windowManager && this.orchestrator.windowManager.mainWindow;
+      if (mainWindow && !mainWindow.isDestroyed()) {
+        mainWindow.webContents.send('whatsapp-ready', { accountId: view.accountId });
+      }
+    };
+
+    // Safety fallback: ensure splash is never blocked indefinitely (7.5s max)
+    setTimeout(notifyReady, 7500);
+
     const settings = this.orchestrator.settingsManager.getSettingsSync();
     let acceptLanguages = 'en-US,en';
     if (settings.language && settings.language !== 'system') {
@@ -137,10 +161,54 @@ class WhatsAppViewManager {
           }
         })();
       `).catch(() => {});
+
+      // Poll until WhatsApp DOM renders (QR code, chat list, side pane, or intro)
+      let attempts = 0;
+      const checkInterval = setInterval(async () => {
+        attempts++;
+        if (view.isReady || !view.webContents || view.webContents.isDestroyed()) {
+          clearInterval(checkInterval);
+          return;
+        }
+        try {
+          const hasContent = await view.webContents.executeJavaScript(`
+            (function() {
+              if (
+                document.querySelector('canvas') ||
+                document.querySelector('#side') ||
+                document.querySelector('#pane-side') ||
+                document.querySelector('[data-testid="chatlist-header"]') ||
+                document.querySelector('[data-testid="qrcode"]') ||
+                document.querySelector('[data-testid="intro-title"]') ||
+                document.querySelector('div[data-ref]') ||
+                document.querySelector('.landing-wrapper') ||
+                document.querySelector('progress')
+              ) {
+                return true;
+              }
+              const app = document.getElementById('app');
+              if (app && app.children && app.children.length > 0) {
+                return true;
+              }
+              return false;
+            })()
+          `);
+          if (hasContent || attempts >= 35) {
+            clearInterval(checkInterval);
+            notifyReady();
+          }
+        } catch (e) {
+          if (attempts >= 35) {
+            clearInterval(checkInterval);
+            notifyReady();
+          }
+        }
+      }, 150);
     });
 
     // Handle offline/load failures — retry automatically
     view.webContents.on('did-fail-load', (event, errorCode, errorDescription, validatedURL) => {
+      notifyReady();
       if (validatedURL && validatedURL.startsWith(WHATSAPP_URL)) {
         console.log(`[Nammil] WhatsApp view failed to load (${errorDescription}), retrying in 5s...`);
         setTimeout(() => {
@@ -298,6 +366,14 @@ class WhatsAppViewManager {
         mainWindow.contentView.addChildView(this.views[targetView]);
         this.resizeViews();
       }
+    });
+
+    ipcMain.handle('is-whatsapp-ready', (event, accountId) => {
+      if (accountId && this.views[accountId]) {
+        return !!this.views[accountId].isReady;
+      }
+      // If no specific accountId given, check if any view is ready
+      return Object.values(this.views).some(v => !!v.isReady);
     });
   }
 }

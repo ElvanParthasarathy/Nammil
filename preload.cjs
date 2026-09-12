@@ -59,4 +59,10 @@ contextBridge.exposeInMainWorld('electronAPI', {
     return () => ipcRenderer.removeListener('nammil-received-notification', handler);
   },
   setTaskbarBadge: (count) => ipcRenderer.send('set-taskbar-badge', count),
+  onWhatsAppReady: (callback) => {
+    const handler = (_event, data) => callback(data);
+    ipcRenderer.on('whatsapp-ready', handler);
+    return () => ipcRenderer.removeListener('whatsapp-ready', handler);
+  },
+  isWhatsAppReady: (accountId) => ipcRenderer.invoke('is-whatsapp-ready', accountId),
 });

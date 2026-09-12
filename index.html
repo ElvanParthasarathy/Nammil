@@ -251,11 +251,6 @@
     (function() {
       var splashOverlay = document.getElementById('splash-overlay');
 
-      // Fast, lightweight splash hold (300ms) then dismiss
-      setTimeout(function() {
-        window.dispatchEvent(new CustomEvent('splash-finished'));
-      }, 300);
-
       window.__dismissSplash = function() {
         if (!splashOverlay) return;
         splashOverlay.style.opacity = '0';
@@ -266,6 +261,13 @@
           }
         }, 220);
       };
+
+      // Failsafe safety fallback in case React or Electron fails (10s)
+      setTimeout(function() {
+        if (splashOverlay && splashOverlay.parentNode) {
+          window.__dismissSplash();
+        }
+      }, 10000);
     })();
   </script>
 </body>
