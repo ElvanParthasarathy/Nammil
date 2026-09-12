@@ -374,6 +374,14 @@ export function mlymToTaml(text: string): string {
       }
     }
 
+    // Malayalam conjunct സ്റ്റ (sta = സ + ് + റ + ് + റ):
+    // In Malayalam typography, sa + tta represents English/loan 'st' (stand -> ஸ்டாண்டு, post -> போஸ்டு, restart -> இரீஸ்டார்ட்டு)
+    if (c === '\u0D38' && i + 4 < n && text[i + 1] === '\u0D4D' && text[i + 2] === '\u0D31' && text[i + 3] === '\u0D4D' && text[i + 4] === '\u0D31') {
+      sb.push('\u0BB8\u0BCD\u0B9F'); // ஸ்ட
+      i += 5;
+      continue;
+    }
+
     if (i + 2 < n && text[i + 1] === '\u0D4D') {
       const c1 = c;
       const c3 = text[i + 2];
@@ -389,13 +397,22 @@ export function mlymToTaml(text: string): string {
           continue;
         }
 
-        // Dental + ് + യ (Ya) -> Svarabhakti:
-        // - Word-medial Dental + ് + യ -> த் + தி + ய (thtthiya, e.g. സാങ്കേതികവിദ്യ: -> சாங்கேதிகவித்திய:, ആദിത്യ -> ஆதித்திய, സത്യ -> சத்திய, പ്രത്യേകം -> பிரத்தியேகம்)
+        // C1 + ് + യ (Ya) -> Svarabhakti per Tolkappiyam / Nannul 147-148:
+        // - Medial Dental + ് + യ -> த் + தி + ய (thtthiya, e.g. സാങ്കേതികവിദ്യ: -> சாங்கேதிகவித்திய:, ആദിത്യ -> ஆதித்திய, സത്യ -> சத்திய, പ്രത്യേകം -> பிரத்தியேகம்)
+        // - Medial Velar + ് + യ -> க் + கி + ய (kkiya, e.g. വാക്യം -> வாக்கியம், ഭാഗ്യം -> பாக்கியம், യോഗ്യം -> யோக்கியம், ആരോഗ്യം -> ஆரோக்கியம்)
+        // - Medial Labial + ് + യ -> ப் + பி + ய (ppiya, e.g. അഭ്യാസം -> அப்பியாசம்)
+        // - Medial Palatal + ് + യ -> ச் + சி + ய (cciya, e.g. രാജ്യം -> ராச்சியம்)
+        // - Medial Va + ് + യ -> வ் + வி + ய (vviya, e.g. ദിവ്യം -> திவ்வியம்)
+        // - Medial Ra + ് + യ -> ரிய (riya, e.g. കാര്യ -> காரிய, സൂര്യ -> சூரிய)
         // - Word-initial Dental + ് + യ -> தியா (e.g. ത്യാഗം -> தியாகம்)
         // - Other Word-initial C1 + ് + യ -> C1 + ி + ய (e.g. ന്യാ -> நியா, വ്യാ -> வியா)
         if (c3 === '\u0D2F') {
           const code1 = c1.charCodeAt(0);
           const isDental = code1 >= 0x0D24 && code1 <= 0x0D27; // ത, ഥ, ദ, ധ
+          const isVelar = code1 >= 0x0D15 && code1 <= 0x0D18;  // ക, ഖ, ഗ, ഘ
+          const isLabial = code1 >= 0x0D2A && code1 <= 0x0D2D && c1 !== '\u0D2B'; // പ, ഫ, ബ, ഭ
+          const isPalatal = (code1 >= 0x0D1A && code1 <= 0x0D1D) || c1 === '\u0D1C'; // ച, ഛ, ജ, ഝ
+
           if (isDental) {
             if (!isWordStart) {
               sb.push('\u0BA4\u0BCD\u0BA4\u0BBF\u0BAF'); // த்திய
@@ -406,6 +423,26 @@ export function mlymToTaml(text: string): string {
               i += 3;
               continue;
             }
+          } else if (!isWordStart && isVelar) {
+            sb.push('\u0B95\u0BCD\u0B95\u0BBF\u0BAF'); // க்கிய
+            i += 3;
+            continue;
+          } else if (!isWordStart && isLabial) {
+            sb.push('\u0BAA\u0BCD\u0BAA\u0BBF\u0BAF'); // ப்பிய
+            i += 3;
+            continue;
+          } else if (!isWordStart && isPalatal) {
+            sb.push('\u0B9A\u0BCD\u0B9A\u0BBF\u0BAF'); // ச்சிய
+            i += 3;
+            continue;
+          } else if (!isWordStart && c1 === '\u0D35') {
+            sb.push('\u0BB5\u0BCD\u0BB5\u0BBF\u0BAF'); // வ்விய
+            i += 3;
+            continue;
+          } else if (c1 === '\u0D30') {
+            sb.push('\u0BB0\u0BBF\u0BAF'); // ரிய
+            i += 3;
+            continue;
           } else if (isWordStart) {
             sb.push(base1 + '\u0BBF'); // inserts ி
             sb.push('\u0BAF');         // ய
@@ -454,7 +491,7 @@ export function mlymToTaml(text: string): string {
           }
         }
 
-        // s + consonant in loanwords like സ്റ്റ (st) in റീസ്റ്റാർട്ട്:
+        // s + consonant in loanwords like modern സ്റ്റ (st) or സ്ക (sk):
         if (c1 === '\u0D38') {
           sb.push('\u0BB8\u0BCD'); // retain pulli sibilant ஸ்
           sb.push(getTamilBaseConsonant(c3) ?? c3);
@@ -525,8 +562,8 @@ export function mlymToTaml(text: string): string {
         continue;
       }
 
-      // 8. Ending in വ (va) after long vowel (e.g. സേവ -> சேவை, സജീവ -> சச்சீவை)
-      if (c === '\u0D35' && prevIsLong) {
+      // 8. Ending in വ (va) for specific words like സേവ -> சேவை
+      if (c === '\u0D35' && i >= 2 && text.slice(i - 2, i + 1) === '\u0D38\u0D47\u0D35') {
         sb.push('\u0BB5\u0BC8');
         i++;
         continue;
@@ -539,17 +576,12 @@ export function mlymToTaml(text: string): string {
         continue;
       }
 
-      // 10. Ending in യ (ya) after long vowel:
-      // - Sanskrit feminine nouns (ഛായ -> சாயை, മായ -> மாயை)
-      // - Malayalam relative participle suffix -āya (-ായ -> -ான as in പൊതുവായ -> பொதுவான, പ്രധാനമായ -> பிரதானமான)
+      // 10. Ending in യ (ya) after long vowel for Sanskrit nouns (ഛായ -> சாயை, മായ -> மாயை)
+      // Malayalam relative participle adjectives ending in -āya (പൊതുവായ) retain original letter 'ய'
       if (c === '\u0D2F' && (prev === '\u0D3E' || prev === '\u0D47' || prev === '\u0D4B')) {
         const isSanskritNoun = i <= 3 && (text === '\u0D1B\u0D3E\u0D2F' || text === '\u0D2E\u0D3E\u0D2F' || text.endsWith(' \u0D1B\u0D3E\u0D2F') || text.endsWith(' \u0D2E\u0D3E\u0D2F'));
         if (isSanskritNoun) {
           sb.push('\u0BAF\u0BC8'); // சாயை, மாயை
-          i++;
-          continue;
-        } else if (prev === '\u0D3E' && i >= 3) {
-          sb.push('\u0BA9'); // -வான / -மான (e.g. പൊതുവായ -> பொதுவான)
           i++;
           continue;
         }
@@ -586,6 +618,10 @@ export function mlymToTaml(text: string): string {
           sb.push('\u0BAE\u0BCD'); // ம்
           i++;
           continue;
+        } else if (nextChar === '\u0D31') {
+          sb.push('\u0BA9\u0BCD'); // ன்
+          i++;
+          continue;
         }
       }
       sb.push('\u0BAE\u0BCD');
@@ -608,12 +644,43 @@ export function mlymToTaml(text: string): string {
     if (c === '\u0D28') {
       if (isWordStart) {
         sb.push('\u0BA8'); // ந
-      } else if (i + 2 < n && text[i + 1] === '\u0D4D' && text[i + 2] >= '\u0D1F' && text[i + 2] <= '\u0D22') {
-        sb.push('\u0BA3'); // ண before retroflex stop (ட)
-      } else if (i + 2 < n && text[i + 1] === '\u0D4D' && text[i + 2] >= '\u0D24' && text[i + 2] <= '\u0D27') {
-        sb.push('\u0BA8'); // ந் before dental stop (த)
-      } else if (i + 2 < n && text[i + 1] === '\u0D4D' && text[i + 2] === '\u0D31') {
-        sb.push('\u0BA9'); // ன before alveolar stop (ற)
+      } else if (i + 1 < n && text[i + 1] === '\u0D4D') {
+        let lookahead = i + 2;
+        while (lookahead < n && (text[lookahead] === '\u200C' || text[lookahead] === '\u200D')) {
+          lookahead++;
+        }
+        const nextChar = lookahead < n ? text[lookahead] : null;
+        if (nextChar !== null) {
+          const nextCode = nextChar.charCodeAt(0);
+          if (nextCode >= 0x0D1F && nextCode <= 0x0D22) {
+            sb.push('\u0BA3\u0BCD'); // ண் before ட (டன்னகரம்: பிராண்டு, செக்கண்டு, ஸ்டாண்டு)
+            i = lookahead;
+            continue;
+          } else if (nextCode >= 0x0D24 && nextCode <= 0x0D27) {
+            sb.push('\u0BA8\u0BCD'); // ந் before த (தந்நகரம்: பந்து)
+            i = lookahead;
+            continue;
+          } else if (nextChar === '\u0D31') {
+            sb.push('\u0BA9\u0BCD'); // ன் before ற (றன்னகரம்: என்று)
+            i = lookahead;
+            continue;
+          } else if (nextCode >= 0x0D15 && nextCode <= 0x0D18) {
+            sb.push('\u0B99\u0BCD'); // ங் before க
+            i = lookahead;
+            continue;
+          } else if (nextCode >= 0x0D1A && nextCode <= 0x0D1D) {
+            sb.push('\u0B9E\u0BCD'); // ஞ் before ச
+            i = lookahead;
+            continue;
+          } else if (nextCode >= 0x0D2A && nextCode <= 0x0D2E) {
+            sb.push('\u0BAE\u0BCD'); // ம் before ப
+            i = lookahead;
+            continue;
+          }
+        }
+        sb.push('\u0BA9\u0BCD'); // ன்
+        i = lookahead;
+        continue;
       } else {
         sb.push('\u0BA9'); // ன (medial intervocalic)
       }
@@ -626,24 +693,52 @@ export function mlymToTaml(text: string): string {
     // Before dental stop (ത, ഥ, ദ, ധ) -> ந் (பந்து)
     // Before alveolar stop (റ) -> ன் (என்றெ)
     if (c === '\u0D7B') {
-      const nextChar = i + 1 < n ? text[i + 1] : null;
+      let lookahead = i + 1;
+      while (lookahead < n && (text[lookahead] === '\u200C' || text[lookahead] === '\u200D' || text[lookahead] === '\u0D4D')) {
+        lookahead++;
+      }
+      const nextChar = lookahead < n ? text[lookahead] : null;
       if (nextChar !== null) {
         const nextCode = nextChar.charCodeAt(0);
         if (nextCode >= 0x0D1F && nextCode <= 0x0D22) {
-          sb.push('\u0BA3\u0BCD'); // ண் before ட
-          i++;
+          sb.push('\u0BA3\u0BCD'); // ண் before ட (டன்னகரம்: பிராண்டு, செக்கண்டு, ஸ்டாண்டு)
+          i = lookahead;
           continue;
         } else if (nextCode >= 0x0D24 && nextCode <= 0x0D27) {
-          sb.push('\u0BA8\u0BCD'); // ந் before த
-          i++;
+          sb.push('\u0BA8\u0BCD'); // ந் before த (தந்நகரம்)
+          i = lookahead;
           continue;
         } else if (nextChar === '\u0D31') {
-          sb.push('\u0BA9\u0BCD'); // ன் before ற
-          i++;
+          sb.push('\u0BA9\u0BCD'); // ன் before ற (றன்னகரம்)
+          i = lookahead;
+          continue;
+        } else if (nextCode >= 0x0D15 && nextCode <= 0x0D18) {
+          sb.push('\u0B99\u0BCD'); // ங் before க
+          i = lookahead;
+          continue;
+        } else if (nextCode >= 0x0D1A && nextCode <= 0x0D1D) {
+          sb.push('\u0B9E\u0BCD'); // ஞ் before ச
+          i = lookahead;
+          continue;
+        } else if (nextCode >= 0x0D2A && nextCode <= 0x0D2E) {
+          sb.push('\u0BAE\u0BCD'); // ம் before ப
+          i = lookahead;
           continue;
         }
       }
       sb.push('\u0BA9\u0BCD'); // ன்
+      i++;
+      continue;
+    }
+
+    // 7d. Chillu R (ർ) before Ya (യ) -> Svarabhakti 'ரி' per Nannul 147 (കാര്യം -> காரியம், സൂര്യൻ -> சூரியன், ധൈര്യം -> தைரியம்):
+    if (c === '\u0D7C') {
+      if (i + 1 < n && text[i + 1] === '\u0D2F') {
+        sb.push('\u0BB0\u0BBF'); // inserts ரி before ய
+        i++;
+        continue;
+      }
+      sb.push('\u0BB0\u0BCD'); // ர்
       i++;
       continue;
     }
