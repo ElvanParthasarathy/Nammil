@@ -66,6 +66,11 @@ export function SidebarItem({ icon, iconColor, title, description, isActive, onC
               sx={{ 
                 bgcolor: isActive ? (theme: any) => theme.palette.mode === 'dark' ? 'rgba(255,255,255,0.1)' : 'rgba(0,0,0,0.06)' : 'transparent',
                 color: (theme: any) => iconColor === 'monochrome' ? (theme.palette.mode === 'dark' ? '#fff' : '#444') : '#ffffff',
+                '&:hover': {
+                  bgcolor: (theme: any) => isActive
+                    ? (theme.palette.mode === 'dark' ? 'rgba(255,255,255,0.15)' : 'rgba(0,0,0,0.09)')
+                    : (theme.palette.mode === 'dark' ? 'rgba(255,255,255,0.08)' : 'rgba(0,0,0,0.05)'),
+                }
               }}
             >
               {icon}
@@ -82,9 +87,15 @@ export function SidebarItem({ icon, iconColor, title, description, isActive, onC
               textAlign: 'left',
               p: '16px 20px',
               borderRadius: '20px',
+              cursor: 'pointer',
               bgcolor: isActive ? (theme: any) => theme.palette.mode === 'dark' ? '#282929' : '#FFFFFF' : 'transparent',
-              transition: 'background-color 0.2s',
+              transition: 'background-color 0.15s ease',
               zIndex: isActive ? 2 : 1,
+              '&:hover': {
+                bgcolor: isActive 
+                  ? ((theme: any) => theme.palette.mode === 'dark' ? '#2c2d2d' : '#f5f5f5')
+                  : ((theme: any) => theme.palette.mode === 'dark' ? 'rgba(255, 255, 255, 0.06)' : 'rgba(0, 0, 0, 0.04)'),
+              },
             }}
           >
             {icon && (
@@ -148,10 +159,10 @@ export function SettingsRow({ icon, iconColor, title, description, control, onCl
         textAlign: 'left',
         p: '16px 20px',
         cursor: onClick ? 'pointer' : 'default',
-        '@media (hover: hover)': {
-          '&:hover': onClick ? { bgcolor: (theme) => theme.palette.mode === 'dark' ? 'var(--mac-selection-hover, rgba(255, 255, 255, 0.05))' : 'action.hover' } : {},
-        },
-        transition: 'background-color 0.2s',
+        '&:hover': onClick ? { 
+          bgcolor: (theme: any) => theme.palette.mode === 'dark' ? 'var(--mac-selection-hover, rgba(255, 255, 255, 0.05))' : 'action.hover' 
+        } : {},
+        transition: 'background-color 0.15s ease',
         ...sx
       }}
     >
