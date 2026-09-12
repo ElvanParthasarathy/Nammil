@@ -142,7 +142,7 @@ export default function WelcomePhase({ onContinue }: { onContinue: () => void, s
                                 overflow: 'hidden',
                             }}>
                                 <List sx={{
-                                    maxHeight: '260px',
+                                    maxHeight: '320px',
                                     overflowY: 'auto',
                                     p: 0,
                                     '&::-webkit-scrollbar': { width: '6px' },
