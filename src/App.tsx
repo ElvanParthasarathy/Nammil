@@ -16,7 +16,7 @@ import Onboarding from './components/Onboarding/index';
 function App() {
   const { setLang } = useI18n();
   const [showSplash, setShowSplash] = useState(true);
-  const isDevSplash = false; // DEV MODE: PAUSES SPLASH SCREEN
+  const isDevSplash = true; // FREEZE SPLASH SCREEN FOR DEV DESIGNER
   const [userTheme, setUserTheme] = useState('system');
   const [activeTab, setActiveTab] = useState('settings');
   const [accounts, setAccounts] = useState([{ id: 'default', name: 'personal' }]);
