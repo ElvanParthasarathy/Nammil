@@ -10,6 +10,7 @@ export default function LanguageTab() {
 
   const handleLangChange = (newLang: string) => {
     setLang(newLang);
+    try { localStorage.setItem('nammil-language', newLang); } catch {}
     if ((window as any).electronAPI) {
       (window as any).electronAPI.saveSetting('language', newLang);
     }

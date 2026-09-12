@@ -37,7 +37,10 @@ function App() {
     if ((window as any).electronAPI) {
       (window as any).electronAPI.getSettings().then((settings: any) => {
         if (settings) {
-          if (settings.language) setLang(settings.language);
+          if (settings.language) {
+            setLang(settings.language);
+            try { localStorage.setItem('nammil-language', settings.language); } catch {}
+          }
           if (settings.theme) setUserTheme(settings.theme);
           if (settings.accounts && settings.accounts.length > 0) {
             setAccounts(settings.accounts);

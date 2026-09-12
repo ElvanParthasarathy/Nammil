@@ -17,6 +17,10 @@
       } else {
         show();
       }
+      try {
+        var lang = localStorage.getItem('nammil-language') || 'en';
+        window.__INIT_NAME__ = (lang === 'ta' || lang === 'ml_tam') ? 'நம்மில்' : ((lang === 'ml' || lang === 'ta_ml') ? 'നമ്മിൽ' : 'Nammil');
+      } catch(e) {}
     })();
   </script>
   <style>
@@ -47,30 +51,44 @@
         color: #1A1A1A;
       }
     }
-    .pre-splash {
+    .splash-screen-root {
       position: fixed;
       inset: 0;
+      width: 100vw;
+      height: 100vh;
+      background-color: #0A0A0A;
+      color: #FFFFFF;
       display: flex;
       flex-direction: column;
       align-items: center;
       justify-content: center;
       pointer-events: none;
       overflow: hidden;
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
       opacity: 0;
       transition: opacity 0.12s ease-in-out;
+      -webkit-app-region: no-drag;
     }
-    .fonts-loaded .pre-splash {
+    .fonts-loaded .splash-screen-root {
       opacity: 1;
     }
+    @media (prefers-color-scheme: light) {
+      .splash-screen-root {
+        background-color: #FAFAFA;
+        color: #1A1A1A;
+      }
+    }
     /* Floating background shapes from Neram */
-    .pre-shape {
+    .splash-shape {
       position: absolute;
       background-color: rgba(255, 255, 255, 0.03);
       pointer-events: none;
       z-index: 0;
     }
     @media (prefers-color-scheme: light) {
-      .pre-shape {
+      .splash-shape {
         background-color: #EAEAEA;
       }
     }
@@ -119,51 +137,90 @@
       from { transform: translateY(0px); }
       to { transform: translateY(-15px); }
     }
-    .pre-center {
+    .splash-center {
       display: flex;
       flex-direction: column;
       align-items: center;
       justify-content: center;
       transform: translateY(0px);
-      z-index: 1;
+      z-index: 10;
+      pointer-events: none;
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
     }
-    .pre-logo {
+    .splash-logo {
       width: 82px;
       height: 82px;
       object-fit: contain;
-      margin-bottom: 10px;
-      filter: drop-shadow(0 4px 12px rgba(0,0,0,0.25));
+      margin: 0 0 10px 0 !important;
+      padding: 0;
+      display: block;
+      flex-shrink: 0;
+      filter: drop-shadow(0 4px 12px rgba(0, 0, 0, 0.25));
+      user-select: none;
+      pointer-events: none;
     }
-    .pre-name {
+    .splash-brand-wrap {
+      height: 24px;
+      min-height: 24px;
+      max-height: 24px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    .splash-brand-name {
       font-size: 20px;
       font-weight: 500;
-      font-family: 'Elvan Sans', sans-serif;
+      font-family: 'Elvan Sans', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
       letter-spacing: 0px;
+      line-height: 24px;
+      height: 24px;
+      margin: 0;
+      padding: 0;
       color: rgba(255, 255, 255, 0.9);
       text-align: center;
+      white-space: nowrap;
+      display: block;
     }
     @media (prefers-color-scheme: light) {
-      .pre-name {
+      .splash-brand-name {
         color: rgba(0, 0, 0, 0.85);
       }
     }
-    .pre-footer {
+    .splash-footer {
       position: absolute;
       bottom: 47px;
+      left: 0;
+      right: 0;
+      width: 100%;
+      height: 22px;
       display: flex;
       justify-content: center;
       align-items: center;
-      z-index: 1;
+      z-index: 10;
+      pointer-events: none;
+      margin: 0;
+      padding: 0;
     }
-    .pre-footer-brand {
+    .splash-footer-brand {
       font-size: 17px;
-      font-family: 'Elvan Sans', sans-serif;
+      font-family: 'Elvan Sans', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
       font-weight: 400;
       letter-spacing: 0px;
+      line-height: 22px;
+      height: 22px;
+      margin: 0;
+      padding: 0;
       color: rgba(255, 255, 255, 0.45);
+      text-align: center;
+      display: block;
     }
     @media (prefers-color-scheme: light) {
-      .pre-footer-brand {
+      .splash-footer-brand {
         color: rgba(0, 0, 0, 0.45);
       }
     }
@@ -171,17 +228,24 @@
 </head>
 <body>
   <div id="root">
-    <div class="pre-splash">
-      <div class="pre-shape shape-1"></div>
-      <div class="pre-shape shape-2"></div>
-      <div class="pre-shape shape-3"></div>
-      <div class="pre-shape shape-4"></div>
-      <div class="pre-center">
-        <img src="/app_icon.png" alt="Nammil" class="pre-logo" />
-        <div class="pre-name">Nammil</div>
+    <div class="splash-screen-root">
+      <div class="splash-shape shape-1"></div>
+      <div class="splash-shape shape-2"></div>
+      <div class="splash-shape shape-3"></div>
+      <div class="splash-shape shape-4"></div>
+      <div class="splash-center">
+        <img src="/app_icon.png" alt="Nammil" class="splash-logo" />
+        <div class="splash-brand-wrap">
+          <span class="splash-brand-name" id="pre-brand-name">Nammil</span>
+          <script>
+            if (window.__INIT_NAME__) {
+              document.getElementById('pre-brand-name').textContent = window.__INIT_NAME__;
+            }
+          </script>
+        </div>
       </div>
-      <div class="pre-footer">
-        <span class="pre-footer-brand">Elvan Navil</span>
+      <div class="splash-footer">
+        <span class="splash-footer-brand">Elvan Navil</span>
       </div>
     </div>
   </div>

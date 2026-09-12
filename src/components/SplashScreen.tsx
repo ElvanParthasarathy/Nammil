@@ -1,7 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { Box, Typography } from '@mui/material';
 import { useI18n } from '../i18n/I18nContext';
-import { getTheme } from '../theme';
 
 import './Onboarding/Onboarding.css';
 
@@ -48,9 +46,6 @@ export default function SplashScreen({ userTheme, onFinish }: SplashScreenProps)
   const { lang } = useI18n();
   const prefersDarkMode = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
   const actualMode = userTheme === 'system' ? (prefersDarkMode ? 'dark' : 'light') : userTheme;
-  const theme = getTheme(actualMode);
-
-  const contentColor = actualMode === 'dark' ? 'rgba(255,255,255,0.9)' : 'rgba(0,0,0,0.85)';
   const order = LANG_ORDER[lang] || LANG_ORDER['en'];
 
   const [nameIndex, setNameIndex] = useState(0);
@@ -84,101 +79,41 @@ export default function SplashScreen({ userTheme, onFinish }: SplashScreenProps)
 
   return (
     <div 
-      className={`onboarding-container splash-screen-root ${actualMode === 'dark' ? 'dark' : ''}`}
+      className={`splash-screen-root ${actualMode === 'dark' ? 'dark' : 'light'}`}
       style={{ WebkitAppRegion: 'no-drag' }}
     >
-      {/* Floating Animated Shapes from Neram */}
-      <div className="onboarding-shape shape-1" />
-      <div className="onboarding-shape shape-2" />
-      <div className="onboarding-shape shape-3" />
-      <div className="onboarding-shape shape-4" />
+      {/* Floating Animated Shapes from Neram - exact match with index.html */}
+      <div className="splash-shape shape-1" />
+      <div className="splash-shape shape-2" />
+      <div className="splash-shape shape-3" />
+      <div className="splash-shape shape-4" />
       
-      {/* Centered Content: Logo with Changing Language Below */}
-      <Box 
-        sx={{ 
-          width: '100vw', 
-          height: '100vh', 
-          display: 'flex', 
-          flexDirection: 'column',
-          justifyContent: 'center', 
-          alignItems: 'center', 
-          transform: `translateY(${SPLASH_COORDINATES.centerOffsetY}px)`,
-          color: actualMode === 'dark' ? '#FFFFFF' : theme.palette.text.primary,
-          position: 'relative',
-          zIndex: 10000,
-          pointerEvents: 'none'
-        }}
-      >
-        {/* Logo — Always centered on top, exact match with HTML splash */}
-        <Box 
-          component="img"
-          src="/app_icon.png"
-          alt="Nammil"
-          sx={{ 
-            width: `${SPLASH_COORDINATES.logoSize}px`,
-            height: `${SPLASH_COORDINATES.logoSize}px`,
-            mb: `${SPLASH_COORDINATES.logoMarginBottom}px`,
-            objectFit: 'contain',
-            flexShrink: 0,
-            filter: 'drop-shadow(0 4px 12px rgba(0,0,0,0.25))',
-            userSelect: 'none',
-          }} 
+      {/* Centered Content: 100% Identical DOM & CSS to HTML pre-splash */}
+      <div className="splash-center">
+        <img 
+          src="/app_icon.png" 
+          alt="Nammil" 
+          className="splash-logo" 
         />
-
-        {/* App name — Placed directly below the logo with smooth cross-language fade */}
-        <Box 
-          sx={{ 
-            display: 'flex', 
-            justifyContent: 'center',
-            alignItems: 'center',
-            minHeight: `${Math.round(SPLASH_COORDINATES.brandFontSize * 1.4)}px`,
-          }}
-        >
-          <Typography 
-            sx={{ 
-              fontSize: `${SPLASH_COORDINATES.brandFontSize}px`,
-              fontWeight: SPLASH_COORDINATES.brandFontWeight,
-              letterSpacing: `${SPLASH_COORDINATES.brandLetterSpacing}px`,
-              fontFamily: "'Elvan Sans', sans-serif",
-              color: contentColor,
+        <div className="splash-brand-wrap">
+          <span 
+            className="splash-brand-name"
+            style={{ 
               opacity: visible ? 1 : 0,
               transition: 'opacity 0.25s ease-in-out',
-              whiteSpace: 'nowrap',
-              textAlign: 'center',
             }}
           >
             {currentName}
-          </Typography>
-        </Box>
-      </Box>
+          </span>
+        </div>
+      </div>
 
-      {/* Elvan Navil Parent Branding at the bottom */}
-      <Box
-        sx={{
-          position: 'absolute',
-          bottom: `${SPLASH_COORDINATES.footerBottom}px`,
-          width: '100%',
-          display: 'flex',
-          justifyContent: 'center',
-          alignItems: 'center',
-          zIndex: 10000,
-          pointerEvents: 'none'
-        }}
-      >
-        <Typography 
-          sx={{ 
-            fontSize: `${SPLASH_COORDINATES.footerFontSize}px`, 
-            fontFamily: "'Elvan Sans', sans-serif",
-            letterSpacing: `${SPLASH_COORDINATES.footerLetterSpacing}px`,
-            fontWeight: SPLASH_COORDINATES.footerFontWeight,
-            color: actualMode === 'dark' 
-              ? `rgba(255, 255, 255, ${SPLASH_COORDINATES.footerOpacity})` 
-              : `rgba(0, 0, 0, ${SPLASH_COORDINATES.footerOpacity})`,
-          }}
-        >
+      {/* Elvan Navil Parent Branding at the bottom: 100% Identical DOM & CSS to HTML pre-splash */}
+      <div className="splash-footer">
+        <span className="splash-footer-brand">
           Elvan Navil
-        </Typography>
-      </Box>
+        </span>
+      </div>
     </div>
   );
 }
