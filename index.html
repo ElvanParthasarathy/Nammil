@@ -6,6 +6,19 @@
   <title>Nammil</title>
   <link rel="preload" href="/Fonts/ElvanSans-Regular.ttf" as="font" type="font/ttf" crossorigin />
   <link rel="preload" href="/app_icon.png" as="image" />
+  <script>
+    (function() {
+      function show() {
+        document.documentElement.classList.add('fonts-loaded');
+      }
+      if (document.fonts) {
+        document.fonts.load("1em 'Elvan Sans'").then(show).catch(show);
+        setTimeout(show, 150);
+      } else {
+        show();
+      }
+    })();
+  </script>
   <style>
     :root {
       color-scheme: light dark;
@@ -43,6 +56,11 @@
       justify-content: center;
       pointer-events: none;
       overflow: hidden;
+      opacity: 0;
+      transition: opacity 0.12s ease-in-out;
+    }
+    .fonts-loaded .pre-splash {
+      opacity: 1;
     }
     /* Floating background shapes from Neram */
     .pre-shape {

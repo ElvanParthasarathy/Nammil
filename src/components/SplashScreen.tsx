@@ -85,7 +85,10 @@ export default function SplashScreen({ userTheme, onFinish }: SplashScreenProps)
   }
 
   return (
-    <div className={`onboarding-container ${actualMode === 'dark' ? 'dark' : ''}`}>
+    <div 
+      className={`onboarding-container splash-screen-root ${actualMode === 'dark' ? 'dark' : ''}`}
+      style={{ WebkitAppRegion: 'no-drag' }}
+    >
       <div className="onboarding-shape shape-1" />
       <div className="onboarding-shape shape-2" />
       <div className="onboarding-shape shape-3" />
@@ -101,6 +104,7 @@ export default function SplashScreen({ userTheme, onFinish }: SplashScreenProps)
             top: 16,
             right: 16,
             zIndex: 99999,
+            WebkitAppRegion: 'no-drag',
             bgcolor: 'rgba(20, 24, 30, 0.85)',
             backdropFilter: 'blur(12px)',
             border: '1px solid rgba(255, 255, 255, 0.15)',

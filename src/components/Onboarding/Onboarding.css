@@ -61,6 +61,14 @@ html.dark .onboarding-logo-themed, html[data-theme="dark"] .onboarding-logo-them
     -webkit-app-region: drag;
 }
 
+/* Splash Screen & Dev Designer overrides to ensure sliders and controls are fully interactive without window drag */
+.splash-screen-root,
+.splash-container,
+.splash-designer-panel,
+.splash-designer-panel * {
+    -webkit-app-region: no-drag !important;
+}
+
 .onboarding-container::-webkit-scrollbar {
     display: none;
 }

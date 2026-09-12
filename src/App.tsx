@@ -15,8 +15,7 @@ import Onboarding from './components/Onboarding/index';
 
 function App() {
   const { setLang } = useI18n();
-  const [showSplash, setShowSplash] = useState(true);
-  const isDevSplash = true; // FREEZE SPLASH SCREEN FOR DEV DESIGNER
+  const [showSplash, setShowSplash] = useState(true); // Locked on splash screen until user exits
   const [userTheme, setUserTheme] = useState('system');
   const [activeTab, setActiveTab] = useState('settings');
   const [accounts, setAccounts] = useState([{ id: 'default', name: 'personal' }]);
@@ -46,16 +45,14 @@ function App() {
           }
           if (settings.isFirstBoot === true) setIsFirstBoot(true);
         }
+        // Keep splash screen stuck/frozen permanently for designing until user clicks "Enter App ->"
         setSettingsLoaded(true);
-        if (!isDevSplash) setTimeout(() => setShowSplash(false), 2500);
       }).catch(() => {
         setSettingsLoaded(true);
-        if (!isDevSplash) setTimeout(() => setShowSplash(false), 2500);
       });
     } else {
       setSettingsLoaded(true);
       setActiveTab('wa-default');
-      if (!isDevSplash) setTimeout(() => setShowSplash(false), 2500);
     }
   }, [setLang]);
 
