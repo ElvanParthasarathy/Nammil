@@ -525,8 +525,8 @@ export function mlymToTaml(text: string): string {
         continue;
       }
 
-      // 8. Ending in വ (va) for specific words like സേവ -> சேவை
-      if (c === '\u0D35' && i >= 2 && text.slice(i - 2, i + 1) === '\u0D38\u0D47\u0D35') {
+      // 8. Ending in വ (va) after long vowel (e.g. സേവ -> சேவை, സജീവ -> சச்சீவை)
+      if (c === '\u0D35' && prevIsLong) {
         sb.push('\u0BB5\u0BC8');
         i++;
         continue;
