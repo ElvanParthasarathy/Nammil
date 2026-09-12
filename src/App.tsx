@@ -45,14 +45,17 @@ function App() {
           }
           if (settings.isFirstBoot === true) setIsFirstBoot(true);
         }
-        // Keep splash screen stuck/frozen permanently for designing until user clicks "Enter App ->"
         setSettingsLoaded(true);
+        // Fallback timer to transition into main app smoothly
+        setTimeout(() => setShowSplash(false), 2600);
       }).catch(() => {
         setSettingsLoaded(true);
+        setTimeout(() => setShowSplash(false), 2600);
       });
     } else {
       setSettingsLoaded(true);
       setActiveTab('wa-default');
+      setTimeout(() => setShowSplash(false), 2600);
     }
   }, [setLang]);
 

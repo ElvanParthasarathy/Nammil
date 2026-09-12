@@ -1,11 +1,24 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { Box, Typography, Button } from '@mui/material';
-import { Wrench } from '@phosphor-icons/react';
+import { Box, Typography } from '@mui/material';
 import { useI18n } from '../i18n/I18nContext';
 import { getTheme } from '../theme';
-import SplashDesigner, { SplashConfig, DEFAULT_SPLASH_CONFIG } from './SplashDesigner';
 
 import './Onboarding/Onboarding.css';
+
+// Exact coordinates designed and approved
+export const SPLASH_COORDINATES = {
+  logoSize: 82,
+  logoMarginBottom: 10,
+  centerOffsetY: 0,
+  brandFontSize: 20,
+  brandFontWeight: 500,
+  brandLetterSpacing: 0,
+  footerBottom: 47,
+  footerFontSize: 17,
+  footerFontWeight: 400,
+  footerLetterSpacing: 0,
+  footerOpacity: 0.45,
+};
 
 // Brand name in each script
 const BRAND_NAMES: Record<string, string> = {
@@ -40,25 +53,11 @@ export default function SplashScreen({ userTheme, onFinish }: SplashScreenProps)
   const contentColor = actualMode === 'dark' ? 'rgba(255,255,255,0.9)' : 'rgba(0,0,0,0.85)';
   const order = LANG_ORDER[lang] || LANG_ORDER['en'];
 
-  // Designer Config State (persisted in localStorage)
-  const [config, setConfig] = useState<SplashConfig>(() => {
-    try {
-      const saved = localStorage.getItem('nammil-splash-designer-config');
-      if (saved) return { ...DEFAULT_SPLASH_CONFIG, ...JSON.parse(saved) };
-    } catch {}
-    return DEFAULT_SPLASH_CONFIG;
-  });
-
-  const [isDesignerOpen, setIsDesignerOpen] = useState(true);
-  const [isPaused, setIsPaused] = useState(true); // Paused by default for designing
-  const [previewLang, setPreviewLang] = useState('cycle');
-
   const [nameIndex, setNameIndex] = useState(0);
   const [visible, setVisible] = useState(true);
   const doneRef = useRef(false);
 
   useEffect(() => {
-    if (isPaused || previewLang !== 'cycle') return;
     if (doneRef.current) return;
 
     // Smooth cycle: 450ms visible + 250ms fade = 700ms per name
@@ -71,71 +70,28 @@ export default function SplashScreen({ userTheme, onFinish }: SplashScreenProps)
         }, 250);
       } else {
         doneRef.current = true;
+        // Hold the final language briefly (400ms), then smoothly transition into app
+        setTimeout(() => {
+          onFinish?.();
+        }, 400);
       }
     }, 450);
 
     return () => clearTimeout(timer);
-  }, [nameIndex, order.length, isPaused, previewLang]);
+  }, [nameIndex, order.length, onFinish]);
 
-  let currentName = BRAND_NAMES['en'];
-  if (previewLang !== 'cycle') {
-    currentName = BRAND_NAMES[previewLang] || BRAND_NAMES['en'];
-  } else {
-    currentName = BRAND_NAMES[order[nameIndex]] || BRAND_NAMES['en'];
-  }
+  const currentName = BRAND_NAMES[order[nameIndex]] || BRAND_NAMES['en'];
 
   return (
     <div 
       className={`onboarding-container splash-screen-root ${actualMode === 'dark' ? 'dark' : ''}`}
       style={{ WebkitAppRegion: 'no-drag' }}
     >
+      {/* Floating Animated Shapes from Neram */}
       <div className="onboarding-shape shape-1" />
       <div className="onboarding-shape shape-2" />
       <div className="onboarding-shape shape-3" />
       <div className="onboarding-shape shape-4" />
-
-      {/* Floating Toggle Button when Designer is Closed */}
-      {!isDesignerOpen && (
-        <Button
-          onClick={() => setIsDesignerOpen(true)}
-          startIcon={<Wrench size={16} weight="fill" />}
-          sx={{
-            position: 'fixed',
-            top: 16,
-            right: 16,
-            zIndex: 99999,
-            WebkitAppRegion: 'no-drag',
-            bgcolor: 'rgba(20, 24, 30, 0.85)',
-            backdropFilter: 'blur(12px)',
-            border: '1px solid rgba(255, 255, 255, 0.15)',
-            color: '#00e676',
-            borderRadius: '20px',
-            textTransform: 'none',
-            fontSize: '12px',
-            fontWeight: 700,
-            px: 1.5,
-            py: 0.5,
-            boxShadow: '0 4px 16px rgba(0,0,0,0.4)',
-            '&:hover': { bgcolor: 'rgba(30, 36, 45, 0.95)', borderColor: '#00e676' },
-          }}
-        >
-          Dev Designer
-        </Button>
-      )}
-
-      {/* Interactive Dev Designer Panel */}
-      {isDesignerOpen && (
-        <SplashDesigner
-          config={config}
-          onChange={setConfig}
-          previewLang={previewLang}
-          onPreviewLangChange={setPreviewLang}
-          isPaused={isPaused}
-          onTogglePause={() => setIsPaused(p => !p)}
-          onCloseDesigner={() => setIsDesignerOpen(false)}
-          onEnterApp={onFinish}
-        />
-      )}
       
       {/* Centered Content: Logo with Changing Language Below */}
       <Box 
@@ -143,10 +99,10 @@ export default function SplashScreen({ userTheme, onFinish }: SplashScreenProps)
           width: '100vw', 
           height: '100vh', 
           display: 'flex', 
-          flexDirection: 'column', // VERTICAL: Brand name placed below logo
+          flexDirection: 'column',
           justifyContent: 'center', 
           alignItems: 'center', 
-          transform: `translateY(${config.centerOffsetY}px)`,
+          transform: `translateY(${SPLASH_COORDINATES.centerOffsetY}px)`,
           color: actualMode === 'dark' ? '#FFFFFF' : theme.palette.text.primary,
           position: 'relative',
           zIndex: 10000,
@@ -159,9 +115,9 @@ export default function SplashScreen({ userTheme, onFinish }: SplashScreenProps)
           src="/app_icon.png"
           alt="Nammil"
           sx={{ 
-            width: `${config.logoSize}px`,
-            height: `${config.logoSize}px`,
-            mb: `${config.logoMarginBottom}px`,
+            width: `${SPLASH_COORDINATES.logoSize}px`,
+            height: `${SPLASH_COORDINATES.logoSize}px`,
+            mb: `${SPLASH_COORDINATES.logoMarginBottom}px`,
             objectFit: 'contain',
             flexShrink: 0,
             filter: 'drop-shadow(0 4px 12px rgba(0,0,0,0.25))',
@@ -169,23 +125,23 @@ export default function SplashScreen({ userTheme, onFinish }: SplashScreenProps)
           }} 
         />
 
-        {/* App name — Placed directly below the logo */}
+        {/* App name — Placed directly below the logo with smooth cross-language fade */}
         <Box 
           sx={{ 
             display: 'flex', 
             justifyContent: 'center',
             alignItems: 'center',
-            minHeight: `${Math.round(config.brandFontSize * 1.3)}px`,
+            minHeight: `${Math.round(SPLASH_COORDINATES.brandFontSize * 1.4)}px`,
           }}
         >
           <Typography 
             sx={{ 
-              fontSize: `${config.brandFontSize}px`,
-              fontWeight: config.brandFontWeight,
-              letterSpacing: `${config.brandLetterSpacing}px`,
+              fontSize: `${SPLASH_COORDINATES.brandFontSize}px`,
+              fontWeight: SPLASH_COORDINATES.brandFontWeight,
+              letterSpacing: `${SPLASH_COORDINATES.brandLetterSpacing}px`,
               fontFamily: "'Elvan Sans', sans-serif",
               color: contentColor,
-              opacity: (previewLang !== 'cycle' || visible) ? 1 : 0,
+              opacity: visible ? 1 : 0,
               transition: 'opacity 0.25s ease-in-out',
               whiteSpace: 'nowrap',
               textAlign: 'center',
@@ -200,7 +156,7 @@ export default function SplashScreen({ userTheme, onFinish }: SplashScreenProps)
       <Box
         sx={{
           position: 'absolute',
-          bottom: `${config.footerBottom}px`,
+          bottom: `${SPLASH_COORDINATES.footerBottom}px`,
           width: '100%',
           display: 'flex',
           justifyContent: 'center',
@@ -211,11 +167,13 @@ export default function SplashScreen({ userTheme, onFinish }: SplashScreenProps)
       >
         <Typography 
           sx={{ 
-            fontSize: `${config.footerFontSize}px`, 
+            fontSize: `${SPLASH_COORDINATES.footerFontSize}px`, 
             fontFamily: "'Elvan Sans', sans-serif",
-            letterSpacing: `${config.footerLetterSpacing}px`,
-            fontWeight: config.footerFontWeight,
-            color: actualMode === 'dark' ? `rgba(255, 255, 255, ${config.footerOpacity})` : `rgba(0, 0, 0, ${config.footerOpacity})`,
+            letterSpacing: `${SPLASH_COORDINATES.footerLetterSpacing}px`,
+            fontWeight: SPLASH_COORDINATES.footerFontWeight,
+            color: actualMode === 'dark' 
+              ? `rgba(255, 255, 255, ${SPLASH_COORDINATES.footerOpacity})` 
+              : `rgba(0, 0, 0, ${SPLASH_COORDINATES.footerOpacity})`,
           }}
         >
           Elvan Navil
