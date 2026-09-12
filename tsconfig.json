@@ -13,6 +13,10 @@
     "isolatedModules": true,
     "noEmit": true,
     "jsx": "react-jsx",
+    "baseUrl": ".",
+    "paths": {
+      "navil-engine": ["../Navil Engine/engine.ts"]
+    },
 
     /* Linting */
     "strict": true,

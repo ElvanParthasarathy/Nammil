@@ -1,7 +1,19 @@
 import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
+import { transliterate, capitalizeWords } from 'navil-engine';
 import { en } from './en';
 import { ta } from './ta';
 import { ml } from './ml';
+
+const navilCache = new Map<string, string>();
+
+function toNavilLatn(text: string): string {
+  if (!text) return '';
+  const cached = navilCache.get(text);
+  if (cached !== undefined) return cached;
+  const result = capitalizeWords(transliterate(text));
+  navilCache.set(text, result);
+  return result;
+}
 
 const dictionaries: Record<string, Record<string, string>> = {
   en
@@ -46,9 +58,12 @@ export const I18nProvider = ({ children, initialLang = 'system' }: { children: R
     if (actualLang.startsWith('ta')) {
       const obj = (ta as any)[key];
       if (!obj) return (en as any)[key] || key;
-      if (actualLang === 'ta_latn') return obj.latn;
-      if (actualLang === 'ta_ml') return obj.ml;
-      return obj.ta;
+      if (actualLang === 'ta_latn') {
+        const tamilText = typeof obj === 'string' ? obj : (obj.ta || '');
+        return toNavilLatn(tamilText);
+      }
+      if (actualLang === 'ta_ml') return obj.ml || obj.ta;
+      return typeof obj === 'string' ? obj : obj.ta;
     }
     
     if (actualLang.startsWith('ml')) {
