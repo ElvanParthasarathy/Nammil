@@ -63,18 +63,26 @@ class SettingsManager {
 
   getMediaFolder() {
     const s = this.getSettingsSync();
-    if (s.mediaFolderPath && fs.existsSync(s.mediaFolderPath) && (s.mediaFolderPath.toLowerCase().endsWith('media') || s.mediaFolderPath.toLowerCase().includes('nammil'))) {
-      return s.mediaFolderPath;
+    const defaultDownloads = path.join(this.app.getPath('downloads'), 'Nammil', 'Media');
+    const current = s.mediaFolderPath || s.mediaFolder;
+
+    // Automatically migrate from old OneDrive or Pictures default to Downloads
+    if (current && (current.toLowerCase().includes('pictures') || current.toLowerCase().includes('onedrive'))) {
+      this.setMediaFolder(defaultDownloads);
+      if (!fs.existsSync(defaultDownloads)) {
+        try { fs.mkdirSync(defaultDownloads, { recursive: true }); } catch(e) {}
+      }
+      return defaultDownloads;
     }
-    if (s.mediaFolder && fs.existsSync(s.mediaFolder) && (s.mediaFolder.toLowerCase().endsWith('media') || s.mediaFolder.toLowerCase().includes('nammil'))) {
-      return s.mediaFolder;
+
+    if (current && fs.existsSync(current) && (current.toLowerCase().endsWith('media') || current.toLowerCase().includes('nammil'))) {
+      return current;
     }
-    const defaultMedia = path.join(this.app.getPath('pictures'), 'Nammil', 'Media');
-    if (fs.existsSync(defaultMedia)) {
-      return defaultMedia;
+
+    if (!fs.existsSync(defaultDownloads)) {
+      try { fs.mkdirSync(defaultDownloads, { recursive: true }); } catch(e) {}
     }
-    const userDataMedia = path.join(this.app.getPath('userData'), 'Media');
-    return fs.existsSync(userDataMedia) ? userDataMedia : defaultMedia;
+    return defaultDownloads;
   }
 
   setMediaFolder(newPath) {

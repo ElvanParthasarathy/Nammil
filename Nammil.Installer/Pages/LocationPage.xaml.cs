@@ -13,8 +13,8 @@ namespace Nammil_Installer.Pages
         public LocationPage()
         {
             this.InitializeComponent();
-            string docs = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
-            SelectedMediaPath = Path.Combine(docs, "Nammil", "Media");
+            string downloads = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), "Downloads");
+            SelectedMediaPath = Path.Combine(downloads, "Nammil", "Media");
             MediaPathBox.Text = SelectedMediaPath;
             AppPathBox.Text = SelectedAppPath;
         }
