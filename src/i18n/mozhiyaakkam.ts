@@ -246,9 +246,35 @@ function isLetterChar(c: string): boolean {
   return /\p{L}/u.test(c);
 }
 
+function getTamilBaseConsonant(c: string): string | null {
+  if (c === '\u0D36' || c === '\u0D38') return '\u0B9A'; // ശ, സ -> ச
+  if (c >= '\u0D15' && c <= '\u0D18') return '\u0B95'; // க
+  if (c >= '\u0D1A' && c <= '\u0D1D' && c !== '\u0D1C') return '\u0B9A'; // ச
+  if (c === '\u0D1C') return '\u0B9C'; // ஜ
+  if (c >= '\u0D1F' && c <= '\u0D22') return '\u0B9F'; // ட
+  if (c === '\u0D23') return '\u0BA3'; // ண
+  if (c >= '\u0D24' && c <= '\u0D27') return '\u0BA4'; // த
+  if (c === '\u0D28') return '\u0BA8'; // ந
+  if (c === '\u0D29') return '\u0BA9'; // ன
+  if (c >= '\u0D2A' && c <= '\u0D2D' && c !== '\u0D2B') return '\u0BAA'; // ப
+  if (c === '\u0D2B') return '\u0B83\u0BAA'; // ஃப
+  if (c === '\u0D2E') return '\u0BAE'; // ம
+  if (c === '\u0D2F') return '\u0BAF'; // ய
+  if (c === '\u0D30') return '\u0BB0'; // ர
+  if (c === '\u0D31') return '\u0BB1'; // ற
+  if (c === '\u0D32') return '\u0BB2'; // ல
+  if (c === '\u0D33') return '\u0BB3'; // ள
+  if (c === '\u0D34') return '\u0BB4'; // ழ
+  if (c === '\u0D35') return '\u0BB5'; // வ
+  if (c === '\u0D37') return '\u0BB7'; // ஷ
+  if (c === '\u0D39') return '\u0BB9'; // ஹ
+  return null;
+}
+
 /**
  * Transliterates Malayalam script into authentic Tamil script, applying
- * classical Kutriyalukaram (Samvruthokaram), Chillu-pulli, and phonological folding rules.
+ * classical Kutriyalukaram (Samvruthokaram), Svarabhakti cluster resolution,
+ * Chillu-pulli, and phonological folding rules.
  */
 export function mlymToTaml(text: string): string {
   if (!text) return '';
@@ -258,6 +284,62 @@ export function mlymToTaml(text: string): string {
 
   while (i < n) {
     const c = text[i];
+    const isWordStart = i === 0 || !isLetterChar(text[i - 1]);
+
+    // Word-initial / Svarabhakti cluster resolution (மொழிமுதல் மெய்ம்மயக்கமின்மை):
+    // E.g. പ്ര -> பிர, പ്രി -> பிரி, ശ്ര -> சிர (ശ്രമം -> சிரமம், ശ്രദ്ധ -> சிரத்தை)
+    if (i + 2 < n && text[i + 1] === '\u0D4D') {
+      const c1 = c;
+      const c3 = text[i + 2];
+      const base1 = getTamilBaseConsonant(c1);
+
+      if (base1) {
+        // 1. C1 + ് + ര (Ra):
+        // പ്ര -> பிர, പ്രി -> பிரி, ശ്ര -> சிர, ക്ര -> கிர, ത്ര -> திர
+        // Universal at word start (or for ശ്ര everywhere: ആശ്രമം -> ஆசிரமம்)
+        if (c3 === '\u0D30' && (isWordStart || c1 === '\u0D36' || c1 === '\u0D38')) {
+          sb.push(base1 + '\u0BBF'); // inserts ி
+          sb.push('\u0BB0');         // ர
+          i += 3;
+          continue;
+        }
+
+        // 2. Word-initial C1 + ് + യ (Ya) -> C1 + ி + ய (e.g. ത്യാ -> தியா, ന്യാ -> நியா, വ്യാ -> வியா)
+        if (isWordStart && c3 === '\u0D2F') {
+          sb.push(base1 + '\u0BBF'); // inserts ி
+          sb.push('\u0BAF');         // ய
+          i += 3;
+          continue;
+        }
+
+        // 3. Word-initial C1 + ് + വ (Va) -> C1 + ு + வ (e.g. സ്വാ -> சுவா, ദ്வா -> துவா)
+        if (isWordStart && c3 === '\u0D35') {
+          sb.push(base1 + '\u0BC1'); // inserts ு
+          sb.push('\u0BB5');         // வ
+          i += 3;
+          continue;
+        }
+
+        // 4. Word-initial സ/ശ + ് + ന/മ/ല (Sibilant + Nasal/Liquid)
+        if (isWordStart && (c1 === '\u0D38' || c1 === '\u0D36')) {
+          if (c3 === '\u0D28') { // സ്ന -> சின (சினேகம்)
+            sb.push('\u0B9A\u0BBF\u0BA9');
+            i += 3;
+            continue;
+          }
+          if (c3 === '\u0D2E') { // സ്ம -> சும (சுமரணை)
+            sb.push('\u0B9A\u0BC1\u0BAE');
+            i += 3;
+            continue;
+          }
+          if (c3 === '\u0D32') { // ശ്ല -> சுல (சுலோகம்)
+            sb.push('\u0B9A\u0BC1\u0BB2');
+            i += 3;
+            continue;
+          }
+        }
+      }
+    }
 
     // Word-final Virama '്':
     // - After Vallinam and Chillu-capable consonants -> Tamil 'ு' (Kutriyalukaram: അത്, വീട്, എന്താണ്, അവന്, കണ്ണ്)
