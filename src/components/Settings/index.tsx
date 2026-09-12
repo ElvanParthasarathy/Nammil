@@ -3,7 +3,7 @@ import { Box, Typography, IconButton, Menu, MenuItem } from '@mui/material';
 import { ChatCircle, Palette, Translate, CaretLeft, Gear, DotsThreeVertical, HardDrives, Bell, GearSix, Info } from '@phosphor-icons/react';
 import { useI18n } from '../../i18n/I18nContext';
 import { k } from '../../i18n/k';
-import { SidebarItem } from '../shared/ElvanSettingsSection';
+import { SidebarItem } from '../shared/SettingsSection';
 import DualPanelLayout from '../shared/DualPanelLayout';
 import { useIsDark } from '../shared/hooks';
 import { sanitizeName } from './validation';

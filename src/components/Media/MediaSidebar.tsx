@@ -4,7 +4,7 @@ import { FolderOpen, Image, VideoCamera, FileText, Headphones } from '@phosphor-
 import { useI18n } from '../../i18n/I18nContext';
 import { k } from '../../i18n/k';
 import { useIsDark } from '../shared/hooks';
-import { SidebarItem } from '../shared/ElvanSettingsSection';
+import { SidebarItem } from '../shared/SettingsSection';
 
 interface MediaSidebarProps {
   accounts: any[];

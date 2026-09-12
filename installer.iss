@@ -1,10 +1,10 @@
-#define MyAppName "Elvan Nammil"
+#define MyAppName "Nammil"
 #define MyAppVersion "2.1.0"
 #define MyAppPublisher "Elvan Parthasarathy"
-#define MyAppExeName "Elvan Nammil.exe"
+#define MyAppExeName "Nammil.exe"
 #define MyOutputDir "build-release"
 #define MyAppURL "https://nammil.elvan.dev"
-#define MyAppId "com.nammil.elvan"
+#define MyAppId "com.nammil.app"
 
 [Setup]
 AppId={{5A8C4A9D-2F38-4F43-A1C2-8B1E4A35B9D1}
@@ -23,7 +23,7 @@ UninstallDisplayIcon={app}\{#MyAppExeName}
 Compression=lzma2/ultra64
 SolidCompression=yes
 OutputDir={#MyOutputDir}
-OutputBaseFilename=Elvan Nammil Setup
+OutputBaseFilename=Nammil Setup
 ArchitecturesAllowed=x64compatible
 ArchitecturesInstallIn64BitMode=x64compatible
 

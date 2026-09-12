@@ -31,7 +31,7 @@ class TrayManager {
         } 
       }
     ]);
-    this.tray.setToolTip('Elvan Nammil');
+    this.tray.setToolTip('Nammil');
     this.tray.setContextMenu(trayMenu);
     this.tray.on('double-click', () => {
       const mainWindow = this.orchestrator.windowManager.mainWindow;

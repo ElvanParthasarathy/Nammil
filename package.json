@@ -1,8 +1,8 @@
 {
-  "name": "elvan-nammil",
-  "productName": "Elvan Nammil",
+  "name": "nammil",
+  "productName": "Nammil",
   "author": "Elvan Parthasarathy",
-  "description": "Elvan Nammil - WhatsApp Client",
+  "description": "Nammil - WhatsApp Client",
   "version": "2.1.0",
   "private": true,
   "type": "module",
@@ -19,8 +19,8 @@
     "start": "electron ."
   },
   "build": {
-    "appId": "com.nammil.elvan",
-    "productName": "Elvan Nammil",
+    "appId": "com.nammil.app",
+    "productName": "Nammil",
     "directories": {
       "output": "build-release"
     },
@@ -47,7 +47,7 @@
       "installerHeaderIcon": "build/icon.ico",
       "createDesktopShortcut": true,
       "createStartMenuShortcut": true,
-      "shortcutName": "Elvan Nammil",
+      "shortcutName": "Nammil",
       "runAfterFinish": true
     }
   },

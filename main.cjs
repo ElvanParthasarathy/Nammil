@@ -4,11 +4,11 @@ const AppOrchestrator = require('./services/AppOrchestrator.cjs');
 
 // Detect dev vs release mode
 const isDev = !!process.env.VITE_DEV_SERVER_URL;
-const APP_ID = isDev ? 'com.nammil.elvan.dev' : 'com.nammil.elvan';
+const APP_ID = isDev ? 'com.nammil.app.dev' : 'com.nammil.app';
 
 // In dev mode, use a separate userData folder so dev & release never share data
 if (isDev) {
-  app.setPath('userData', path.join(app.getPath('appData'), 'elvan-nammil-dev'));
+  app.setPath('userData', path.join(app.getPath('appData'), 'nammil-dev'));
 }
 
 // 1. Single Instance Lock — Ensure only one instance per mode runs at a time

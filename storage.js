@@ -8,7 +8,7 @@ import path from 'path';
 import { app } from 'electron';
 
 const oldMediaDir = path.join(app.getPath('userData'), 'Media');
-const newMediaDir = path.join(app.getPath('downloads'), 'Elvan Nammil', 'Media');
+const newMediaDir = path.join(app.getPath('downloads'), 'Nammil', 'Media');
 
 let BASE_MEDIA_DIR = fs.existsSync(oldMediaDir) ? oldMediaDir : newMediaDir;
 

@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Box, Typography } from '@mui/material';
 import { useI18n } from '../../i18n/I18nContext';
 import { k } from '../../i18n/k';
-import { SettingsSection, SettingsRow } from '../shared/ElvanSettingsSection';
+import { SettingsSection, SettingsRow } from '../shared/SettingsSection';
 import { useIsDark } from '../shared/hooks';
 import NammilLogo from '../../assets/nammil_outline.webp';
 

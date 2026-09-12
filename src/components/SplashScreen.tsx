@@ -9,7 +9,7 @@ import './Onboarding/Onboarding.css';
 // Brand name in each script
 const BRAND_NAMES: Record<string, string> = {
   ta: 'எல்வன் நம்மில்',
-  en: 'Elvan Nammil',
+  en: 'Nammil',
   ml: 'എൽവൻ നമ്മിൽ',
 };
 

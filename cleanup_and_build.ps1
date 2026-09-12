@@ -1,33 +1,33 @@
 # === FULL NUCLEAR CLEANUP & FRESH BUILD ===
 
 # Kill any running instances
-taskkill /F /IM "Elvan Nammil.exe" /T 2>$null
-taskkill /F /IM "Elvan Nammil Pro.exe" /T 2>$null
+taskkill /F /IM "Nammil.exe" /T 2>$null
+taskkill /F /IM "Nammil Pro.exe" /T 2>$null
 taskkill /F /IM electron.exe /T 2>$null
 
 # Remove ALL old app data folders (every variant we ever used)
 Remove-Item -Recurse -Force "$env:APPDATA\nammil-electron" -ErrorAction SilentlyContinue
-Remove-Item -Recurse -Force "$env:APPDATA\elvan-nammil" -ErrorAction SilentlyContinue
-Remove-Item -Recurse -Force "$env:APPDATA\elvan-nammil-pro" -ErrorAction SilentlyContinue
-Remove-Item -Recurse -Force "$env:APPDATA\elvan-nammil-app" -ErrorAction SilentlyContinue
-Remove-Item -Recurse -Force "$env:APPDATA\Elvan Nammil" -ErrorAction SilentlyContinue
-Remove-Item -Recurse -Force "$env:APPDATA\Elvan Nammil Pro" -ErrorAction SilentlyContinue
+Remove-Item -Recurse -Force "$env:APPDATA\nammil" -ErrorAction SilentlyContinue
+Remove-Item -Recurse -Force "$env:APPDATA\nammil-pro" -ErrorAction SilentlyContinue
+Remove-Item -Recurse -Force "$env:APPDATA\nammil-app" -ErrorAction SilentlyContinue
+Remove-Item -Recurse -Force "$env:APPDATA\Nammil" -ErrorAction SilentlyContinue
+Remove-Item -Recurse -Force "$env:APPDATA\Nammil Pro" -ErrorAction SilentlyContinue
 
 # Remove ALL old installation folders
-Remove-Item -Recurse -Force "$env:LOCALAPPDATA\Programs\Elvan Nammil" -ErrorAction SilentlyContinue
-Remove-Item -Recurse -Force "$env:LOCALAPPDATA\Programs\Elvan Nammil Pro" -ErrorAction SilentlyContinue
+Remove-Item -Recurse -Force "$env:LOCALAPPDATA\Programs\Nammil" -ErrorAction SilentlyContinue
+Remove-Item -Recurse -Force "$env:LOCALAPPDATA\Programs\Nammil Pro" -ErrorAction SilentlyContinue
 Remove-Item -Recurse -Force "$env:LOCALAPPDATA\Programs\nammil-electron" -ErrorAction SilentlyContinue
-Remove-Item -Recurse -Force "$env:LOCALAPPDATA\Programs\elvan-nammil" -ErrorAction SilentlyContinue
-Remove-Item -Recurse -Force "$env:LOCALAPPDATA\Programs\elvan-nammil-pro" -ErrorAction SilentlyContinue
+Remove-Item -Recurse -Force "$env:LOCALAPPDATA\Programs\nammil" -ErrorAction SilentlyContinue
+Remove-Item -Recurse -Force "$env:LOCALAPPDATA\Programs\nammil-pro" -ErrorAction SilentlyContinue
 
 # Remove old Start Menu shortcuts
-Remove-Item -Force "$env:APPDATA\Microsoft\Windows\Start Menu\Programs\Elvan Nammil.lnk" -ErrorAction SilentlyContinue
-Remove-Item -Force "$env:APPDATA\Microsoft\Windows\Start Menu\Programs\Elvan Nammil Pro.lnk" -ErrorAction SilentlyContinue
+Remove-Item -Force "$env:APPDATA\Microsoft\Windows\Start Menu\Programs\Nammil.lnk" -ErrorAction SilentlyContinue
+Remove-Item -Force "$env:APPDATA\Microsoft\Windows\Start Menu\Programs\Nammil Pro.lnk" -ErrorAction SilentlyContinue
 Remove-Item -Force "$env:APPDATA\Microsoft\Windows\Start Menu\Programs\Electron.lnk" -ErrorAction SilentlyContinue
 
 # Remove old Desktop shortcuts
-Remove-Item -Force "$env:USERPROFILE\Desktop\Elvan Nammil.lnk" -ErrorAction SilentlyContinue
-Remove-Item -Force "$env:USERPROFILE\Desktop\Elvan Nammil Pro.lnk" -ErrorAction SilentlyContinue
+Remove-Item -Force "$env:USERPROFILE\Desktop\Nammil.lnk" -ErrorAction SilentlyContinue
+Remove-Item -Force "$env:USERPROFILE\Desktop\Nammil Pro.lnk" -ErrorAction SilentlyContinue
 Remove-Item -Force "$env:USERPROFILE\Desktop\Electron.lnk" -ErrorAction SilentlyContinue
 
 # Remove old build directory
@@ -53,6 +53,6 @@ npm run dist
 
 # Copy final installer back
 New-Item -ItemType Directory -Force -Path "d:\Things\Padaippugal\Nadappil\Elvan Elcen\elvan-elcen\Nammil.Electron\release" | Out-Null
-Copy-Item "release\Elvan Nammil Setup 1.0.0.exe" "d:\Things\Padaippugal\Nadappil\Elvan Elcen\elvan-elcen\Nammil.Electron\release\Elvan Nammil Setup.exe" -Force
+Copy-Item "release\Nammil Setup 1.0.0.exe" "d:\Things\Padaippugal\Nadappil\Elvan Elcen\elvan-elcen\Nammil.Electron\release\Nammil Setup.exe" -Force
 
 Write-Host "=== CLEAN BUILD COMPLETE ==="

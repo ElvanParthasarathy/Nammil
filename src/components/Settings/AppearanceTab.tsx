@@ -4,7 +4,7 @@ import { CheckCircle, Circle } from '@phosphor-icons/react';
 import { useI18n } from '../../i18n/I18nContext';
 import { k } from '../../i18n/k';
 import { useIsDark } from '../shared/hooks';
-import { SettingsSection } from '../shared/ElvanSettingsSection';
+import { SettingsSection } from '../shared/SettingsSection';
 import { Material3Switch } from '../shared/Material3Switch';
 
 export default function AppearanceTab({ userTheme, setUserTheme }: any) {

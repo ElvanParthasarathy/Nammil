@@ -21,9 +21,9 @@ namespace Nammil_Installer.Services
                 }
 
                 string finalMediaPath = mediaPath;
-                if (!finalMediaPath.EndsWith("Media", StringComparison.OrdinalIgnoreCase) && !finalMediaPath.Contains("Elvan Nammil", StringComparison.OrdinalIgnoreCase))
+                if (!finalMediaPath.EndsWith("Media", StringComparison.OrdinalIgnoreCase) && !finalMediaPath.Contains("Nammil", StringComparison.OrdinalIgnoreCase))
                 {
-                    finalMediaPath = Path.Combine(finalMediaPath, "Elvan Nammil", "Media");
+                    finalMediaPath = Path.Combine(finalMediaPath, "Nammil", "Media");
                 }
 
                 if (!Directory.Exists(finalMediaPath))
@@ -58,7 +58,7 @@ namespace Nammil_Installer.Services
 
                 // 3. Create Settings File
                 var appData = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
-                var settingsDir = Path.Combine(appData, "Elvan Nammil");
+                var settingsDir = Path.Combine(appData, "Nammil");
                 if (!Directory.Exists(settingsDir))
                 {
                     Directory.CreateDirectory(settingsDir);
@@ -89,8 +89,8 @@ namespace Nammil_Installer.Services
 
                 // 4. Create Desktop Shortcut (via PowerShell to avoid COM Interop complexities in .NET 9)
                 string desktop = Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
-                string shortcutPath = Path.Combine(desktop, "Elvan Nammil.lnk");
-                string targetPath = Path.Combine(appPath, "Elvan Nammil.exe");
+                string shortcutPath = Path.Combine(desktop, "Nammil.lnk");
+                string targetPath = Path.Combine(appPath, "Nammil.exe");
                 
                 string iconPath = Path.Combine(appPath, "resources", "app.asar.unpacked", "assets", "app_icon.ico");
                 if (!File.Exists(iconPath)) iconPath = targetPath; // Fallback to exe icon
@@ -115,7 +115,7 @@ namespace Nammil_Installer.Services
 
         public static void LaunchApp(string appPath)
         {
-            var targetPath = Path.Combine(appPath, "Elvan Nammil.exe");
+            var targetPath = Path.Combine(appPath, "Nammil.exe");
             if (File.Exists(targetPath))
             {
                 Process.Start(new ProcessStartInfo

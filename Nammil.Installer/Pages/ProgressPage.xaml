@@ -15,7 +15,7 @@
             <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
 
-        <TextBlock Text="Installing Elvan Nammil" Style="{ThemeResource TitleTextBlockStyle}" FontWeight="SemiBold" />
+        <TextBlock Text="Installing Nammil" Style="{ThemeResource TitleTextBlockStyle}" FontWeight="SemiBold" />
 
         <StackPanel Grid.Row="1" VerticalAlignment="Center" Spacing="16">
             <TextBlock x:Name="StatusText" Text="Extracting files..." HorizontalAlignment="Center" />

@@ -18,9 +18,9 @@
 
         <!-- Content -->
         <StackPanel Grid.Column="1" VerticalAlignment="Center" Margin="40,0,0,0" Spacing="24">
-            <TextBlock Text="Welcome to Elvan Nammil" Style="{ThemeResource TitleTextBlockStyle}" FontWeight="SemiBold" />
+            <TextBlock Text="Welcome to Nammil" Style="{ThemeResource TitleTextBlockStyle}" FontWeight="SemiBold" />
             
-            <TextBlock Text="This setup will install Elvan Nammil 2.1.0 on your computer.&#x0a;&#x0a;Click Next to continue, or Cancel to exit Setup."
+            <TextBlock Text="This setup will install Nammil 2.1.0 on your computer.&#x0a;&#x0a;Click Next to continue, or Cancel to exit Setup."
                        Style="{ThemeResource BodyTextBlockStyle}" TextWrapping="Wrap" Foreground="{ThemeResource TextFillColorSecondaryBrush}" />
 
             <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Spacing="12" Margin="0,40,0,0">

@@ -3,7 +3,7 @@ import { Box } from '@mui/material';
 import { Check } from '@phosphor-icons/react';
 import { useI18n } from '../../i18n/I18nContext';
 import { k } from '../../i18n/k';
-import { SettingsSection, SettingsRow } from '../shared/ElvanSettingsSection';
+import { SettingsSection, SettingsRow } from '../shared/SettingsSection';
 
 export default function LanguageTab() {
   const { t, lang, setLang } = useI18n();

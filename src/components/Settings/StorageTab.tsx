@@ -3,7 +3,7 @@ import { Box, Typography, Button, CircularProgress, IconButton, Tooltip } from '
 import { HardDrives, Warning, Trash, FolderOpen } from '@phosphor-icons/react';
 import { useI18n } from '../../i18n/I18nContext';
 import { k } from '../../i18n/k';
-import { SettingsSection as ElvanSettingsSection, SettingsRow } from '../shared/ElvanSettingsSection';
+import { SettingsSection as SettingsSection, SettingsRow } from '../shared/SettingsSection';
 import { useIsDark } from '../shared/hooks';
 
 export default function StorageTab() {
@@ -54,7 +54,7 @@ export default function StorageTab() {
 
   return (
     <Box sx={{ pr: '24px', pb: '24px' }}>
-      <ElvanSettingsSection title={t(k.STORAGE_TITLE)}>
+      <SettingsSection title={t(k.STORAGE_TITLE)}>
         <SettingsRow
           icon={<HardDrives size={20} weight="fill" />}
           title={t(k.STORAGE_MEDIA_FOLDER)}
@@ -111,7 +111,7 @@ export default function StorageTab() {
             </Tooltip>
           }
         />
-      </ElvanSettingsSection>
+      </SettingsSection>
 
       {isMigrating && progress && (
         <Box sx={{ mt: 3, p: 3, borderRadius: '16px', bgcolor: isDark ? 'rgba(255,255,255,0.05)' : 'rgba(0,0,0,0.03)', border: '1px solid var(--mac-border)' }}>

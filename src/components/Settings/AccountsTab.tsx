@@ -4,7 +4,7 @@ import { ChatCircle, Trash, Plus } from '@phosphor-icons/react';
 import { useI18n } from '../../i18n/I18nContext';
 import { k } from '../../i18n/k';
 import { useIsDark } from '../shared/hooks';
-import { SettingsSection, SettingsRow } from '../shared/ElvanSettingsSection';
+import { SettingsSection, SettingsRow } from '../shared/SettingsSection';
 import { sanitizeName, validateAccountName } from './validation';
 import WinUIDeleteDialog from './WinUIDeleteDialog';
 import WinUIAddDialog from './WinUIAddDialog';

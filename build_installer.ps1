@@ -6,5 +6,5 @@ Set-Location "D:\nammil_build"
 npm install
 npm run dist
 New-Item -ItemType Directory -Force -Path "d:\Things\Padaippugal\Nadappil\Elvan Elcen\elvan-elcen\Nammil.Electron\release"
-Copy-Item "release\Elvan Nammil Setup 0.0.0.exe" "d:\Things\Padaippugal\Nadappil\Elvan Elcen\elvan-elcen\Nammil.Electron\release\Elvan Nammil Setup.exe" -Force
+Copy-Item "release\Nammil Setup 0.0.0.exe" "d:\Things\Padaippugal\Nadappil\Elvan Elcen\elvan-elcen\Nammil.Electron\release\Nammil Setup.exe" -Force
 Write-Host "DONE"

@@ -63,13 +63,13 @@ class SettingsManager {
 
   getMediaFolder() {
     const s = this.getSettingsSync();
-    if (s.mediaFolderPath && fs.existsSync(s.mediaFolderPath) && (s.mediaFolderPath.toLowerCase().endsWith('media') || s.mediaFolderPath.toLowerCase().includes('elvan nammil'))) {
+    if (s.mediaFolderPath && fs.existsSync(s.mediaFolderPath) && (s.mediaFolderPath.toLowerCase().endsWith('media') || s.mediaFolderPath.toLowerCase().includes('nammil'))) {
       return s.mediaFolderPath;
     }
-    if (s.mediaFolder && fs.existsSync(s.mediaFolder) && (s.mediaFolder.toLowerCase().endsWith('media') || s.mediaFolder.toLowerCase().includes('elvan nammil'))) {
+    if (s.mediaFolder && fs.existsSync(s.mediaFolder) && (s.mediaFolder.toLowerCase().endsWith('media') || s.mediaFolder.toLowerCase().includes('nammil'))) {
       return s.mediaFolder;
     }
-    const defaultMedia = path.join(this.app.getPath('pictures'), 'Elvan Nammil', 'Media');
+    const defaultMedia = path.join(this.app.getPath('pictures'), 'Nammil', 'Media');
     if (fs.existsSync(defaultMedia)) {
       return defaultMedia;
     }
@@ -132,8 +132,8 @@ class SettingsManager {
 
       if (mediaFolder) {
         let finalPath = mediaFolder;
-        if (!finalPath.toLowerCase().endsWith('media') && !finalPath.toLowerCase().includes('elvan nammil')) {
-          finalPath = path.join(finalPath, 'Elvan Nammil', 'Media');
+        if (!finalPath.toLowerCase().endsWith('media') && !finalPath.toLowerCase().includes('nammil')) {
+          finalPath = path.join(finalPath, 'Nammil', 'Media');
         }
         settings.mediaFolder = finalPath;
         settings.mediaFolderPath = finalPath;
@@ -264,9 +264,9 @@ class SettingsManager {
       if (canceled || filePaths.length === 0) return { success: false, reason: 'canceled' };
 
       const selectedRoot = filePaths[0];
-      const newBase = (selectedRoot.toLowerCase().endsWith('media') || selectedRoot.toLowerCase().includes('elvan nammil'))
+      const newBase = (selectedRoot.toLowerCase().endsWith('media') || selectedRoot.toLowerCase().includes('nammil'))
         ? selectedRoot
-        : path.join(selectedRoot, 'Elvan Nammil', 'Media');
+        : path.join(selectedRoot, 'Nammil', 'Media');
       const oldBase = this.getMediaFolder();
 
       if (newBase.toLowerCase() === oldBase.toLowerCase()) {
@@ -354,7 +354,7 @@ class SettingsManager {
           };
           rmRobust(oldBase);
           const parentDir = path.dirname(oldBase);
-          if (path.basename(parentDir) === 'Elvan Nammil' && fs.existsSync(parentDir)) {
+          if (path.basename(parentDir) === 'Nammil' && fs.existsSync(parentDir)) {
             try {
               if (fs.readdirSync(parentDir).length === 0) {
                 fs.rmdirSync(parentDir);

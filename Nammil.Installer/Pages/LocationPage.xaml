@@ -20,14 +20,14 @@
         <StackPanel Grid.Row="1" Spacing="24" Margin="0,32,0,0">
             
             <StackPanel Spacing="8">
-                <TextBlock Text="Where should Elvan Nammil be installed?" FontWeight="SemiBold" />
+                <TextBlock Text="Where should Nammil be installed?" FontWeight="SemiBold" />
                 <TextBlock Text="The app binaries will be extracted to the following folder." Foreground="{ThemeResource TextFillColorSecondaryBrush}" FontSize="12" />
                 <Grid ColumnSpacing="8">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="*" />
                         <ColumnDefinition Width="Auto" />
                     </Grid.ColumnDefinitions>
-                    <TextBox x:Name="AppPathBox" Text="C:\Program Files\Elvan Nammil" CornerRadius="6" VerticalAlignment="Center" />
+                    <TextBox x:Name="AppPathBox" Text="C:\Program Files\Nammil" CornerRadius="6" VerticalAlignment="Center" />
                     <Button Grid.Column="1" Content="Browse..." CornerRadius="6" Click="BrowseApp_Click" />
                 </Grid>
             </StackPanel>

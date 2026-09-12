@@ -7,14 +7,14 @@ namespace Nammil_Installer.Pages
 {
     public sealed partial class LocationPage : Page
     {
-        public static string SelectedAppPath { get; private set; } = @"C:\Program Files\Elvan Nammil";
+        public static string SelectedAppPath { get; private set; } = @"C:\Program Files\Nammil";
         public static string SelectedMediaPath { get; private set; }
 
         public LocationPage()
         {
             this.InitializeComponent();
             string docs = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
-            SelectedMediaPath = Path.Combine(docs, "Elvan Nammil", "Media");
+            SelectedMediaPath = Path.Combine(docs, "Nammil", "Media");
             MediaPathBox.Text = SelectedMediaPath;
             AppPathBox.Text = SelectedAppPath;
         }
@@ -33,13 +33,13 @@ namespace Nammil_Installer.Pages
                 var folder = await folderPicker.PickSingleFolderAsync();
                 if (folder != null)
                 {
-                    AppPathBox.Text = Path.Combine(folder.Path, "Elvan Nammil");
+                    AppPathBox.Text = Path.Combine(folder.Path, "Nammil");
                 }
             }
             catch
             {
                 // Elevation prevents COM picker
-                AppPathBox.Text = @"C:\Program Files\Elvan Nammil";
+                AppPathBox.Text = @"C:\Program Files\Nammil";
             }
         }
 

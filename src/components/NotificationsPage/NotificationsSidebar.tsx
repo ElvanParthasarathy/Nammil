@@ -1,7 +1,7 @@
 import React from 'react';
 import { Box, Button, Typography } from '@mui/material';
 import { Bell, ChatCircle, Trash } from '@phosphor-icons/react';
-import { SidebarItem } from '../shared/ElvanSettingsSection';
+import { SidebarItem } from '../shared/SettingsSection';
 import { useIsDark } from '../shared/hooks';
 import { useI18n } from '../../i18n/I18nContext';
 import { k } from '../../i18n/k';

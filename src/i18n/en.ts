@@ -1,7 +1,7 @@
 import { k } from './k';
 
 export const en = {
-  [k.BRAND_NAME]: 'Elvan Nammil',
+  [k.BRAND_NAME]: 'Nammil',
   [k.TAB_WHATSAPP]: 'WhatsApp',
   [k.TAB_MEDIA]: 'Media',
   [k.TAB_SETTINGS]: 'Settings',

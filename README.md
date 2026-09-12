@@ -1,6 +1,6 @@
 <div align="center">
-  <img src="src/assets/app_icon.png" alt="Elvan Nammil Logo" width="128" />
-  <h1>Elvan Nammil</h1>
+  <img src="src/assets/app_icon.png" alt="Nammil Logo" width="128" />
+  <h1>Nammil</h1>
   <p><strong>A beautifully crafted, high-performance messaging client powered by React, Electron, and WinUI 3.</strong></p>
 </div>
 
@@ -25,12 +25,12 @@
 
 ## ⚙️ App Configuration & Settings
 
-Elvan Nammil offers deep configuration options managed through a robust internal `SettingsManager`:
+Nammil offers deep configuration options managed through a robust internal `SettingsManager`:
 - **Theme Engine**: Syncs with Windows system settings (Light/Dark/System) dynamically using Electron's `nativeTheme` API.
 - **Multi-Account Support**: Manage multiple isolated profiles (e.g., Personal, Work) seamlessly.
 - **Bespoke Notification Sounds**: Choose from high-quality custom notification chimes like *Kumizhi*, *Minnal*, *Alai*, *Thendral*, *Thuli*, and *Thullal*.
 - **Per-Account Sounds**: Assign specific notification sounds to different accounts so you instantly know who received a message.
-- **Dynamic Media Management**: Set up custom local media folders. The app automatically defaults to intelligently locating or creating an `Elvan Nammil\Media` directory inside your Documents folder.
+- **Dynamic Media Management**: Set up custom local media folders. The app automatically defaults to intelligently locating or creating an `Nammil\Media` directory inside your Documents folder.
 - **Auto-Organization**: Toggleable media auto-organization with robust duplicate file handling (Skip/Overwrite).
 
 ---

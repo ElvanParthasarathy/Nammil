@@ -3,7 +3,7 @@ import { Box, Typography, Button, Select, MenuItem, IconButton } from '@mui/mate
 import { SpeakerHigh } from '@phosphor-icons/react';
 import { useI18n } from '../../i18n/I18nContext';
 import { k } from '../../i18n/k';
-import { SettingsSection, SettingsRow } from '../shared/ElvanSettingsSection';
+import { SettingsSection, SettingsRow } from '../shared/SettingsSection';
 import { Material3Switch } from '../shared/Material3Switch';
 import { useIsDark } from '../shared/hooks';
 
