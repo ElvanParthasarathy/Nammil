@@ -151,6 +151,11 @@ class AppOrchestrator {
     mainWindow.on('unmaximize', () => this.whatsAppViewManager.resizeViews());
 
     mainWindow.on('close', (event) => {
+      if (!this.app.isPackaged) {
+        this.app.isQuitting = true;
+        this.app.quit();
+        return;
+      }
       if (!this.app.isQuitting) {
         event.preventDefault();
         mainWindow.hide();

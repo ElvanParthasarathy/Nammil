@@ -29,7 +29,7 @@ protocol.registerSchemesAsPrivileged([
 // 3.5. Read settings to force global browser language
 const fs = require('fs');
 try {
-  const settingsPath = path.join(app.getPath('userData'), 'nammil-settings.json');
+  const settingsPath = path.join(app.getPath('userData'), 'nammil_settings.json');
   if (fs.existsSync(settingsPath)) {
     const settings = JSON.parse(fs.readFileSync(settingsPath, 'utf8'));
     if (settings.language && settings.language !== 'system') {
@@ -50,15 +50,14 @@ app.on('second-instance', () => {
   if (orchestrator && orchestrator.windowManager && orchestrator.windowManager.mainWindow) {
     const mainWindow = orchestrator.windowManager.mainWindow;
     if (mainWindow.isMinimized()) mainWindow.restore();
-    mainWindow.setAlwaysOnTop(true);
     mainWindow.show();
+    mainWindow.setAlwaysOnTop(true);
     mainWindow.focus();
     setTimeout(() => {
       if (mainWindow && !mainWindow.isDestroyed()) {
         mainWindow.setAlwaysOnTop(false);
-        app.focus();
       }
-    }, 500);
+    }, 300);
   }
 });
 

@@ -39,28 +39,35 @@ class WindowManager {
       }
     });
 
-    // Maximize and show when ready
-    this.mainWindow.once('ready-to-show', () => {
+    // Show window safely with guaranteed fallback
+    let hasShown = false;
+    const showWindow = () => {
+      if (hasShown) return;
+      if (!this.mainWindow || this.mainWindow.isDestroyed()) return;
+      hasShown = true;
+
       if (!isFirstBoot) {
         this.mainWindow.maximize();
       }
       
-      // Force window to foreground (bypasses Windows focus-stealing prevention)
-      this.mainWindow.setAlwaysOnTop(true);
       this.mainWindow.show();
       if (this.mainWindow.isMinimized()) {
         this.mainWindow.restore();
       }
+      this.mainWindow.setAlwaysOnTop(true);
       this.mainWindow.focus();
       
-      // Delay removing alwaysOnTop to ensure Windows brings it to front
       setTimeout(() => {
         if (this.mainWindow && !this.mainWindow.isDestroyed()) {
           this.mainWindow.setAlwaysOnTop(false);
-          this.app.focus();
         }
-      }, 500);
-    });
+      }, 300);
+    };
+
+    this.mainWindow.once('ready-to-show', showWindow);
+
+    // Safety fallback: if ready-to-show is delayed by Vite compilation, force show within 1.5s
+    setTimeout(showWindow, 1500);
 
     // Load frontend
     if (process.env.VITE_DEV_SERVER_URL) {
