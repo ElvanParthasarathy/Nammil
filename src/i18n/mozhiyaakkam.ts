@@ -394,6 +394,99 @@ export function mlymToTaml(text: string): string {
       }
     }
 
+    // Word-final A-stem feminine/loan noun ending -> Tamil '-ai' (ஆ ஈற்று வடசொல் ஐகார ஈறாதல்):
+    // E.g. കഥ -> கதை, ലങ്ക -> இலங்கை, ദോശ -> தோசை, ഗംഗ -> கங்கை, മാല -> மாலை, പൂജ -> பூஜை, സഭ -> ஸபை
+    {
+      const isWordEnd = i === n - 1 || !isLetterChar(text[i + 1]);
+      if (isWordEnd) {
+        const prev = i > 0 ? text[i - 1] : '';
+        const prev2 = i > 1 ? text[i - 2] : '';
+        const prevIsLong = prev === '\u0D3E' || prev === '\u0D40' || prev === '\u0D42' || prev === '\u0D47' || prev === '\u0D4B' || prev === '\u0D48';
+
+        // 1. Ending in ഥ (tha) -> தை (e.g. കഥ -> கதை)
+        if (c === '\u0D25') {
+          sb.push('\u0BA4\u0BC8');
+          i++;
+          continue;
+        }
+
+        // 2. Ending in ശ (sha) -> சை (e.g. ദോശ -> தோசை, ആശ -> ஆசை)
+        if (c === '\u0D36') {
+          sb.push('\u0B9A\u0BC8');
+          i++;
+          continue;
+        }
+
+        // 3. Ending in ഷ (sha) -> ஷை (e.g. ഭാഷ -> பாஷை, പരീക്ഷ -> பரீக்ஷை)
+        if (c === '\u0D37') {
+          sb.push('\u0BB7\u0BC8');
+          i++;
+          continue;
+        }
+
+        // 4. Ending in ഭ (bha) -> பை (e.g. സഭ -> ஸபை, ശോഭ -> சோபை)
+        if (c === '\u0D2D') {
+          sb.push('\u0BAA\u0BC8');
+          i++;
+          continue;
+        }
+
+        // 5. Ending in ജ (ja) -> ஜை (e.g. പൂജ -> பூஜை)
+        if (c === '\u0D1C') {
+          sb.push('\u0B9C\u0BC8');
+          i++;
+          continue;
+        }
+
+        // 6. Ending in ങ്ക (nka) or Anusvara + ഗ (nga) -> ங்கை (e.g. ലങ്ക -> இலங்கை, ഗംഗ -> கங்கை)
+        if ((c === '\u0D15' && prev === '\u0D4D' && prev2 === '\u0D19') ||
+            (c === '\u0D17' && prev === '\u0D02')) {
+          sb.push('\u0B95\u0BC8');
+          i++;
+          continue;
+        }
+
+        // 7. Ending in ത (ta) after long vowel, nasal, or conjunct (e.g. ചിന്ത -> சிந்தை, വാർത്ത -> வார்த்தை, കവിത -> கவிதை, സീത -> சீதை)
+        if (c === '\u0D24') {
+          const isAfterNasalOrConjunct = prev === '\u0D4D' || prev === '\u0D7B' || prev === '\u0D7A' || prev === '\u0D7C';
+          const isAfterMultiSyllableVowel = prev === '\u0D3F' && i >= 3; // e.g. കവിത -> கவிதை
+          if (prevIsLong || isAfterNasalOrConjunct || isAfterMultiSyllableVowel) {
+            sb.push('\u0BA4\u0BC8');
+            i++;
+            continue;
+          }
+        }
+
+        // 8. Ending in ല (la) after long vowel (e.g. മാല -> மாலை, ശാല -> சாலை)
+        if (c === '\u0D32' && prevIsLong) {
+          sb.push('\u0BB2\u0BC8');
+          i++;
+          continue;
+        }
+
+        // 9. Ending in വ (va) after long vowel (e.g. സേവ -> ஸேவை)
+        if (c === '\u0D35' && prevIsLong) {
+          sb.push('\u0BB5\u0BC8');
+          i++;
+          continue;
+        }
+
+        // 10. Ending in ഖ (kha) after long vowel (e.g. ശാഖ -> சாகை, രേഖ -> இரேகை)
+        if (c === '\u0D16' && prevIsLong) {
+          sb.push('\u0B95\u0BC8');
+          i++;
+          continue;
+        }
+
+        // 11. Ending in യ (ya) after long vowel (e.g. ഛായ -> சாயை, മായ -> மாயை)
+        if (c === '\u0D2F' && (prev === '\u0D3E' || prev === '\u0D47' || prev === '\u0D4B')) {
+          sb.push('\u0BAF\u0BC8');
+          i++;
+          continue;
+        }
+      }
+    }
+
     // Anusvara (ം) Homorganic Nasal (இனவெழுத்து) assimilation:
     // When followed by a stop consonant, ം assimilates to the homorganic nasal:
     // Velar (ക,ഖ,ഗ,ഘ) -> ங் (e.g. ഇംഗ്ലീഷ് -> இங்கிலீஷ், സംഗീതം -> சங்கீதம்)
