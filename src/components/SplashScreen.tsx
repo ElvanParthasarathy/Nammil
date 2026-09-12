@@ -133,26 +133,22 @@ export default function SplashScreen({ userTheme }: { userTheme: string }) {
       <Box
         sx={{
           position: 'absolute',
-          bottom: '40px',
+          bottom: '50px',
           width: '100%',
           display: 'flex',
-          flexDirection: 'column',
+          justifyContent: 'center',
           alignItems: 'center',
-          color: contentColor,
           zIndex: 10000,
           pointerEvents: 'none'
         }}
       >
-        <Typography sx={{ fontSize: '12px', opacity: 0.6, letterSpacing: '1px' }}>
-          from
-        </Typography>
         <Typography 
-          fontWeight="bold" 
           sx={{ 
             fontSize: '18px', 
             fontFamily: "'Elvan Sans', sans-serif",
-            letterSpacing: '2px',
-            textTransform: 'uppercase'
+            letterSpacing: '-0.2px',
+            fontWeight: 500,
+            color: actualMode === 'dark' ? 'rgba(255, 255, 255, 0.4)' : 'rgba(0, 0, 0, 0.4)',
           }}
         >
           Elvan Navil
