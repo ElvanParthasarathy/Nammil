@@ -1,5 +1,5 @@
 #define MyAppName "Nammil"
-#define MyAppVersion "2.1.0"
+#define MyAppVersion "2.2.0"
 #define MyAppPublisher "Elvan Parthasarathy"
 #define MyAppExeName "Nammil.exe"
 #define MyOutputDir "build-release"
@@ -40,6 +40,13 @@ Name: "desktopicon"; Description: "{cm:CreateDesktopIcon}"; GroupDescription: "{
 [Files]
 Source: "build-release\win-unpacked\{#MyAppExeName}"; DestDir: "{app}"; Flags: ignoreversion
 Source: "build-release\win-unpacked\*"; DestDir: "{app}"; Flags: ignoreversion recursesubdirs createallsubdirs
+
+[InstallDelete]
+Type: files; Name: "{app}\Elvan Nammil.exe"
+Type: files; Name: "{autoprograms}\Elvan Nammil.lnk"
+Type: files; Name: "{autodesktop}\Elvan Nammil.lnk"
+Type: files; Name: "{userprograms}\Elvan Nammil.lnk"
+Type: files; Name: "{userdesktop}\Elvan Nammil.lnk"
 
 [Icons]
 Name: "{autoprograms}\{#MyAppName}"; Filename: "{app}\{#MyAppExeName}"

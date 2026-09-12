@@ -9,7 +9,7 @@ import NammilLogo from '../../assets/nammil_outline.webp';
 export default function AboutTab() {
   const { t } = useI18n();
   const isDark = useIsDark();
-  const [version, setVersion] = useState('v2.1.0');
+  const [version, setVersion] = useState('v2.2.0');
 
   useEffect(() => {
     if ((window as any).electronAPI && (window as any).electronAPI.getAppVersion) {

@@ -1,5 +1,6 @@
 const { app, protocol } = require('electron');
 const path = require('path');
+const fs = require('fs');
 const AppOrchestrator = require('./services/AppOrchestrator.cjs');
 
 // Detect dev vs release mode
@@ -9,6 +10,27 @@ const APP_ID = isDev ? 'com.nammil.app.dev' : 'com.nammil.app';
 // In dev mode, use a separate userData folder so dev & release never share data
 if (isDev) {
   app.setPath('userData', path.join(app.getPath('appData'), 'nammil-dev'));
+} else {
+  // Seamless migration from legacy 'Elvan Nammil' directory to 'Nammil'
+  try {
+    const oldUserData = path.join(app.getPath('appData'), 'Elvan Nammil');
+    const newUserData = app.getPath('userData');
+    if (fs.existsSync(oldUserData) && !fs.existsSync(newUserData)) {
+      console.log('[Nammil] Migrating user data from "Elvan Nammil" to "Nammil"...');
+      fs.renameSync(oldUserData, newUserData);
+    }
+  } catch (err) {
+    console.error('[Nammil] Migration failed, attempting copy:', err);
+    try {
+      const oldUserData = path.join(app.getPath('appData'), 'Elvan Nammil');
+      const newUserData = app.getPath('userData');
+      if (fs.existsSync(oldUserData) && !fs.existsSync(newUserData)) {
+        fs.cpSync(oldUserData, newUserData, { recursive: true });
+      }
+    } catch (cpErr) {
+      console.error('[Nammil] Copy migration also failed:', cpErr);
+    }
+  }
 }
 
 // 1. Single Instance Lock — Ensure only one instance per mode runs at a time
@@ -27,7 +49,6 @@ protocol.registerSchemesAsPrivileged([
 ]);
 
 // 3.5. Read settings to force global browser language
-const fs = require('fs');
 try {
   const settingsPath = path.join(app.getPath('userData'), 'nammil_settings.json');
   if (fs.existsSync(settingsPath)) {
