@@ -2,9 +2,9 @@ import { k } from './k';
 
 export const ml = {
   [k.BRAND_NAME]: {
-    ml: 'എൽവൻ നമ്മിൽ',
+    ml: 'നമ്മിൽ',
     latn: 'Nammil',
-    ta: 'எல்வன் நம்மில்',
+    ta: 'நம்மில்',
   },
   [k.TAB_WHATSAPP]: {
     ml: 'വാട്സപ്',

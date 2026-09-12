@@ -8,9 +8,9 @@ import './Onboarding/Onboarding.css';
 
 // Brand name in each script
 const BRAND_NAMES: Record<string, string> = {
-  ta: 'எல்வன் நம்மில்',
+  ta: 'நம்மில்',
   en: 'Nammil',
-  ml: 'എൽവൻ നമ്മിൽ',
+  ml: 'നമ്മിൽ',
 };
 
 // Cycle order per language setting — primary script first, then others. No looping.
@@ -106,7 +106,7 @@ export default function SplashScreen({ userTheme }: { userTheme: string }) {
         {/* App name — fast cycle through languages, stops on last */}
         <Box 
           sx={{ 
-            width: currentName.includes('നമ്മിൽ') ? '320px' : currentName.includes('நம்மில்') ? '290px' : '260px', 
+            width: currentName.includes('നമ്മിൽ') ? '170px' : currentName.includes('நம்மில்') ? '160px' : '150px', 
             display: 'flex', 
             justifyContent: 'flex-start',
             transition: 'width 0.25s ease-in-out'
