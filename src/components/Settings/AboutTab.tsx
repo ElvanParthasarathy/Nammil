@@ -9,11 +9,13 @@ import NammilLogo from '../../assets/nammil_outline.webp';
 export default function AboutTab() {
   const { t } = useI18n();
   const isDark = useIsDark();
-  const [version, setVersion] = useState('v0.0.0');
+  const [version, setVersion] = useState('v2.1.0');
 
   useEffect(() => {
     if ((window as any).electronAPI && (window as any).electronAPI.getAppVersion) {
-      (window as any).electronAPI.getAppVersion().then((v: string) => setVersion(`v${v}`));
+      (window as any).electronAPI.getAppVersion().then((v: string) => {
+        if (v) setVersion(`v${v}`);
+      });
     }
   }, []);
 
@@ -39,13 +41,20 @@ export default function AboutTab() {
         <Typography sx={{ fontSize: '28px', fontWeight: 'bold', color: 'var(--mac-text)' }}>
           {t(k.BRAND_NAME)}
         </Typography>
-        <Typography sx={{ color: 'var(--mac-text-secondary)', mt: 0.5, fontWeight: 500 }}>
+        <Typography sx={{ color: 'var(--mac-text-secondary)', mt: 0.5, fontSize: '15px', fontWeight: 500 }}>
+          {t(k.ABOUT_PARENT_BRAND_NAME)}
+        </Typography>
+        <Typography sx={{ color: 'var(--mac-text-secondary)', opacity: 0.7, mt: 0.5, fontSize: '13px', fontWeight: 500 }}>
           {version}
         </Typography>
       </Box>
 
       <Box sx={{ width: '100%', maxWidth: 500 }}>
         <SettingsSection>
+          <SettingsRow
+            title={t(k.ABOUT_PARENT_BRAND)}
+            control={<Typography sx={{ color: 'var(--mac-text-secondary)', fontSize: '14px', fontWeight: 500 }}>{t(k.ABOUT_PARENT_BRAND_NAME)}</Typography>}
+          />
           <SettingsRow
             title={t(k.ABOUT_DEVELOPER)}
             control={<Typography sx={{ color: 'var(--mac-text-secondary)', fontSize: '14px' }}>{t(k.ABOUT_DEV_NAME)}</Typography>}
@@ -69,7 +78,7 @@ export default function AboutTab() {
       </Box>
 
       <Typography sx={{ mt: 6, color: 'var(--mac-text-secondary)', fontSize: '12px' }}>
-        © 2026 {t(k.ABOUT_DEV_NAME)}
+        © 2026 {t(k.ABOUT_PARENT_BRAND_NAME)} • {t(k.ABOUT_DEVELOPER)}: {t(k.ABOUT_DEV_NAME)}
       </Typography>
     </Box>
   );

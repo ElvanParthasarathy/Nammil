@@ -681,6 +681,16 @@ export const ta = {
     latn: 'Padhippu',
     ml: 'പതിപ്പു',
   },
+  [k.ABOUT_PARENT_BRAND]: {
+    ta: 'தாய் நிறுவனம்',
+    latn: 'Thaai Niruvanam',
+    ml: 'മാതൃ ബ്രാൻഡ്',
+  },
+  [k.ABOUT_PARENT_BRAND_NAME]: {
+    ta: 'எல்வன் நவில்',
+    latn: 'Elvan Navil',
+    ml: 'എൽവൻ നവിൽ',
+  },
   [k.ABOUT_DEVELOPER]: {
     ta: 'உருவாக்குநர்',
     latn: 'Uruvaakkunar',

@@ -676,6 +676,16 @@ export const ml = {
     latn: 'Pathippu',
     ta: 'பதிப்பு',
   },
+  [k.ABOUT_PARENT_BRAND]: {
+    ml: 'മാതൃ ബ്രാൻഡ്',
+    latn: 'Mathru Brand',
+    ta: 'தாய் நிறுவனம்',
+  },
+  [k.ABOUT_PARENT_BRAND_NAME]: {
+    ml: 'എൽവൻ നവിൽ',
+    latn: 'Elvan Navil',
+    ta: 'எல்வன் நவில்',
+  },
   [k.ABOUT_DEVELOPER]: {
     ml: 'ഡെവലപ്പർ',
     latn: 'Developer',

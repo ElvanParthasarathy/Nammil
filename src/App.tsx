@@ -122,10 +122,8 @@ function App() {
   const actualMode = userTheme === 'system' ? (prefersDarkMode ? 'dark' : 'light') : userTheme;
   const theme = getTheme(actualMode);
 
-  if (!settingsLoaded) {
-    return (
-      <Box sx={{ width: '100vw', height: '100vh', bgcolor: actualMode === 'dark' ? '#1d1f1f' : '#F7F5F3' }} />
-    );
+  if (!settingsLoaded || showSplash) {
+    return <SplashScreen userTheme={userTheme} />;
   }
 
   if (isFirstBoot) {
@@ -136,14 +134,10 @@ function App() {
           setAccounts(newAccounts);
           setActiveTab(`wa-${newAccounts[0].id}`);
           setIsFirstBoot(false);
-          setShowSplash(true);
-          if (!isDevSplash) setTimeout(() => setShowSplash(false), 2500);
         }} />
       </ThemeProvider>
     );
   }
-
-  if (showSplash) return <SplashScreen isDark={prefersDarkMode} userTheme={userTheme} />;
 
   return (
     <ThemeProvider theme={theme}>

@@ -152,6 +152,8 @@ export const en = {
   [k.ABOUT_TITLE]: 'About',
   [k.ABOUT_DESC]: 'App info and credits',
   [k.ABOUT_VERSION]: 'Version',
+  [k.ABOUT_PARENT_BRAND]: 'Parent Brand',
+  [k.ABOUT_PARENT_BRAND_NAME]: 'Elvan Navil',
   [k.ABOUT_DEVELOPER]: 'Developer',
   [k.ABOUT_DEV_NAME]: 'Elvan Parthasarathy',
   [k.ABOUT_BUILT_WITH]: 'Built with',
