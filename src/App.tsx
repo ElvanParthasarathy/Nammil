@@ -7,14 +7,16 @@ import { getTheme } from './theme';
 import TopBar from './components/TopBar';
 import Settings from './components/Settings/index';
 import WhatsAppViews from './components/WhatsAppViews';
+import SplashScreen from './components/SplashScreen';
 import MediaLibrary from './components/Media/index';
 import NotificationsPage, { NotificationItem } from './components/NotificationsPage/index';
 import { useI18n } from './i18n/I18nContext';
 import Onboarding from './components/Onboarding/index';
-import './components/Onboarding/Onboarding.css';
 
 function App() {
   const { setLang } = useI18n();
+  const [showSplash, setShowSplash] = useState(true);
+  const isDevSplash = true; // FREEZE SPLASH SCREEN FOR DEV DESIGNER
   const [userTheme, setUserTheme] = useState('system');
   const [activeTab, setActiveTab] = useState('settings');
   const [accounts, setAccounts] = useState([{ id: 'default', name: 'personal' }]);
@@ -45,22 +47,25 @@ function App() {
           if (settings.isFirstBoot === true) setIsFirstBoot(true);
         }
         setSettingsLoaded(true);
+        if (!isDevSplash) setTimeout(() => setShowSplash(false), 2500);
       }).catch(() => {
         setSettingsLoaded(true);
+        if (!isDevSplash) setTimeout(() => setShowSplash(false), 2500);
       });
     } else {
       setSettingsLoaded(true);
       setActiveTab('wa-default');
+      if (!isDevSplash) setTimeout(() => setShowSplash(false), 2500);
     }
   }, [setLang]);
 
-  // Attach WhatsApp view after settings load and not in first boot onboarding
+  // Only attach WhatsApp view after splash finishes and not in first boot onboarding
   useEffect(() => {
-    if (settingsLoaded && !isFirstBoot && (window as any).electronAPI) {
+    if (!showSplash && !isFirstBoot && (window as any).electronAPI) {
       const targetView = activeTab.startsWith('wa-') ? activeTab.replace('wa-', '') : activeTab;
       (window as any).electronAPI.switchTab(targetView);
     }
-  }, [settingsLoaded, activeTab, isFirstBoot]);
+  }, [showSplash, activeTab, isFirstBoot]);
 
   // Listen for custom audio preview requests from Settings tab
   useEffect(() => {
@@ -117,25 +122,12 @@ function App() {
   const actualMode = userTheme === 'system' ? (prefersDarkMode ? 'dark' : 'light') : userTheme;
   const theme = getTheme(actualMode);
 
-  if (!settingsLoaded) {
+  if (!settingsLoaded || showSplash) {
     return (
-      <div className={`onboarding-container ${actualMode === 'dark' ? 'dark' : ''}`}>
-        <div className="onboarding-shape shape-1" />
-        <div className="onboarding-shape shape-2" />
-        <div className="onboarding-shape shape-3" />
-        <div className="onboarding-shape shape-4" />
-        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', height: '100vh', transform: 'translateY(-20px)' }}>
-          <img src="/app_icon.png" alt="Nammil" style={{ width: 72, height: 72, marginBottom: 16, filter: 'drop-shadow(0 4px 12px rgba(0,0,0,0.25))' }} />
-          <div style={{ fontSize: 28, fontWeight: 600, fontFamily: "'Elvan Sans', sans-serif", letterSpacing: -0.2, color: actualMode === 'dark' ? '#fff' : '#000' }}>
-            Nammil
-          </div>
-        </div>
-        <div style={{ position: 'absolute', bottom: 50, width: '100%', display: 'flex', justifyContent: 'center' }}>
-          <span style={{ fontSize: 18, fontFamily: "'Elvan Sans', sans-serif", fontWeight: 500, letterSpacing: -0.2, color: actualMode === 'dark' ? 'rgba(255,255,255,0.4)' : 'rgba(0,0,0,0.4)' }}>
-            Elvan Navil
-          </span>
-        </div>
-      </div>
+      <SplashScreen 
+        userTheme={userTheme} 
+        onFinish={() => setShowSplash(false)} 
+      />
     );
   }
 
