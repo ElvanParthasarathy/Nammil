@@ -364,6 +364,16 @@ export function mlymToTaml(text: string): string {
     }
 
     // 4. Word-initial / Svarabhakti cluster resolution (மொழிமுதல் மெய்ம்மயக்கமின்மை):
+    // Palatal gemination for sa- prefix / short 'sa' before palatals (സജീവ -> சச்சீவ, സചിവ -> சச்சிவ):
+    if ((c === '\u0D38' || c === '\u0D1A') && i + 1 < n) {
+      const next = text[i + 1];
+      if (next >= '\u0D1A' && next <= '\u0D1D') {
+        sb.push('\u0B9A\u0B9A\u0BCD'); // சச்
+        i++;
+        continue;
+      }
+    }
+
     if (i + 2 < n && text[i + 1] === '\u0D4D') {
       const c1 = c;
       const c3 = text[i + 2];
@@ -515,8 +525,8 @@ export function mlymToTaml(text: string): string {
         continue;
       }
 
-      // 8. Ending in വ (va) after long vowel (e.g. സേവ -> சேவை)
-      if (c === '\u0D35' && prevIsLong) {
+      // 8. Ending in വ (va) for specific words like സേവ -> சேவை
+      if (c === '\u0D35' && i >= 2 && text.slice(i - 2, i + 1) === '\u0D38\u0D47\u0D35') {
         sb.push('\u0BB5\u0BC8');
         i++;
         continue;
