@@ -17,10 +17,10 @@ class WindowManager {
     const isFirstBoot = settings.isFirstBoot === true;
 
     this.mainWindow = new BrowserWindow({
-      width: isFirstBoot ? 780 : 1280,
-      height: isFirstBoot ? 580 : 720,
-      minWidth: isFirstBoot ? 780 : 940,
-      minHeight: isFirstBoot ? 580 : 600,
+      width: isFirstBoot ? 920 : 1280,
+      height: isFirstBoot ? 650 : 720,
+      minWidth: isFirstBoot ? 920 : 940,
+      minHeight: isFirstBoot ? 650 : 600,
       resizable: !isFirstBoot,
       maximizable: !isFirstBoot,
       show: false, // Hide until maximized

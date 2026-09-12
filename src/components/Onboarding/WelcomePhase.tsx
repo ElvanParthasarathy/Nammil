@@ -71,7 +71,7 @@ export default function WelcomePhase({ onContinue, skipGreeting }: { onContinue:
                 flex: 1,
                 justifyContent: 'center',
                 alignItems: 'center',
-                maxWidth: '800px', // increased for two panels
+                maxWidth: '840px', // increased for two panels
                 margin: '0 auto',
                 width: '100%',
                 position: 'relative',
@@ -207,7 +207,7 @@ export default function WelcomePhase({ onContinue, skipGreeting }: { onContinue:
                                 overflow: 'hidden',
                             }}>
                                 <List sx={{
-                                    maxHeight: '344px',
+                                    maxHeight: '368px',
                                     overflowY: 'auto',
                                     p: 0,
                                     '&::-webkit-scrollbar': { width: '6px' },
