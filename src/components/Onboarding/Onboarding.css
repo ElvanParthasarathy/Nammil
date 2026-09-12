@@ -190,6 +190,27 @@ html.dark .onboarding-logo-themed, html[data-theme="dark"] .onboarding-logo-them
     color: #1A1A1A;
 }
 
+.splash-shape {
+    position: absolute;
+    background-color: rgba(255, 255, 255, 0.03);
+    pointer-events: none;
+    z-index: 0;
+}
+
+@media (prefers-color-scheme: light) {
+    .splash-shape {
+        background-color: #EAEAEA;
+    }
+}
+
+.splash-screen-root.dark .splash-shape {
+    background-color: rgba(255, 255, 255, 0.03);
+}
+
+.splash-screen-root.light .splash-shape {
+    background-color: #EAEAEA;
+}
+
 .splash-center {
     display: flex;
     flex-direction: column;

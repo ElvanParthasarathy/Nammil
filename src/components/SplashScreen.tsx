@@ -58,6 +58,12 @@ export default function SplashScreen({ userTheme, onFinish }: SplashScreenProps)
       className={`splash-screen-root ${actualMode === 'dark' ? 'dark' : 'light'}`}
       style={{ WebkitAppRegion: 'no-drag' }}
     >
+      {/* Floating Animated Shapes from Neram - exact match with index.html */}
+      <div className="splash-shape shape-1" />
+      <div className="splash-shape shape-2" />
+      <div className="splash-shape shape-3" />
+      <div className="splash-shape shape-4" />
+      
       {/* Centered Content: Logo alone */}
       <div className="splash-center">
         <img 

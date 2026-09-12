@@ -89,6 +89,70 @@
       color: #1A1A1A;
     }
 
+    /* Floating background shapes from Neram */
+    .splash-shape {
+      position: absolute;
+      background-color: rgba(255, 255, 255, 0.03);
+      pointer-events: none;
+      z-index: 0;
+    }
+    @media (prefers-color-scheme: light) {
+      .splash-shape {
+        background-color: #EAEAEA;
+      }
+    }
+    html.theme-dark .splash-shape {
+      background-color: rgba(255, 255, 255, 0.03);
+    }
+    html.theme-light .splash-shape {
+      background-color: #EAEAEA;
+    }
+    .shape-1 {
+      top: 2%;
+      right: -10%;
+      width: 50vw;
+      height: 50vw;
+      border-radius: 80px;
+      animation: rotate1 60s linear infinite;
+      transform-origin: 85% 15%;
+    }
+    .shape-2 {
+      bottom: 5%;
+      left: -10%;
+      width: 70vw;
+      height: 70vw;
+      border-radius: 50%;
+      animation: float 4s ease-in-out infinite alternate;
+    }
+    .shape-3 {
+      top: 15%;
+      left: 5%;
+      width: 20vw;
+      height: 20vw;
+      border-radius: 30px;
+      animation: rotate2 40s linear infinite reverse;
+    }
+    .shape-4 {
+      top: 60%;
+      right: 10%;
+      width: 15vw;
+      height: 15vw;
+      border-radius: 50%;
+      animation: float 5s ease-in-out infinite alternate-reverse;
+    }
+    @keyframes rotate1 {
+      from { transform: rotate(0deg); }
+      to { transform: rotate(360deg); }
+    }
+    @keyframes rotate2 {
+      from { transform: rotate(0deg); }
+      to { transform: rotate(360deg); }
+    }
+    @keyframes float {
+      from { transform: translateY(0px); }
+      to { transform: translateY(-15px); }
+    }
+
     /* Center Content */
     .splash-center {
       display: flex;
@@ -168,6 +232,10 @@
 <body>
   <!-- Fixed splash overlay: Never destroyed by React mounting, zero flicker -->
   <div id="splash-overlay">
+    <div class="splash-shape shape-1"></div>
+    <div class="splash-shape shape-2"></div>
+    <div class="splash-shape shape-3"></div>
+    <div class="splash-shape shape-4"></div>
     <div class="splash-center">
       <img src="./app_icon.png" alt="Nammil" class="splash-logo" />
     </div>
