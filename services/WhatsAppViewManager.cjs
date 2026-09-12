@@ -167,6 +167,11 @@ class WhatsAppViewManager {
           clearInterval(checkInterval);
           return;
         }
+        if (attempts > 60) {
+          clearInterval(checkInterval);
+          notifyReady();
+          return;
+        }
         try {
           const hasContent = await view.webContents.executeJavaScript(`
             (function() {
@@ -177,14 +182,8 @@ class WhatsAppViewManager {
                 document.querySelector('[data-testid="chatlist-header"]') ||
                 document.querySelector('[data-testid="qrcode"]') ||
                 document.querySelector('[data-testid="intro-title"]') ||
-                document.querySelector('div[data-ref]') ||
-                document.querySelector('.landing-wrapper') ||
-                document.querySelector('progress')
+                document.querySelector('div[data-ref]')
               ) {
-                return true;
-              }
-              const app = document.getElementById('app');
-              if (app && app.children && app.children.length > 0) {
                 return true;
               }
               return false;

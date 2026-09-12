@@ -39,19 +39,11 @@ const LANG_ORDER: Record<string, string[]> = {
 
 interface SplashScreenProps {
   userTheme: string;
-  onFinish?: () => void;
 }
 
-export default function SplashScreen({ userTheme, onFinish }: SplashScreenProps) {
+export default function SplashScreen({ userTheme }: SplashScreenProps) {
   const prefersDarkMode = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
   const actualMode = userTheme === 'system' ? (prefersDarkMode ? 'dark' : 'light') : userTheme;
-
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      onFinish?.();
-    }, 300);
-    return () => clearTimeout(timer);
-  }, [onFinish]);
 
   return (
     <div 

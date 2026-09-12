@@ -128,9 +128,15 @@ function App() {
       if (waReady) performDismiss();
     }, 600);
 
+    // Safety fallback timer: guarantee splash dismissal even if network is slow or offline
+    const maxTimer = setTimeout(() => {
+      performDismiss();
+    }, 10000);
+
     return () => {
       if (typeof removeListener === 'function') removeListener();
       clearTimeout(minTimer);
+      clearTimeout(maxTimer);
     };
   }, [settingsLoaded, isFirstBoot, accounts]);
 
@@ -199,7 +205,9 @@ function App() {
 
   if (!settingsLoaded || showSplash) {
     return (
-      <Box sx={{ width: '100vw', height: '100vh', bgcolor: actualMode === 'dark' ? '#0A0A0A' : '#FAFAFA' }} />
+      <Box sx={{ width: '100vw', height: '100vh', bgcolor: actualMode === 'dark' ? '#0A0A0A' : '#FAFAFA' }}>
+        <SplashScreen userTheme={userTheme} />
+      </Box>
     );
   }
 
@@ -210,6 +218,7 @@ function App() {
         <Onboarding onComplete={(newAccounts) => {
           setAccounts(newAccounts);
           setActiveTab(`wa-${newAccounts[0].id}`);
+          setShowSplash(true);
           setIsFirstBoot(false);
         }} />
       </ThemeProvider>

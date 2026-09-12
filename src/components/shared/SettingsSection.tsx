@@ -57,7 +57,7 @@ export function SidebarItem({ icon, iconColor, title, description, isActive, onC
   };
 
   return (
-    <Box sx={{ position: 'relative' }}>
+    <Box sx={{ position: 'relative', my: '3px' }}>
       <Tooltip title={isSmallScreen ? title : ''} placement="right" disableHoverListener={!isSmallScreen}>
         {isSmallScreen ? (
           <Box sx={{ display: 'flex', justifyContent: 'center', my: 1, width: '100%', zIndex: isActive ? 2 : 1 }}>
@@ -85,8 +85,8 @@ export function SidebarItem({ icon, iconColor, title, description, isActive, onC
               width: '100%',
               justifyContent: 'flex-start',
               textAlign: 'left',
-              p: '16px 20px',
-              borderRadius: '20px',
+              p: '14px 20px',
+              borderRadius: '18px',
               cursor: 'pointer',
               bgcolor: isActive ? (theme: any) => theme.palette.mode === 'dark' ? '#282929' : '#FFFFFF' : 'transparent',
               transition: 'background-color 0.15s ease',
