@@ -1,5 +1,5 @@
 #define MyAppName "Nammil"
-#define MyAppVersion "2.5.11"
+#define MyAppVersion "1.1.0"
 #define MyAppPublisher "Elvan Navil"
 #define MyAppExeName "Nammil.exe"
 #define MyOutputDir "build-release"

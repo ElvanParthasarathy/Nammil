@@ -7,7 +7,7 @@ class UpdateManager {
     this.autoUpdater = null;
     this.currentStatus = {
       status: 'idle', // 'idle' | 'checking' | 'available' | 'not-available' | 'downloading' | 'downloaded' | 'error'
-      version: this.app && typeof this.app.getVersion === 'function' ? this.app.getVersion() : '2.5.11',
+      version: this.app && typeof this.app.getVersion === 'function' ? this.app.getVersion() : '1.1.0',
       percent: 0,
       transferred: 0,
       total: 0,
@@ -102,7 +102,7 @@ class UpdateManager {
     this.currentStatus = {
       ...this.currentStatus,
       ...newState,
-      version: this.app && typeof this.app.getVersion === 'function' ? this.app.getVersion() : '2.5.11',
+      version: this.app && typeof this.app.getVersion === 'function' ? this.app.getVersion() : '1.1.0',
       isDev: !this.app || !this.app.isPackaged
     };
     this._broadcast();
@@ -165,7 +165,7 @@ class UpdateManager {
             if (res.statusCode === 200) {
               const release = JSON.parse(data);
               const latestTag = release.tag_name ? release.tag_name.replace(/^v/, '') : '';
-              const currentVer = this.app && typeof this.app.getVersion === 'function' ? this.app.getVersion() : '2.5.11';
+              const currentVer = this.app && typeof this.app.getVersion === 'function' ? this.app.getVersion() : '1.1.0';
 
               if (latestTag && latestTag !== currentVer && this._isNewerVersion(latestTag, currentVer)) {
                 this._updateState({
@@ -184,7 +184,7 @@ class UpdateManager {
             } else {
               this._updateState({
                 status: 'not-available',
-                newVersion: this.app && typeof this.app.getVersion === 'function' ? this.app.getVersion() : '2.5.11',
+                newVersion: this.app && typeof this.app.getVersion === 'function' ? this.app.getVersion() : '1.1.0',
                 isDev: true
               });
             }
