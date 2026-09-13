@@ -1,11 +1,55 @@
 const fs = require('fs');
 const path = require('path');
 const crypto = require('crypto');
+const { nativeImage } = require('electron');
 
 class DownloadManager {
   constructor(app, orchestrator) {
     this.app = app;
     this.orchestrator = orchestrator;
+  }
+
+  getThumbnailDir() {
+    const baseDir = this.orchestrator.settingsManager.getMediaFolder();
+    const thumbDir = path.join(baseDir, '.thumbnails');
+    if (!fs.existsSync(thumbDir)) {
+      try { fs.mkdirSync(thumbDir, { recursive: true }); } catch (e) {}
+    }
+    return thumbDir;
+  }
+
+  getThumbnailPath(sourceFilePath) {
+    const hash = crypto.createHash('md5').update(sourceFilePath).digest('hex');
+    return path.join(this.getThumbnailDir(), `${hash}.jpg`);
+  }
+
+  async generateThumbnailBuffer(absolutePath, nativeImg) {
+    try {
+      const ext = path.extname(absolutePath).toLowerCase();
+      const nImg = nativeImg || nativeImage;
+      if (['.jpg', '.jpeg', '.png', '.webp', '.gif', '.bmp'].includes(ext)) {
+        let image = nImg.createFromPath(absolutePath);
+        if (!image.isEmpty()) {
+          const size = image.getSize();
+          if (size.width > 300 || size.height > 300) {
+            if (size.width >= size.height) {
+              image = image.resize({ width: 300, quality: 'good' });
+            } else {
+              image = image.resize({ height: 300, quality: 'good' });
+            }
+          }
+          return image.toJPEG(80);
+        }
+      } else {
+        const thumb = await nImg.createThumbnailFromPath(absolutePath, { width: 300, height: 300 });
+        if (!thumb.isEmpty()) {
+          return thumb.toJPEG(80);
+        }
+      }
+    } catch (e) {
+      console.error('[DownloadManager] Thumbnail buffer error for:', absolutePath, e.message);
+    }
+    return null;
   }
 
   async processDownloadedFile(tempPath, fileName, accountName) {
@@ -61,6 +105,7 @@ class DownloadManager {
           const newFileName = `${nameWithoutExt}_${timestamp}${ext}`;
           const renamePath = path.join(targetDir, newFileName);
           fs.copyFileSync(tempPath, renamePath);
+          this.scheduleThumbnailGeneration(renamePath, fileType);
           return {
             success: true,
             filePath: renamePath,
@@ -73,6 +118,7 @@ class DownloadManager {
         fs.copyFileSync(tempPath, finalPath);
       }
 
+      this.scheduleThumbnailGeneration(finalPath, fileType);
       return {
         success: true,
         filePath: finalPath,
@@ -86,6 +132,24 @@ class DownloadManager {
     }
   }
 
+  scheduleThumbnailGeneration(filePath, fileType) {
+    if (fileType === 'image' || fileType === 'video') {
+      setTimeout(async () => {
+        try {
+          const thumbPath = this.getThumbnailPath(filePath);
+          if (!fs.existsSync(thumbPath)) {
+            const buf = await this.generateThumbnailBuffer(filePath);
+            if (buf) {
+              fs.writeFile(thumbPath, buf, () => {});
+            }
+          }
+        } catch (e) {
+          console.error('[DownloadManager] Background thumbnail generation error:', e);
+        }
+      }, 50);
+    }
+  }
+
   listAllFiles() {
     const baseDir = this.orchestrator.settingsManager.getMediaFolder();
     let results = [];
@@ -94,6 +158,7 @@ class DownloadManager {
     const readDirRec = (dir) => {
       const entries = fs.readdirSync(dir, { withFileTypes: true });
       for (const entry of entries) {
+        if (entry.name.startsWith('.')) continue;
         const res = path.resolve(dir, entry.name);
         if (entry.isDirectory()) {
           readDirRec(res);
@@ -118,6 +183,7 @@ class DownloadManager {
       if (found) return;
       const entries = fs.readdirSync(dir, { withFileTypes: true });
       for (const entry of entries) {
+        if (entry.name.startsWith('.')) continue;
         const res = path.resolve(dir, entry.name);
         if (entry.isDirectory()) {
           readDirRec(res);
@@ -138,26 +204,21 @@ class DownloadManager {
     protocol.handle('nammil', async (request) => {
       if (request.url.startsWith('nammil://thumb/')) {
         const absolutePath = decodeURIComponent(request.url.replace('nammil://thumb/', ''));
-        const ext = path.extname(absolutePath).toLowerCase();
+        const thumbFilePath = this.getThumbnailPath(absolutePath);
+
+        // 1. FAST PATH: Persistent disk cache hit (instant 0ms CPU resize)
+        if (fs.existsSync(thumbFilePath)) {
+          return net.fetch('file:///' + thumbFilePath.replace(/\\/g, '/'));
+        }
+
+        // 2. SLOW PATH: First view — generate 300px thumbnail and cache to disk
         try {
-          if (['.jpg', '.jpeg', '.png', '.webp', '.gif', '.bmp'].includes(ext)) {
-            let image = nativeImage.createFromPath(absolutePath);
-            if (!image.isEmpty()) {
-              const size = image.getSize();
-              if (size.width > 480 || size.height > 480) {
-                if (size.width >= size.height) {
-                  image = image.resize({ width: 480, quality: 'good' });
-                } else {
-                  image = image.resize({ height: 480, quality: 'good' });
-                }
-              }
-              return new Response(image.toJPEG(75), { headers: { 'Content-Type': 'image/jpeg' } });
-            }
-          } else {
-            const thumb = await nativeImage.createThumbnailFromPath(absolutePath, { width: 400, height: 400 });
-            if (!thumb.isEmpty()) {
-              return new Response(thumb.toJPEG(80), { headers: { 'Content-Type': 'image/jpeg' } });
-            }
+          const buf = await this.generateThumbnailBuffer(absolutePath, nativeImage);
+          if (buf) {
+            fs.writeFile(thumbFilePath, buf, (err) => {
+              if (err) console.error('[DownloadManager] Failed to cache thumbnail:', err);
+            });
+            return new Response(buf, { headers: { 'Content-Type': 'image/jpeg', 'Cache-Control': 'public, max-age=31536000' } });
           }
         } catch (e) {
           console.error('Thumbnail generation failed for:', absolutePath, e.message);
@@ -183,6 +244,7 @@ class DownloadManager {
       const readDirRec = (dir, currentAccount) => {
         const entries = fs.readdirSync(dir, { withFileTypes: true });
         for (const entry of entries) {
+          if (entry.name.startsWith('.')) continue;
           const res = path.resolve(dir, entry.name);
           if (entry.isDirectory()) {
             readDirRec(res, currentAccount || entry.name);
