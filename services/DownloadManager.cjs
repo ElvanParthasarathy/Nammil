@@ -1,19 +1,29 @@
 const fs = require('fs');
 const path = require('path');
 const crypto = require('crypto');
+const { exec } = require('child_process');
 const { nativeImage } = require('electron');
 
 class DownloadManager {
   constructor(app, orchestrator) {
     this.app = app;
     this.orchestrator = orchestrator;
+    this._thumbDirHidden = false;
   }
 
   getThumbnailDir() {
     const baseDir = this.orchestrator.settingsManager.getMediaFolder();
     const thumbDir = path.join(baseDir, '.thumbnails');
     if (!fs.existsSync(thumbDir)) {
-      try { fs.mkdirSync(thumbDir, { recursive: true }); } catch (e) {}
+      try {
+        fs.mkdirSync(thumbDir, { recursive: true });
+        if (process.platform === 'win32') {
+          exec(`attrib +h "${thumbDir}"`);
+        }
+      } catch (e) {}
+    } else if (process.platform === 'win32' && !this._thumbDirHidden) {
+      this._thumbDirHidden = true;
+      exec(`attrib +h "${thumbDir}"`);
     }
     return thumbDir;
   }
