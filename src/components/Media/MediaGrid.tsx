@@ -45,7 +45,6 @@ export default function MediaGrid({ groupedMedia, hasMore, remainingCount = 0, o
       {hasMore && onLoadMore && (
         <Box sx={{ display: 'flex', justifyContent: 'center', mt: 4, mb: 6 }}>
           <Button
-            variant="outlined"
             onClick={onLoadMore}
             startIcon={<MaterialSymbol icon="expand_more" size={20} />}
             sx={{
@@ -56,12 +55,13 @@ export default function MediaGrid({ groupedMedia, hasMore, remainingCount = 0, o
               fontWeight: 600,
               textTransform: 'none',
               color: isDark ? '#fff' : '#000',
-              borderColor: isDark ? 'rgba(255,255,255,0.15)' : 'rgba(0,0,0,0.15)',
-              bgcolor: isDark ? 'rgba(255,255,255,0.04)' : 'rgba(0,0,0,0.02)',
-              boxShadow: isDark ? 'none' : '0 2px 8px rgba(0,0,0,0.04)',
+              bgcolor: isDark ? 'rgba(255,255,255,0.06)' : 'rgba(0,0,0,0.05)',
+              border: 'none',
+              boxShadow: 'none',
               '&:hover': {
-                bgcolor: isDark ? 'rgba(255,255,255,0.08)' : 'rgba(0,0,0,0.06)',
-                borderColor: isDark ? 'rgba(255,255,255,0.3)' : 'rgba(0,0,0,0.3)',
+                bgcolor: isDark ? 'rgba(255,255,255,0.1)' : 'rgba(0,0,0,0.09)',
+                border: 'none',
+                boxShadow: 'none',
               }
             }}
           >
