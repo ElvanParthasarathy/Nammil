@@ -1,5 +1,5 @@
-import React, { useState, useEffect, useRef } from 'react';
-import { Box, Typography, Button, IconButton, Tooltip, Skeleton } from '@mui/material';
+import React from 'react';
+import { Box, Typography, Button } from '@mui/material';
 import MaterialSymbol from '../shared/MaterialSymbol';
 
 const getFileIcon = (fileName: string, mediaType: string, size: number, weight: any = 'regular', color?: string) => {
@@ -20,6 +20,7 @@ import { k } from '../../i18n/k';
 import { useIsDark } from '../shared/hooks';
 import PdfThumbnail from './PdfThumbnail';
 import { getMediaUrl, getThumbUrl, isImageFile, isPdfFile, isOfficeFile, handleOpenSystem } from './mediaUtils';
+
 export default React.memo(function MediaCard({ item }: { item: any }) {
   const formatSize = (bytes: number) => {
     if (!bytes) return t(k.MEDIA_UNKNOWN_SIZE);
@@ -38,27 +39,8 @@ export default React.memo(function MediaCard({ item }: { item: any }) {
   const isPdf = isPdfFile(item.fileName);
   const isOffice = isOfficeFile(item.fileName);
 
-  const cardRef = useRef<HTMLDivElement>(null);
-  const [isVisible, setIsVisible] = useState(false);
-  const [isLoaded, setIsLoaded] = useState(false);
-
-  useEffect(() => {
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting) {
-          setIsVisible(true);
-          observer.disconnect();
-        }
-      },
-      { rootMargin: '200px' }
-    );
-    if (cardRef.current) observer.observe(cardRef.current);
-    return () => observer.disconnect();
-  }, []);
-
   return (
     <Box
-      ref={cardRef}
       sx={{
         width: '100%', 
         borderRadius: '24px', overflow: 'hidden', position: 'relative',
@@ -66,68 +48,58 @@ export default React.memo(function MediaCard({ item }: { item: any }) {
         bgcolor: isDark ? 'rgba(255,255,255,0.04)' : '#ffffff',
         boxShadow: isDark ? 'none' : '0 4px 20px rgba(0,0,0,0.03)',
         transition: 'background-color 0.2s',
+        contentVisibility: 'auto',
+        containIntrinsicSize: '280px 240px',
       }}
     >
-      {/* Thumbnail Area */}
+      {/* Thumbnail Area with Zero-Repaint Static Placeholder */}
       <Box
         sx={{
           width: '100%', aspectRatio: '16/9', height: 'auto', cursor: 'pointer', position: 'relative',
           display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center',
-          bgcolor: isDark ? 'rgba(255,255,255,0.06)' : 'rgba(0,0,0,0.08)',
+          bgcolor: isDark ? 'rgba(255,255,255,0.05)' : 'rgba(0,0,0,0.04)',
           borderRadius: '16px 16px 0 0',
           overflow: 'hidden'
         }}
+        onClick={() => handleOpenSystem(item.filePath)}
       >
+        {/* Static, lightweight placeholder icon (0 repaints/sec) */}
+        <Box sx={{ position: 'absolute', inset: 0, display: 'flex', alignItems: 'center', justifyContent: 'center', opacity: 0.2, pointerEvents: 'none' }}>
+          {getFileIcon(item.fileName, item.mediaType, 40, 'regular', isDark ? '#aaa' : '#666')}
+        </Box>
 
-        {!isLoaded && (isImage || isOffice || isPdf) && (
-          <Skeleton 
-            variant="rectangular" 
-            animation="wave"
-            sx={{ width: '100%', height: '100%', position: 'absolute', top: 0, left: 0, zIndex: 1, bgcolor: isDark ? 'rgba(255,255,255,0.05)' : 'rgba(0,0,0,0.05)' }} 
+        {isImage ? (
+          <img 
+            src={getThumbUrl(item)} 
+            alt={item.fileName} 
+            loading="lazy" 
+            decoding="async"
+            onLoad={(e) => { (e.currentTarget as HTMLElement).style.opacity = '1'; }}
+            onError={(e) => { (e.currentTarget as HTMLElement).style.display = 'none'; }}
+            style={{ 
+              width: '100%', height: '100%', objectFit: 'cover', 
+              opacity: 0, transition: 'opacity 0.2s ease-out', 
+              zIndex: 2, position: 'absolute', top: 0, left: 0 
+            }} 
           />
-        )}
-
-        {isVisible && (
-          isImage ? (
-            <img 
-              src={getThumbUrl(item)} 
-              alt={item.fileName} 
-              loading="lazy" 
-              decoding="async"
-              onLoad={() => setIsLoaded(true)}
-              onError={() => setIsLoaded(true)}
-              style={{ width: '100%', height: '100%', objectFit: 'cover', opacity: isLoaded ? 1 : 0, transition: 'opacity 0.3s ease', zIndex: 2, position: 'absolute', top: 0, left: 0 }} 
-            />
-          ) : isPdf ? (
-            <Box sx={{ width: '100%', height: '100%', opacity: isLoaded ? 1 : 0, transition: 'opacity 0.3s ease', zIndex: 2, position: 'absolute', top: 0, left: 0 }}>
-              <PdfThumbnail fileUrl={getMediaUrl(item)} fileName={item.fileName} onLoad={() => setIsLoaded(true)} />
-            </Box>
-          ) : isOffice ? (
-            <>
-              <img
-                src={`nammil://media/${encodeURIComponent(item.filePath + '_thumb.jpeg')}`}
-                loading="lazy"
-                decoding="async"
-                onLoad={() => setIsLoaded(true)}
-                style={{ width: '100%', height: '100%', objectFit: 'cover', opacity: isLoaded ? 1 : 0, transition: 'opacity 0.3s ease', zIndex: 2, position: 'absolute', top: 0, left: 0 }}
-                onError={(e) => {
-                  e.currentTarget.style.display = 'none';
-                  setIsLoaded(true);
-                  if (e.currentTarget.nextElementSibling) {
-                    (e.currentTarget.nextElementSibling as HTMLElement).style.display = 'flex';
-                  }
-                }}
-              />
-              <Box sx={{ p: 2, textAlign: 'center', display: 'none', flexDirection: 'column', alignItems: 'center', width: '100%', height: '100%', justifyContent: 'center', bgcolor: 'transparent', zIndex: 2, position: 'absolute', top: 0, left: 0 }}>
-                {getFileIcon(item.fileName, item.mediaType, 48, 'regular', isDark ? '#777' : '#aaa')}
-              </Box>
-            </>
-          ) : (
-            <Box sx={{ p: 2, textAlign: 'center', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', width: '100%', height: '100%', zIndex: 2, position: 'absolute', top: 0, left: 0 }}>
-              {getFileIcon(item.fileName, item.mediaType, 48, 'regular', isDark ? '#777' : '#aaa')}
-            </Box>
-          )
-        )}
+        ) : isPdf ? (
+          <Box sx={{ width: '100%', height: '100%', zIndex: 2, position: 'absolute', top: 0, left: 0 }}>
+            <PdfThumbnail fileUrl={getMediaUrl(item)} fileName={item.fileName} />
+          </Box>
+        ) : isOffice ? (
+          <img
+            src={`nammil://media/${encodeURIComponent(item.filePath + '_thumb.jpeg')}`}
+            loading="lazy"
+            decoding="async"
+            onLoad={(e) => { (e.currentTarget as HTMLElement).style.opacity = '1'; }}
+            onError={(e) => { (e.currentTarget as HTMLElement).style.display = 'none'; }}
+            style={{ 
+              width: '100%', height: '100%', objectFit: 'cover', 
+              opacity: 0, transition: 'opacity 0.2s ease-out', 
+              zIndex: 2, position: 'absolute', top: 0, left: 0 
+            }}
+          />
+        ) : null}
       </Box>
 
       {/* File Info Section */}

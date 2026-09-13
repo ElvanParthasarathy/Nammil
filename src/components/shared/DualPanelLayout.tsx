@@ -9,16 +9,20 @@ interface DualPanelLayoutProps {
 }
 
 function useAutoHideScrollbar() {
-  const [isVisible, setIsVisible] = React.useState(false);
+  const ref = React.useRef<HTMLDivElement>(null);
   const timerRef = React.useRef<ReturnType<typeof setTimeout> | null>(null);
 
   const showBriefly = React.useCallback(() => {
-    setIsVisible(true);
+    if (ref.current) {
+      ref.current.classList.add('scrollbar-visible');
+    }
     if (timerRef.current) {
       clearTimeout(timerRef.current);
     }
     timerRef.current = setTimeout(() => {
-      setIsVisible(false);
+      if (ref.current) {
+        ref.current.classList.remove('scrollbar-visible');
+      }
     }, 1000);
   }, []);
 
@@ -35,7 +39,7 @@ function useAutoHideScrollbar() {
     const distanceFromRight = rect.right - e.clientX;
     // When mouse is near the scrollbar (within 24px of the right edge)
     if (distanceFromRight >= 0 && distanceFromRight <= 24) {
-      setIsVisible(true);
+      if (ref.current) ref.current.classList.add('scrollbar-visible');
       if (timerRef.current) {
         clearTimeout(timerRef.current);
       }
@@ -45,7 +49,7 @@ function useAutoHideScrollbar() {
         clearTimeout(timerRef.current);
       }
       timerRef.current = setTimeout(() => {
-        setIsVisible(false);
+        if (ref.current) ref.current.classList.remove('scrollbar-visible');
       }, 600);
     }
   }, []);
@@ -54,7 +58,7 @@ function useAutoHideScrollbar() {
     if (timerRef.current) {
       clearTimeout(timerRef.current);
     }
-    setIsVisible(false);
+    if (ref.current) ref.current.classList.remove('scrollbar-visible');
   }, []);
 
   React.useEffect(() => {
@@ -66,7 +70,7 @@ function useAutoHideScrollbar() {
   }, []);
 
   return {
-    className: isVisible ? 'scrollbar-visible' : '',
+    ref,
     onScroll: handleScroll,
     onWheel: handleWheel,
     onMouseMove: handleMouseMove,
@@ -101,7 +105,8 @@ export default function DualPanelLayout({ sidebar, content, title }: DualPanelLa
       <div className="s2-content-grid" style={{ gridTemplateColumns: isSmallScreen ? '64px 1fr' : '380px 1fr' }}>
         {/* LEFT HUB */}
         <Box 
-          className={`s2-col-left ${leftScroll.className}`}
+          ref={leftScroll.ref}
+          className="s2-col-left"
           onScroll={leftScroll.onScroll}
           onWheel={leftScroll.onWheel}
           onMouseMove={leftScroll.onMouseMove}
@@ -128,7 +133,8 @@ export default function DualPanelLayout({ sidebar, content, title }: DualPanelLa
 
         {/* RIGHT DETAIL VIEW */}
         <Box 
-          className={`s2-col-right ${rightScroll.className}`}
+          ref={rightScroll.ref}
+          className="s2-col-right"
           onScroll={rightScroll.onScroll}
           onWheel={rightScroll.onWheel}
           onMouseMove={rightScroll.onMouseMove}

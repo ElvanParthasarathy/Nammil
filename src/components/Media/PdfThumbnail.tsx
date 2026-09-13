@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { Box, Skeleton } from '@mui/material';
+import { Box } from '@mui/material';
 import * as pdfjsLib from 'pdfjs-dist';
 import MaterialSymbol from '../shared/MaterialSymbol';
 import { useIsDark } from '../shared/hooks';
@@ -103,17 +103,8 @@ export default function PdfThumbnail({ fileUrl, fileName, onLoad }: { fileUrl: s
       )}
       
       {loading && !cachedImg && (
-        <Box sx={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-          <Box sx={{ p: 2, textAlign: 'center', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', width: '100%', height: '100%' }}>
-            <MaterialSymbol icon="picture_as_pdf" size={48} color={isDark ? '#777' : '#aaa'} />
-          </Box>
-          <Skeleton 
-            variant="rectangular" 
-            width="100%" 
-            height="100%" 
-            animation="wave" 
-            sx={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, opacity: 0.5 }} 
-          />
+        <Box sx={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, display: 'flex', alignItems: 'center', justifyContent: 'center', opacity: 0.3 }}>
+          <MaterialSymbol icon="picture_as_pdf" size={40} color={isDark ? '#aaa' : '#666'} />
         </Box>
       )}
     </Box>
