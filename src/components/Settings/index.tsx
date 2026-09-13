@@ -15,10 +15,16 @@ import StorageTab from './StorageTab';
 import NotificationsTab from './NotificationsTab';
 import { DeveloperTab, AboutAppTab, BrandTab } from './AboutTab';
 
-export default function Settings({ accounts, setAccounts, userTheme, setUserTheme }: any) {
+export default function Settings({ accounts, setAccounts, userTheme, setUserTheme, initialSubTab }: any) {
   const { t } = useI18n();
   const isDark = useIsDark();
-  const [activeTab, setActiveTab] = useState('');
+  const [activeTab, setActiveTab] = useState(initialSubTab || '');
+
+  React.useEffect(() => {
+    if (initialSubTab) {
+      setActiveTab(initialSubTab);
+    }
+  }, [initialSubTab]);
   const [clearAllName, setClearAllName] = useState('');
   const [isClearing, setIsClearing] = useState(false);
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);

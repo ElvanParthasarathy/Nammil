@@ -43,7 +43,7 @@ class UpdateManager {
   init() {
     const updater = this._getAutoUpdater();
     if (updater) {
-      updater.autoDownload = false;
+      updater.autoDownload = true;
       updater.autoInstallOnAppQuit = true;
 
       // Always ensure app-update.yml exists in userData so electron-updater never fails with ENOENT
@@ -82,7 +82,6 @@ class UpdateManager {
           releaseDate: info.releaseDate,
           error: null
         });
-        this._promptUpdateAvailable(info.version, null, 0);
       });
 
       updater.on('update-not-available', (info) => {
@@ -115,7 +114,6 @@ class UpdateManager {
           newVersion: info.version,
           percent: 100
         });
-        this._promptUpdateDownloaded(info.version);
       });
     }
 
@@ -126,6 +124,19 @@ class UpdateManager {
           console.log('[UpdateManager] Background check skipped:', err.message);
         });
       }, 8000);
+    }
+
+    // Automatically apply downloaded update silently when the app quits
+    if (this.app) {
+      this.app.on('before-quit', () => {
+        if (this.currentStatus.status === 'downloaded' && this.downloadedInstallerPath && fs.existsSync(this.downloadedInstallerPath)) {
+          try {
+            spawn(this.downloadedInstallerPath, ['/VERYSILENT', '/SUPPRESSMSGBOXES', '/NORESTART', '/SP-'], { detached: true, stdio: 'ignore' }).unref();
+          } catch (e) {
+            console.warn('[UpdateManager] Could not launch installer on quit:', e.message);
+          }
+        }
+      });
     }
 
     return this;
@@ -216,12 +227,10 @@ class UpdateManager {
                   downloadUrl: exeAsset ? exeAsset.browser_download_url : null
                 });
 
-                // Prompt user before downloading
-                this._promptUpdateAvailable(
-                  latestTag,
-                  exeAsset ? exeAsset.browser_download_url : null,
-                  exeAsset ? (exeAsset.size || 0) : 0
-                );
+                // Start background download immediately (Chrome / VS Code style)
+                if (exeAsset && exeAsset.browser_download_url) {
+                  this._downloadAsset(exeAsset.browser_download_url, exeAsset.size || 0);
+                }
               } else {
                 this._updateState({
                   status: 'not-available',

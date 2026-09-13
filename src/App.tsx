@@ -36,6 +36,35 @@ function App() {
     }
   });
 
+  const [updateStatus, setUpdateStatus] = useState<any>(null);
+  const [settingsSubTab, setSettingsSubTab] = useState('');
+
+  useEffect(() => {
+    if ((window as any).electronAPI) {
+      if ((window as any).electronAPI.getUpdateStatus) {
+        (window as any).electronAPI.getUpdateStatus().then((s: any) => {
+          if (s) setUpdateStatus(s);
+        }).catch(() => {});
+      }
+      if ((window as any).electronAPI.onUpdateStatus) {
+        const unsub = (window as any).electronAPI.onUpdateStatus((s: any) => {
+          if (s) setUpdateStatus(s);
+        });
+        return () => {
+          if (unsub) unsub();
+        };
+      }
+    }
+  }, []);
+
+  const handleOpenUpdatePage = () => {
+    setActiveTab('settings');
+    setSettingsSubTab('aboutApp');
+    if ((window as any).electronAPI && (window as any).electronAPI.switchTab) {
+      (window as any).electronAPI.switchTab('settings');
+    }
+  };
+
   const prefersDarkMode = useMediaQuery('(prefers-color-scheme: dark)');
 
   // One-time initialization: load settings, accounts, and set the initial tab
@@ -259,12 +288,20 @@ function App() {
           accounts={accounts} 
           unreadNotificationCount={notifications.filter(n => !n.read).length}
           notifications={notifications}
+          updateStatus={updateStatus}
+          onOpenUpdatePage={handleOpenUpdatePage}
         />
         
         <Box sx={{ flexGrow: 1, display: 'flex', position: 'relative', overflow: 'hidden' }}>
           {activeTab === 'settings' && (
             <Box sx={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, bgcolor: 'background.default', zIndex: 10 }}>
-              <Settings accounts={accounts} setAccounts={setAccounts} userTheme={userTheme} setUserTheme={setUserTheme} />
+              <Settings 
+                accounts={accounts} 
+                setAccounts={setAccounts} 
+                userTheme={userTheme} 
+                setUserTheme={setUserTheme} 
+                initialSubTab={settingsSubTab}
+              />
             </Box>
           )}
           {activeTab === 'media' && (

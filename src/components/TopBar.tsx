@@ -11,6 +11,8 @@ interface TopBarProps {
   accounts: any[];
   unreadNotificationCount: number;
   notifications?: any[];
+  updateStatus?: any;
+  onOpenUpdatePage?: () => void;
 }
 
 export default function TopBar({
@@ -19,6 +21,8 @@ export default function TopBar({
   accounts,
   unreadNotificationCount,
   notifications = [],
+  updateStatus,
+  onOpenUpdatePage,
 }: TopBarProps) {
   const { t } = useI18n();
   const isSmallScreen = useMediaQuery('(max-width: 700px)');
@@ -138,7 +142,84 @@ export default function TopBar({
         </Box>
 
         {/* Right: Notifications, Media, Settings (with margin for Windows Controls) */}
-        <Box sx={{ flexGrow: 1, display: 'flex', justifyContent: 'flex-end', mr: '110px' }}>
+        <Box sx={{ flexGrow: 1, display: 'flex', alignItems: 'center', justifyContent: 'flex-end', mr: '110px' }}>
+          {/* Chrome-style TopBar Update Indicator */}
+          {updateStatus && (updateStatus.status === 'downloading' || updateStatus.status === 'downloaded') && (
+            <Box
+              onClick={() => {
+                if (updateStatus.status === 'downloaded') {
+                  if ((window as any).electronAPI && (window as any).electronAPI.restartAndInstall) {
+                    (window as any).electronAPI.restartAndInstall();
+                    return;
+                  }
+                }
+                if (onOpenUpdatePage) onOpenUpdatePage();
+              }}
+              sx={{
+                display: 'flex',
+                alignItems: 'center',
+                gap: 0.75,
+                height: 28,
+                px: 1.5,
+                mr: 1.5,
+                borderRadius: '50px',
+                fontSize: '11.5px',
+                fontWeight: 600,
+                cursor: 'pointer',
+                WebkitAppRegion: 'no-drag',
+                userSelect: 'none',
+                transition: 'all 0.2s ease',
+                ...(updateStatus.status === 'downloaded'
+                  ? {
+                      bgcolor: (theme) => theme.palette.mode === 'dark' ? '#00c853' : '#00a344',
+                      color: '#000',
+                      boxShadow: '0 2px 8px rgba(0, 200, 83, 0.3)',
+                      '&:hover': {
+                        bgcolor: (theme) => theme.palette.mode === 'dark' ? '#00e676' : '#00b248',
+                        transform: 'scale(1.02)',
+                      },
+                    }
+                  : {
+                      bgcolor: (theme) => theme.palette.mode === 'dark' ? 'rgba(255, 255, 255, 0.08)' : 'rgba(0, 0, 0, 0.06)',
+                      color: 'text.primary',
+                      border: (theme) => `1px solid ${theme.palette.divider}`,
+                      '&:hover': {
+                        bgcolor: (theme) => theme.palette.mode === 'dark' ? 'rgba(255, 255, 255, 0.14)' : 'rgba(0, 0, 0, 0.1)',
+                      },
+                    }),
+              }}
+              title={updateStatus.status === 'downloaded' ? 'Click to restart & install update' : 'Click to view update download progress'}
+            >
+              {updateStatus.status === 'downloaded' ? (
+                <>
+                  <MaterialSymbol icon="system_update" size={15} />
+                  <Typography sx={{ fontSize: '11.5px', fontWeight: 700, letterSpacing: 0.2 }}>
+                    Relaunch to Update
+                  </Typography>
+                </>
+              ) : (
+                <>
+                  <Box
+                    sx={{
+                      display: 'flex',
+                      alignItems: 'center',
+                      animation: 'spin 2s linear infinite',
+                      '@keyframes spin': {
+                        '0%': { transform: 'rotate(0deg)' },
+                        '100%': { transform: 'rotate(360deg)' }
+                      }
+                    }}
+                  >
+                    <MaterialSymbol icon="sync" size={14} />
+                  </Box>
+                  <Typography sx={{ fontSize: '11.5px', fontWeight: 600 }}>
+                    {`Updating ${updateStatus.percent || 0}%`}
+                  </Typography>
+                </>
+              )}
+            </Box>
+          )}
+
           <Tabs
             value={['notifications', 'media', 'settings'].includes(activeTab) ? activeTab : false}
             onChange={handleChange}
