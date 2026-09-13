@@ -1,8 +1,10 @@
 import React from 'react';
-import { Box, Typography, Button, IconButton, Modal, Paper, TextField } from '@mui/material';
+import { Box, Typography, Modal, Paper, TextField } from '@mui/material';
 import { X } from '@phosphor-icons/react';
 import { useIsDark } from '../shared/hooks';
 import { useI18n } from '../../i18n/I18nContext';
+import { Material3Button } from '../shared/Material3Button';
+import { Material3IconButton } from '../shared/Material3IconButton';
 import { k } from '../../i18n/k';
 
 interface WinUIAddDialogProps {
@@ -35,16 +37,16 @@ export default function WinUIAddDialog({ open, onClose, onConfirm, accountName, 
           <Typography sx={{ fontSize: '13px', color: isDark ? '#fff' : '#000', ml: 1 }}>
             {t(k.DIALOG_ADD_ACCOUNT_TITLE)}
           </Typography>
-          <IconButton 
+          <Material3IconButton 
             onClick={onClose} 
             size="small" 
             sx={{ 
               color: 'var(--mac-text-secondary)', 
-              '&:hover': { bgcolor: isDark ? 'rgba(255,255,255,0.1)' : 'rgba(0,0,0,0.05)', color: 'var(--mac-text)' } 
+              '&:hover': { color: 'var(--mac-text)' } 
             }}
           >
             <X size={18} />
-          </IconButton>
+          </Material3IconButton>
         </Box>
 
         {/* Content */}
@@ -79,49 +81,31 @@ export default function WinUIAddDialog({ open, onClose, onConfirm, accountName, 
 
         {/* Footer */}
         <Box sx={{ bgcolor: isDark ? '#2B2B2B' : '#F3F3F3', p: 2, display: 'flex', justifyContent: 'flex-end', gap: 1 }}>
-          <Button
+          <Material3Button
             onClick={onClose}
-            variant="contained"
             sx={{
               color: isDark ? '#fff' : '#000',
               bgcolor: isDark ? '#333' : '#e0e0e0',
-              textTransform: 'none',
-              boxShadow: 'none',
-              px: 3, py: 0.5,
+              px: 3,
               borderRadius: '24px',
               minWidth: 80,
-              '&:hover': {
-                bgcolor: isDark ? '#3b3b3b' : '#d5d5d5',
-                boxShadow: 'none',
-              }
             }}
           >
             {t(k.BTN_CANCEL)}
-          </Button>
-          <Button
+          </Material3Button>
+          <Material3Button
             onClick={onConfirm}
-            variant="contained"
             disabled={!accountName.trim()}
             sx={{
               color: isDark ? '#000' : '#fff',
               bgcolor: isDark ? '#fff' : '#000',
-              textTransform: 'none',
-              boxShadow: 'none',
-              px: 3, py: 0.5,
+              px: 3,
               borderRadius: '24px',
               minWidth: 80,
-              '&:hover': {
-                bgcolor: isDark ? '#e0e0e0' : '#333',
-                boxShadow: 'none',
-              },
-              '&.Mui-disabled': {
-                bgcolor: isDark ? 'rgba(255,255,255,0.1)' : 'rgba(0,0,0,0.1)',
-                color: isDark ? 'rgba(255,255,255,0.3)' : 'rgba(0,0,0,0.3)',
-              }
             }}
           >
             {t(k.BTN_ADD)}
-          </Button>
+          </Material3Button>
         </Box>
       </Paper>
     </Modal>

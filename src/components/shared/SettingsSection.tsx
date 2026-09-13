@@ -1,5 +1,6 @@
 import React from 'react';
-import { Box, Typography, Divider, Paper, ButtonBase, Tooltip, useMediaQuery, IconButton } from '@mui/material';
+import { Box, Typography, Divider, Paper, ButtonBase, Tooltip, useMediaQuery } from '@mui/material';
+import { Material3IconButton } from './Material3IconButton';
 
 export interface SettingsSectionProps {
   title?: string;
@@ -61,20 +62,15 @@ export function SidebarItem({ icon, iconColor, title, description, isActive, onC
       <Tooltip title={isSmallScreen ? title : ''} placement="right" disableHoverListener={!isSmallScreen}>
         {isSmallScreen ? (
           <Box sx={{ display: 'flex', justifyContent: 'center', my: 1, width: '100%', zIndex: isActive ? 2 : 1 }}>
-            <IconButton 
+            <Material3IconButton 
               onClick={onClick}
               sx={{ 
                 bgcolor: isActive ? (theme: any) => theme.palette.mode === 'dark' ? 'rgba(255,255,255,0.1)' : 'rgba(0,0,0,0.06)' : 'transparent',
                 color: (theme: any) => iconColor === 'monochrome' ? (theme.palette.mode === 'dark' ? '#fff' : '#444') : '#ffffff',
-                '&:hover': {
-                  bgcolor: (theme: any) => isActive
-                    ? (theme.palette.mode === 'dark' ? 'rgba(255,255,255,0.15)' : 'rgba(0,0,0,0.09)')
-                    : (theme.palette.mode === 'dark' ? 'rgba(255,255,255,0.08)' : 'rgba(0,0,0,0.05)'),
-                }
               }}
             >
               {icon}
-            </IconButton>
+            </Material3IconButton>
           </Box>
         ) : (
           <ButtonBase 

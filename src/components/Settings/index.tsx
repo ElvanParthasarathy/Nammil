@@ -1,11 +1,12 @@
 import React, { useState } from 'react';
-import { Box, Typography, IconButton, Menu, MenuItem } from '@mui/material';
+import { Box, Typography, Menu, MenuItem } from '@mui/material';
 import { ChatCircle, Palette, Translate, CaretLeft, Gear, DotsThreeVertical, HardDrives, Bell, Info, Code, Sparkle } from '@phosphor-icons/react';
 import { useI18n } from '../../i18n/I18nContext';
 import { k } from '../../i18n/k';
 import { SidebarItem } from '../shared/SettingsSection';
 import DualPanelLayout from '../shared/DualPanelLayout';
 import { useIsDark } from '../shared/hooks';
+import { Material3IconButton } from '../shared/Material3IconButton';
 import { sanitizeName } from './validation';
 import WinUIClearAllDialog from './WinUIClearAllDialog';
 import AccountsTab from './AccountsTab';
@@ -23,7 +24,7 @@ export default function Settings({ accounts, setAccounts, userTheme, setUserThem
   const [isClearing, setIsClearing] = useState(false);
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
 
-  const handleMenuClick = (event: React.MouseEvent<HTMLButtonElement>) => setAnchorEl(event.currentTarget);
+  const handleMenuClick = (event: React.MouseEvent<HTMLElement>) => setAnchorEl(event.currentTarget);
   const handleMenuClose = () => setAnchorEl(null);
 
   const confirmClearAll = () => {
@@ -126,32 +127,29 @@ export default function Settings({ accounts, setAccounts, userTheme, setUserThem
   ) : (
     <>
       <Box sx={{ display: 'flex', alignItems: 'center', mb: 2, width: '100%' }}>
-        <IconButton
+        <Material3IconButton
           onClick={() => setActiveTab('')}
           sx={{
-            bgcolor: 'transparent',
             color: 'var(--mac-text)',
-            '&:hover': { bgcolor: (theme) => theme.palette.mode === 'dark' ? 'rgba(255, 255, 255, 0.12)' : 'rgba(0, 0, 0, 0.1)' },
             mr: 1
           }}
         >
           <CaretLeft size={20} weight="bold" />
-        </IconButton>
+        </Material3IconButton>
         <Typography sx={{ fontSize: '22px', fontWeight: 600, flexGrow: 1 }}>
           {getActiveTitle()}
         </Typography>
 
         {activeTab === 'accounts' && accounts?.length > 0 && (
           <>
-            <IconButton 
+            <Material3IconButton 
               onClick={handleMenuClick}
               sx={{ 
-                color: 'var(--mac-text-secondary)',
-                '&:hover': { bgcolor: isDark ? 'rgba(255,255,255,0.1)' : 'rgba(0,0,0,0.05)' }
+                color: 'var(--mac-text-secondary)'
               }}
             >
               <DotsThreeVertical size={20} weight="bold" />
-            </IconButton>
+            </Material3IconButton>
             <Menu
               anchorEl={anchorEl}
               open={Boolean(anchorEl)}

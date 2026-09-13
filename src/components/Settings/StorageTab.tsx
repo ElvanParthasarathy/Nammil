@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from 'react';
-import { Box, Typography, Button, CircularProgress, IconButton, Tooltip } from '@mui/material';
+import { Box, Typography, CircularProgress, Tooltip } from '@mui/material';
 import { HardDrives, Warning, Trash, FolderOpen } from '@phosphor-icons/react';
 import { useI18n } from '../../i18n/I18nContext';
 import { k } from '../../i18n/k';
 import { SettingsSection as SettingsSection, SettingsRow } from '../shared/SettingsSection';
+import { Material3IconButton } from '../shared/Material3IconButton';
 import { useIsDark } from '../shared/hooks';
 
 export default function StorageTab() {
@@ -61,19 +62,16 @@ export default function StorageTab() {
           description={currentPath || '...'}
           control={
             <Tooltip title={t(k.BTN_CHANGE_FOLDER)} placement="top" arrow>
-              <IconButton 
+              <Material3IconButton 
                 onClick={handleChangeFolder}
                 disabled={isMigrating}
                 sx={{ 
                   bgcolor: isDark ? 'rgba(255,255,255,0.08)' : 'rgba(0,0,0,0.06)', 
                   color: 'var(--mac-text)',
-                  '&:hover': {
-                    bgcolor: isDark ? 'rgba(255,255,255,0.15)' : 'rgba(0,0,0,0.1)',
-                  }
                 }}
               >
                 <FolderOpen size={20} weight="bold" />
-              </IconButton>
+              </Material3IconButton>
             </Tooltip>
           }
         />
@@ -83,7 +81,7 @@ export default function StorageTab() {
           description={t(k.RESET_APP_DESC) || "Clear all sessions and return to first setup. Keeps media."}
           control={
             <Tooltip title={t(k.RESET_APP_BTN) || "Reset App"} placement="top" arrow>
-              <IconButton 
+              <Material3IconButton 
                 onClick={async () => {
                   if (window.confirm(t(k.RESET_APP_CONFIRM) || "Are you sure you want to reset all app data? This will log out all accounts but preserve your media folder.")) {
                     if ((window as any).electronAPI) {
@@ -101,13 +99,10 @@ export default function StorageTab() {
                 sx={{ 
                   bgcolor: isDark ? 'rgba(255,255,255,0.08)' : 'rgba(0,0,0,0.06)', 
                   color: 'var(--mac-text)',
-                  '&:hover': {
-                    bgcolor: isDark ? 'rgba(255,255,255,0.15)' : 'rgba(0,0,0,0.1)',
-                  }
                 }}
               >
                 <Trash size={20} weight="bold" />
-              </IconButton>
+              </Material3IconButton>
             </Tooltip>
           }
         />

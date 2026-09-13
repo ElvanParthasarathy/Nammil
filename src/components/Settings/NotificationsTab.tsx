@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from 'react';
-import { Box, Typography, Button, Select, MenuItem, IconButton } from '@mui/material';
+import { Box, Typography, Select, MenuItem } from '@mui/material';
 import { SpeakerHigh } from '@phosphor-icons/react';
 import { useI18n } from '../../i18n/I18nContext';
 import { k } from '../../i18n/k';
 import { SettingsSection, SettingsRow } from '../shared/SettingsSection';
 import { Material3Switch } from '../shared/Material3Switch';
+import { Material3IconButton } from '../shared/Material3IconButton';
 import { useIsDark } from '../shared/hooks';
 
 export default function NotificationsTab({ accounts }: any) {
@@ -129,14 +130,14 @@ export default function NotificationsTab({ accounts }: any) {
                 title={acc.name}
                 control={
                   <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5 }}>
-                    <IconButton
+                    <Material3IconButton
                       onClick={() => previewSound(currentAccSound)}
                       size="small"
                       sx={{ color: 'var(--mac-text)' }}
                       disabled={isMuted || currentAccSound === 'silent'}
                     >
                       <SpeakerHigh size={18} />
-                    </IconButton>
+                    </Material3IconButton>
                     <Select
                       value={currentAccSound}
                       onChange={(e) => handleAccountSoundChange(acc.id, e.target.value)}
