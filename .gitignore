@@ -21,15 +21,20 @@ release/
 **/target/
 **/dist/
 **/dist-ssr/
-legacy/
+# Temporary outputs
+*.tmp
+build-release/
+release/
 
-# Temp scripts
-*.py
-clean.bat
-clean_shortcuts.ps1
-find_and_kill_registry.ps1
-nuke_everything.ps1
-temp_logo.png
+# Archived legacy prototypes
+legacy/ElvanElcen.*
+legacy/Nammil.TabTest/
+legacy/src-tauri/
+legacy/src/
+legacy/whatsapp-unpacked/
+legacy/build.bat
+legacy/package*.json
+
 
 # Editor directories and files
 .vscode/*
