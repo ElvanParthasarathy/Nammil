@@ -204,6 +204,7 @@ export const OnboardingButton = ({ children, onClick, disabled, loading, seconda
             backgroundColor: secondary ? 'transparent' : 'var(--onboarding-accent)',
             color: secondary ? 'var(--onboarding-text)' : 'var(--onboarding-btn-text)',
             boxShadow: secondary ? 'none' : '0 4px 12px var(--onboarding-btn-shadow)',
+            transition: 'background-color 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease',
             ...(secondary && {
                 borderColor: 'var(--onboarding-text)',
                 '@media (hover: hover)': { '&:hover': {
@@ -214,6 +215,7 @@ export const OnboardingButton = ({ children, onClick, disabled, loading, seconda
             ...(!secondary && {
                 '@media (hover: hover)': { '&:hover': {
                     backgroundColor: 'var(--onboarding-accent-light)',
+                    color: 'var(--onboarding-btn-text)',
                 } }
             })
         }}
