@@ -127,7 +127,7 @@ export default function TopBar({
                           }
                         }}
                       >
-                        <MaterialSymbol icon="chat_bubble" size={20} fill={isSelected} />
+                        <MaterialSymbol icon="chat" size={20} fill={isSelected} />
                       </Badge>
                     </Box>
                   } 

@@ -59,7 +59,7 @@ export default function AccountsTab({ accounts, setAccounts }: any) {
           {accounts.map((acc: any, index: number) => (
             <SettingsRow
               key={acc.id}
-              icon={<MaterialSymbol icon="chat_bubble" size={20} fill={true} />}
+              icon={<MaterialSymbol icon="chat" size={20} fill={true} />}
               iconColor="monochrome"
               title={acc.name}
               description={`${t(k.ACCOUNTS_INSTANCE)} ${index + 1}`}

@@ -42,7 +42,7 @@ export default function NotificationsSidebar({
           return (
             <SidebarItem
               key={acc.id}
-              icon={<MaterialSymbol icon="chat_bubble" size={20} fill={activeAccount === acc.name} />}
+              icon={<MaterialSymbol icon="chat" size={20} fill={activeAccount === acc.name} />}
               iconColor="monochrome"
               title={acc.name}
               description={`${count} ${t(k.NOTIF_PLURAL)}`}

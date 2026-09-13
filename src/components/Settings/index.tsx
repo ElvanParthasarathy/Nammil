@@ -50,7 +50,7 @@ export default function Settings({ accounts, setAccounts, userTheme, setUserThem
   const sidebar = (
     <>
       <SidebarItem
-        icon={<MaterialSymbol icon="chat_bubble" size={20} fill={activeTab === 'accounts'} />}
+        icon={<MaterialSymbol icon="chat" size={20} fill={activeTab === 'accounts'} />}
         iconColor="monochrome"
         title={t(k.ACCOUNTS_TITLE)}
         description={t(k.ACCOUNTS_DESC)}
