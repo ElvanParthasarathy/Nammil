@@ -632,8 +632,8 @@ export const ml = {
     latn: 'Location',
   },
   [k.ABOUT_LOCATION_VAL]: {
-    ml: 'ചെന്നൈ, തമിഴ്നാട്',
-    latn: 'Chennai, Tamil Nadu',
+    ml: 'ആരണി, തമിഴ്നാട്',
+    latn: 'Arani, Tamil Nadu',
   },
   [k.ABOUT_FROM_BRAND]: {
     ml: 'എൽവൻ നവിൽ സംരംഭം',

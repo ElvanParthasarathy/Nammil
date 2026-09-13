@@ -475,7 +475,7 @@ export const ta = {
     ta: 'இருப்பிடம்',
   },
   [k.ABOUT_LOCATION_VAL]: {
-    ta: 'சென்னை, தமிழ்நாடு',
+    ta: 'ஆரணி, தமிழ்நாடு',
   },
   [k.ABOUT_FROM_BRAND]: {
     ta: 'எல்வன் நவில் படைப்பு',

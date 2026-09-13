@@ -175,7 +175,7 @@ export const en = {
   [k.ABOUT_LINKEDIN]: 'LinkedIn',
   [k.ABOUT_GITHUB]: 'GitHub',
   [k.ABOUT_LOCATION]: 'Location',
-  [k.ABOUT_LOCATION_VAL]: 'Chennai, Tamil Nadu',
+  [k.ABOUT_LOCATION_VAL]: 'Arani, Tamil Nadu',
   [k.ABOUT_FROM_BRAND]: 'From Elvan Navil',
   [k.ABOUT_WHAT_IS_NAMMIL]: 'What is Nammil?',
   [k.ABOUT_NAMMIL_DESC]: "Nammil (நம்மில், meaning 'In Us') is a sleek, privacy-focused desktop companion for WhatsApp. It provides seamless multi-account management, automated media organization, and quiet, distraction-free native notifications.\n\nFrom Elvan Navil\nCrafted with care to bring your conversations and media into an intuitive, beautifully unified experience.",
