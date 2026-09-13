@@ -1,5 +1,5 @@
 #define MyAppName "Nammil"
-#define MyAppVersion "1.1.0"
+#define MyAppVersion "1.1.1"
 #define MyAppPublisher "Elvan Navil"
 #define MyAppExeName "Nammil.exe"
 #define MyOutputDir "build-release"
@@ -20,7 +20,7 @@ DisableProgramGroupPage=yes
 WizardStyle=modern
 SetupIconFile=build\icon.ico
 UninstallDisplayIcon={app}\{#MyAppExeName}
-Compression=lzma2/ultra64
+Compression=lzma2/normal
 SolidCompression=yes
 OutputDir={#MyOutputDir}
 OutputBaseFilename=Nammil Setup
