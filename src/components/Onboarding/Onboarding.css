@@ -196,7 +196,7 @@ input,
 
 .splash-shape {
     position: absolute;
-    background-color: rgba(255, 255, 255, 0.03);
+    background-color: #141414;
     pointer-events: none;
     z-index: 0;
 }
@@ -208,7 +208,7 @@ input,
 }
 
 .splash-screen-root.dark .splash-shape {
-    background-color: rgba(255, 255, 255, 0.03);
+    background-color: #141414;
 }
 
 .splash-screen-root.light .splash-shape {
