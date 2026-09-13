@@ -90,7 +90,7 @@ export default function DualPanelLayout({ sidebar, content, title }: DualPanelLa
     '--mac-divider': isDark ? 'rgba(255,255,255,0.04)' : 'rgba(0,0,0,0.04)',
     '--scrollbar-thumb': isDark ? 'rgba(255, 255, 255, 0.28)' : 'rgba(0, 0, 0, 0.25)',
     '--scrollbar-thumb-hover': isDark ? 'rgba(255, 255, 255, 0.5)' : 'rgba(0, 0, 0, 0.5)',
-    backgroundColor: isDark ? '#161717' : '#F6F5F4', 
+    backgroundColor: isDark ? '#1d1f1f' : '#F6F5F4', 
     color: isDark ? '#ffffff' : '#000000',
     height: '100%',
     width: '100%'

@@ -7,7 +7,7 @@ export const getTheme = (mode) => createTheme({
       main: mode === 'dark' ? '#8696a0' : '#111b21',
     },
     background: {
-      default: mode === 'dark' ? '#1d1f1f' : '#ffffff',
+      default: mode === 'dark' ? '#1d1f1f' : '#F6F5F4',
       paper: mode === 'dark' ? '#1d1f1f' : '#ffffff',
     },
     text: {
@@ -30,7 +30,7 @@ export const getTheme = (mode) => createTheme({
     MuiAppBar: {
       styleOverrides: {
         root: {
-          backgroundColor: mode === 'dark' ? '#1d1f1f' : '#F7F5F3',
+          backgroundColor: mode === 'dark' ? '#1d1f1f' : '#F6F5F4',
           color: mode === 'dark' ? '#e9edef' : '#111b21',
           boxShadow: 'none',
           backgroundImage: 'none',

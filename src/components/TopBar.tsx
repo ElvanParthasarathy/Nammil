@@ -32,7 +32,7 @@ export default function TopBar({
       position="static" 
       elevation={0}
       sx={{ 
-        bgcolor: 'background.paper',
+        bgcolor: (theme) => theme.palette.mode === 'dark' ? '#1d1f1f' : '#F6F5F4',
         borderBottom: (theme) => `1px solid ${theme.palette.divider}`,
         WebkitAppRegion: 'drag',
         userSelect: 'none',
