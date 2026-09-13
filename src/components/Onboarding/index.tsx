@@ -82,7 +82,7 @@ const Onboarding: React.FC<OnboardingProps> = ({ onComplete }) => {
                 color: 'var(--onboarding-text-secondary)', 
                 transition: 'color 0.2s',
                 '&:hover': { color: 'var(--onboarding-text)' },
-                zIndex: 10000,
+                zIndex: 10030,
                 WebkitAppRegion: 'no-drag'
             }}
         >

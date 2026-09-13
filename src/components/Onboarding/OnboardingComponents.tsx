@@ -8,6 +8,7 @@ export const OnboardingLayout = ({ children, hideLogo, maxWidth = "xs" }: { chil
     
     return (
         <div className={`onboarding-container ${isDark ? 'dark' : ''}`}>
+            <div className="onboarding-titlebar" />
             <div className="onboarding-shape shape-1" />
             <div className="onboarding-shape shape-2" />
             <div className="onboarding-shape shape-3" />
