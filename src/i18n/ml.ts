@@ -25,6 +25,10 @@ export const ml = {
     ml: 'സജീവ അക്കൗണ്ടുകൾ',
     latn: 'Sajeeva accountukal',
   },
+  [k.ACCOUNTS_DESC]: {
+    ml: 'അക്കൗണ്ട് കൈകാര്യം',
+    latn: 'Account kaikaryam',
+  },
   [k.ACCOUNTS_ADD]: {
     ml: 'അക്കൗണ്ട് ചേർക്കുക',
     latn: 'Account chaerkkuka',
@@ -110,8 +114,8 @@ export const ml = {
     latn: 'App Theme',
   },
   [k.THEME_SUBTITLE]: {
-    ml: 'തീമും സ്റ്റൈലിംഗും',
-    latn: 'Theemum stylingum',
+    ml: 'തീമും നിറങ്ങളും',
+    latn: 'Theemum nirangalum',
   },
   [k.THEME_DESC]: {
     ml: 'നിറങ്ങൾ സിങ്ക് ചെയ്യാൻ',
@@ -134,8 +138,8 @@ export const ml = {
     latn: 'Mozhi',
   },
   [k.LANG_SUBTITLE]: {
-    ml: 'ആപ്ലിക്കേഷൻ മൊഴി',
-    latn: 'Application mozhi',
+    ml: 'ആപ്പ് മൊഴി',
+    latn: 'App mozhi',
   },
   [k.LANG_DESC]: {
     ml: 'മൊഴി മാറ്റുക',
@@ -318,8 +322,8 @@ export const ml = {
     latn: 'Sekharanavum datayum',
   },
   [k.STORAGE_DESC]: {
-    ml: 'നിങ്ങളുടെ മീഡിയ ഫോൾഡറുകൾ കൈകാര്യം ചെയ്യുക',
-    latn: 'Ningalude media folderukal kaikaryam cheyyuka',
+    ml: 'മീഡിയ ഫോൾഡറുകൾ',
+    latn: 'Media folderukal',
   },
   [k.STORAGE_MEDIA_FOLDER]: {
     ml: 'മീഡിയ ഫോൾഡർ',
@@ -398,8 +402,8 @@ export const ml = {
     latn: 'Ariyippukal',
   },
   [k.NOTIF_DESC]: {
-    ml: 'സന്ദേശ അറിയിപ്പുകൾ, ശബ്ദങ്ങൾ',
-    latn: 'Sandesha ariyippukal, shabdhangal',
+    ml: 'അറിയിപ്പും ശബ്ദവും',
+    latn: 'Ariyippum shabdhavum',
   },
   [k.NOTIF_ENABLE]: {
     ml: 'ഡെസ്ക്ടോപ്പ് അറിയിപ്പുകൾ',
@@ -588,20 +592,20 @@ export const ml = {
     latn: 'About & Brand',
   },
   [k.ABOUT_DEVELOPER_DESC]: {
-    ml: 'ഡെവലപ്പർ വിവരങ്ങളും ബന്ധപ്പെടാനും',
-    latn: 'Developer Vivarangalum Bandhappedanum',
+    ml: 'വിവരങ്ങളും സമ്പർക്കവും',
+    latn: 'Vivarangalum sambarkkavum',
   },
   [k.ABOUT_APP_TITLE]: {
     ml: 'ആപ്പിനെ പറ്റി',
     latn: 'Appine Patti',
   },
   [k.ABOUT_APP_DESC]: {
-    ml: 'നമ്മിൽ - വാട്ട്സ്ആപ്പ് ഓർഗനൈസർ',
-    latn: 'Nammil - WhatsApp Organizer',
+    ml: 'വാട്ട്സ്ആപ്പ് ഓർഗനൈസർ',
+    latn: 'WhatsApp Organizer',
   },
   [k.ABOUT_BRAND_DESC]: {
-    ml: 'എൽവൻ പാർത്തചാരതിയുടെ നിർമ്മിതി',
-    latn: 'Elvan Parthasarathiyude Nirmithi',
+    ml: 'സൃഷ്ടികളും പ്ലാറ്റ്‌ഫോമും',
+    latn: 'Srishtikalum platformum',
   },
   [k.ABOUT_VISIT_PORTFOLIO]: {
     ml: 'പോർട്ട്ഫോളിയോ സന്ദർശിക്കുക',

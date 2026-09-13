@@ -108,7 +108,7 @@ export function SidebarItem({ icon, iconColor, title, description, isActive, onC
                 {title}
               </Typography>
               {description && (
-                <Typography sx={{ mt: '4px', display: 'block', fontSize: '13px', color: 'var(--mac-text-secondary, #aaaaaa)' }}>
+                <Typography sx={{ mt: '4px', display: 'block', fontSize: '13px', color: 'var(--mac-text-secondary, #aaaaaa)', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
                   {description}
                 </Typography>
               )}
