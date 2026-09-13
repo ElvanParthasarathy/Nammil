@@ -1,15 +1,16 @@
-<div align="center">
+<div align="center" style="font-family: 'Elvan Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;">
   <img src="public/app_icon.png" alt="Nammil Logo" width="108" />
-  <h1>Nammil (நம்மில்)</h1>
-  <p><strong>A beautifully crafted, privacy-focused desktop companion for WhatsApp featuring multi-account sessions, automated media organization, and native notifications.</strong></p>
-  <p><em>Part of the <strong>Elvan Navil</strong> ecosystem • Conceived & Developed by <strong>Elvan Parthasarathy</strong></em></p>
+  <h1 style="font-family: 'Elvan Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; font-size: 2.6rem; margin-bottom: 4px;">நம்மில்</h1>
+  <h3 style="font-family: 'Elvan Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; font-weight: 600; margin-top: 0; color: #888;">Nammil • നമ്മിൽ</h3>
+  <p style="font-family: 'Elvan Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;"><strong>A beautifully crafted, privacy-focused desktop companion for WhatsApp featuring multi-account sessions, automated media organization, and native notifications.</strong></p>
+  <p style="font-family: 'Elvan Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;"><em>From <strong>Elvan Navil</strong> • Conceived & Developed by <strong>Elvan Parthasarathy</strong></em></p>
 
   <p>
     <a href="https://github.com/ElvanParthasarathy/Nammil/releases/latest"><img src="https://img.shields.io/github/v/release/ElvanParthasarathy/Nammil?color=00c853&label=Release&style=flat-square" alt="Latest Release" /></a>
     <a href="LICENSE"><img src="https://img.shields.io/badge/License-MIT-blue.svg?style=flat-square" alt="MIT License" /></a>
     <img src="https://img.shields.io/badge/Platform-Windows%2010%20%7C%2011-0078D6?logo=windows&style=flat-square" alt="Windows 10/11" />
     <img src="https://img.shields.io/badge/Stack-Electron%20%7C%20React%2019%20%7C%20TypeScript-61DAFB?logo=react&style=flat-square" alt="Tech Stack" />
-    <a href="https://elvannavil.vercel.app"><img src="https://img.shields.io/badge/Brand-Elvan%20Navil-6C5CE7?style=flat-square" alt="Elvan Navil" /></a>
+    <a href="https://elvannavil.vercel.app"><img src="https://img.shields.io/badge/Elvan%20Navil-6C5CE7?style=flat-square" alt="Elvan Navil" /></a>
     <a href="https://jaiprakashpartha.vercel.app/"><img src="https://img.shields.io/badge/Founder-Elvan%20Parthasarathy-00cec9?style=flat-square" alt="Founder & Developer" /></a>
   </p>
 </div>
@@ -24,7 +25,7 @@ The official WhatsApp Desktop and WhatsApp Web clients have significant limitati
 - **Intrusive or Unreliable Notifications**: Browser notifications frequently fail when tabs fall asleep, lack bespoke sound options, and fail to focus the correct chat session on click.
 - **No Native Desktop Ergonomics**: Web wrappers lack genuine desktop integration, requiring manual reloading and tedious updates.
 
-**Nammil** was created by **Elvan Parthasarathy** under the **Elvan Navil** brand to provide a seamless, native desktop solution:
+**Nammil** was created by **Elvan Parthasarathy** at **Elvan Navil** to provide a seamless, native desktop solution:
 1. **Isolated Multi-Account Sandboxing**: Run multiple independent WhatsApp accounts side-by-side with zero cookie, session, or credential collision.
 2. **Automated Local Media Organizer**: Automatically groups received media into clean directories by type (Images, Videos, Documents, Audio) with search, preview, and Recycle Bin recovery.
 3. **Quiet Native Notifications**: Custom sound chimes, unread counters, and reliable 1-click focus back into chats.
@@ -56,17 +57,19 @@ The official WhatsApp Desktop and WhatsApp Web clients have significant limitati
 
 - 🎨 **Modern Fluent UI & Bespoke Typography**:
   - Clean, distraction-free interface built with React 19, Vite, and Material UI.
-  - Features the custom **Elvan Sans** font for a distinctive, elegant typographic feel.
+  - Typographically powered by the bespoke **Elvan Sans** font family created by **Elvan Parthasarathy** for harmonious, weight-matched Latin and Tamil typography.
   - Full automatic sync with Windows Light, Dark, and System themes.
 
-- 🌐 **Deep Multilingual Localization**:
-  - Out-of-the-box native localization for 6 languages and scripts:
-    - 🇺🇸 **English (US)**
-    - 🇮🇳 **Tamil (தமிழ்)**
-    - 🇮🇳 **Tamil Latin (Thamizh)**
-    - 🇮🇳 **Malayalam (മലയാളം)**
-    - 🇮🇳 **Malayalam Latin (Manglish)**
-    - 🔣 **Neram**
+- 🌐 **Deep Multilingual Localization & Transliteration**:
+  - Out-of-the-box native localization across 7 language and script variants:
+    - 🇺🇸 **English** (`en`)
+    - 🇮🇳 **Tamil (தமிழ்)** (`ta`)
+    - 🇮🇳 **Thamizh Latin** (`ta_latn`) — Romanized Tamil powered by `navil-engine`
+    - 🇮🇳 **Tamil in Malayalam Script (തമിഴ്)** (`ta_ml`) — Cross-script Tamil rendering
+    - 🇮🇳 **Malayalam (മലയാളം)** (`ml`)
+    - 🇮🇳 **Malayalam Latin (Manglish)** (`ml_latn`) — Romanized Malayalam
+    - 🇮🇳 **Malayalam in Tamil Script (மலையாளம்)** (`ml_tam`) — Cross-script Malayalam rendering
+    - 💻 **System Default** (`system`) — Automatically adapts to your OS language
 
 - 🛡️ **Zero-Admin & Complete Local Privacy**:
   - Installs cleanly into `%LOCALAPPDATA%\Programs\Nammil` without requiring Windows UAC administrator elevation.
@@ -91,7 +94,7 @@ Elvan Nammil/
 ├── src/                      # React 19 + TypeScript frontend
 │   ├── components/           # TopBar, MediaViewer, Notifications, Settings, About
 │   ├── devtools/             # SplashDesigner developer tools
-│   ├── i18n/                 # Localization engine (English, Tamil, Malayalam, Neram)
+│   ├── i18n/                 # Multilingual localization & transliteration engine (en, ta, ml, navil-engine)
 │   ├── App.tsx               # Main application view & tab routing
 │   └── main.tsx              # React entry point
 ├── services/                 # Modular Electron backend services
@@ -141,9 +144,9 @@ The final standalone installer will be generated at:
 
 ---
 
-## 🏢 Brand & Creator
+## 🏢 Elvan Navil & Developer
 
-- **Brand**: [Elvan Navil](https://elvannavil.vercel.app) — *Thoughts, writings, and digital creations.*
+- **Elvan Navil**: [elvannavil.vercel.app](https://elvannavil.vercel.app) — *Thoughts, writings, and digital creations.*
 - **Founder & Developer**: [Elvan Parthasarathy](https://jaiprakashpartha.vercel.app/)
   - **GitHub**: [@ElvanParthasarathy](https://github.com/elvanparthasarathy)
   - **LinkedIn**: [in/jaiprakashpartha](https://www.linkedin.com/in/jaiprakashpartha)
@@ -154,7 +157,7 @@ The final standalone installer will be generated at:
 
 ## ⚖️ Legal Disclaimer & Trademark Notice
 
-**Nammil** is an independent, open-source desktop companion developed by **Elvan Parthasarathy** under the **Elvan Navil** brand.
+**Nammil** is an independent, open-source desktop companion developed by **Elvan Parthasarathy** at **Elvan Navil**.
 
 - **WhatsApp** is a registered trademark of WhatsApp LLC and Meta Platforms, Inc.
 - **Nammil** is not affiliated with, endorsed, sponsored, authorized, or certified by WhatsApp LLC, Meta Platforms, Inc., or any of their subsidiaries or affiliates.

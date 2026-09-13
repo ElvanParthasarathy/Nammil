@@ -178,7 +178,7 @@ export const en = {
   [k.ABOUT_LOCATION_VAL]: 'Arani, Tamil Nadu',
   [k.ABOUT_FROM_BRAND]: 'From Elvan Navil',
   [k.ABOUT_WHAT_IS_NAMMIL]: 'What is Nammil?',
-  [k.ABOUT_NAMMIL_DESC]: "Nammil (நம்மில், meaning 'In Us') is a sleek, privacy-focused desktop companion for WhatsApp.\n\nWhile official WhatsApp Web and WhatsApp Desktop restrict users to a single account and clutter downloads, Nammil provides true multi-account desktop isolation, automated local media sorting, distraction-free native notifications, and 100% offline privacy.\n\nCrafted with care by founder & developer Elvan Parthasarathy under the Elvan Navil brand.",
+  [k.ABOUT_NAMMIL_DESC]: "Nammil (நம்மில், meaning 'In Us') is a sleek, privacy-focused desktop companion for WhatsApp.\n\nWhile official WhatsApp Web and WhatsApp Desktop restrict users to a single account and clutter downloads, Nammil provides true multi-account desktop isolation, automated local media sorting, distraction-free native notifications, and 100% offline privacy.\n\nCrafted with care by founder & developer Elvan Parthasarathy at Elvan Navil.",
   [k.ABOUT_FEATURES_TITLE]: 'Features',
   [k.ABOUT_FEAT_MULTI_ACCOUNT]: 'Multi-Account Sessions',
   [k.ABOUT_FEAT_MULTI_ACCOUNT_DESC]: 'Run independent WhatsApp instances side-by-side with separate profiles.',
