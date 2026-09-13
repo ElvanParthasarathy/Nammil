@@ -71,23 +71,7 @@ const Onboarding: React.FC<OnboardingProps> = ({ onComplete }) => {
       </div>
 
       <div style={{ display: step === 'setup' ? 'block' : 'none', height: '100%' }}>
-        <OnboardingLayout maxWidth="md">
-        {/* Back Button positioned exactly in the top-left corner like native window controls */}
-        <IconButton 
-            onClick={() => setStep('welcome')}
-            sx={{ 
-                position: 'fixed',
-                top: 8,
-                left: 8,
-                color: 'var(--onboarding-text-secondary)', 
-                transition: 'color 0.2s',
-                '&:hover': { color: 'var(--onboarding-text)' },
-                zIndex: 10030,
-                WebkitAppRegion: 'no-drag'
-            }}
-        >
-            <MaterialSymbol icon="arrow_back_ios_new" size={20} />
-        </IconButton>
+        <OnboardingLayout maxWidth="md" onBack={() => setStep('welcome')}>
 
         <div style={{
             display: 'flex',

@@ -1,14 +1,61 @@
 import React, { useState } from 'react';
 import { TextField, Button, InputAdornment, IconButton, Box, CircularProgress, Container, useTheme } from '@mui/material';
+import MaterialSymbol from '../shared/MaterialSymbol';
 import './Onboarding.css';
 
-export const OnboardingLayout = ({ children, hideLogo, maxWidth = "xs" }: { children: React.ReactNode, hideLogo?: boolean, maxWidth?: "xs" | "sm" | "md" | "lg" | "xl" | false }) => {
+export const OnboardingLayout = ({ 
+    children, 
+    onBack, 
+    hideLogo, 
+    maxWidth = "xs" 
+}: { 
+    children: React.ReactNode, 
+    onBack?: () => void, 
+    hideLogo?: boolean, 
+    maxWidth?: "xs" | "sm" | "md" | "lg" | "xl" | false 
+}) => {
     const theme = useTheme();
     const isDark = theme.palette.mode === 'dark';
     
     return (
         <div className={`onboarding-container ${isDark ? 'dark' : ''}`}>
-            <div className="onboarding-titlebar" />
+            {/* Native-style 48px Draggable TopBar matching Nammil TopBar */}
+            <Box
+                sx={{
+                    height: 48,
+                    minHeight: 48,
+                    width: '100%',
+                    display: 'flex',
+                    alignItems: 'center',
+                    px: 1.5,
+                    WebkitAppRegion: 'drag',
+                    userSelect: 'none',
+                    position: 'relative',
+                    zIndex: 1000,
+                    boxSizing: 'border-box',
+                }}
+            >
+                {onBack && (
+                    <IconButton
+                        onClick={onBack}
+                        size="small"
+                        sx={{
+                            WebkitAppRegion: 'no-drag',
+                            color: 'var(--onboarding-text-secondary)',
+                            p: '8px',
+                            borderRadius: '8px',
+                            transition: 'color 0.2s, background-color 0.2s',
+                            '&:hover': {
+                                color: 'var(--onboarding-text)',
+                                bgcolor: isDark ? 'rgba(255, 255, 255, 0.08)' : 'rgba(0, 0, 0, 0.05)',
+                            },
+                        }}
+                    >
+                        <MaterialSymbol icon="arrow_back_ios_new" size={18} />
+                    </IconButton>
+                )}
+            </Box>
+
             <div className="onboarding-shape shape-1" />
             <div className="onboarding-shape shape-2" />
             <div className="onboarding-shape shape-3" />
@@ -16,14 +63,15 @@ export const OnboardingLayout = ({ children, hideLogo, maxWidth = "xs" }: { chil
             <Container component="main" maxWidth={maxWidth} className="onboarding-content" sx={{ 
                 display: 'flex', 
                 flexDirection: 'column', 
-                minHeight: '100%',
+                flex: 1,
                 boxSizing: 'border-box',
                 position: 'relative',
                 zIndex: 1,
                 justifyContent: 'center',
                 alignItems: 'center',
                 px: { xs: 3, sm: 4 },
-                py: 3,
+                pb: 3,
+                WebkitAppRegion: 'no-drag',
             }}>
                 {children}
             </Container>
