@@ -476,15 +476,11 @@ export function BrandTab() {
             {t(k.ABOUT_PARENT_BRAND_NAME)}
           </Typography>
 
-          <Typography sx={{ mt: 1, fontSize: '13.5px', color: 'var(--mac-text-secondary)', opacity: 0.85, maxWidth: 440 }}>
-            {t(k.ABOUT_BRAND_TAGLINE)}
-          </Typography>
-
           {/* Monochrome Pill Button for Brand Website */}
           <ButtonBase
             onClick={() => openUrl('https://elvannavil.vercel.app')}
             sx={{
-              mt: 2.25,
+              mt: 2,
               px: 2.75,
               py: 1.15,
               borderRadius: '50px',
