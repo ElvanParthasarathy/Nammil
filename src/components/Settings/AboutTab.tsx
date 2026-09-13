@@ -279,6 +279,7 @@ export function BrandTab() {
               px: 2.75,
               py: 1.15,
               borderRadius: '50px',
+              overflow: 'hidden',
               bgcolor: isDark ? 'rgba(255, 255, 255, 0.1)' : 'rgba(0, 0, 0, 0.08)',
               color: 'var(--mac-text)',
               fontSize: '13.5px',
@@ -286,6 +287,13 @@ export function BrandTab() {
               display: 'inline-flex',
               alignItems: 'center',
               gap: 0.75,
+              transition: 'background-color 0.2s ease, box-shadow 0.2s ease',
+              '&:hover': {
+                bgcolor: isDark ? 'rgba(255, 255, 255, 0.15)' : 'rgba(0, 0, 0, 0.12)',
+                boxShadow: isDark 
+                  ? '0 4px 16px rgba(0, 0, 0, 0.5)' 
+                  : '0 4px 14px rgba(0, 0, 0, 0.12)',
+              },
             }}
           >
             elvannavil.vercel.app
