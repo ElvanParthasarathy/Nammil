@@ -7,34 +7,6 @@ import { k } from '../../i18n/k';
 
 export default function WelcomePhase({ onContinue }: { onContinue: () => void, skipGreeting?: boolean }) {
     const { t, lang, setLang } = useI18n();
-    const [ripples, setRipples] = useState<{ [key: string]: { x: number; y: number; size: number; id: number } }>({});
-
-    const handlePointerDown = (code: string, e: React.PointerEvent<HTMLElement>) => {
-        if (e.button !== 0) return;
-        const rect = e.currentTarget.getBoundingClientRect();
-        const x = e.clientX - rect.left;
-        const y = e.clientY - rect.top;
-        
-        // Generous radius to farthest corner ensuring ripple covers all edges cleanly
-        const cornerX = Math.max(x, rect.width - x);
-        const cornerY = Math.max(y, rect.height - y);
-        const radius = Math.hypot(cornerX, cornerY);
-        const size = Math.round(radius * 2.25);
-
-        setRipples(prev => ({
-            ...prev,
-            [code]: { x, y, size, id: Date.now() }
-        }));
-
-        setTimeout(() => {
-            setRipples(prev => {
-                if (!prev[code]) return prev;
-                const next = { ...prev };
-                delete next[code];
-                return next;
-            });
-        }, 700);
-    };
 
     const handleLanguageSelect = (code: string) => {
         setLang(code);
@@ -162,9 +134,7 @@ export default function WelcomePhase({ onContinue }: { onContinue: () => void, s
                                     <React.Fragment key={l.code}>
                                         <ListItem disablePadding>
                                             <ListItemButton 
-                                                onPointerDown={(e) => handlePointerDown(l.code, e)}
                                                 onClick={() => handleLanguageSelect(l.code)} 
-                                                disableRipple
                                                 sx={{
                                                     width: '100%',
                                                     py: 1.25,
@@ -183,18 +153,6 @@ export default function WelcomePhase({ onContinue }: { onContinue: () => void, s
                                                     },
                                                 }}
                                             >
-                                                {ripples[l.code] && (
-                                                    <span
-                                                        key={ripples[l.code].id}
-                                                        className="onboarding-ripple-wave"
-                                                        style={{
-                                                            left: ripples[l.code].x,
-                                                            top: ripples[l.code].y,
-                                                            width: ripples[l.code].size,
-                                                            height: ripples[l.code].size,
-                                                        }}
-                                                    />
-                                                )}
                                                 <ListItemText 
                                                     sx={{ position: 'relative', zIndex: 2, pointerEvents: 'none' }}
                                                     primary={
