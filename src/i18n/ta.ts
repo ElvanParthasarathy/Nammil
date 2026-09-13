@@ -594,4 +594,18 @@ export const ta = {
   [k.ABOUT_UPDATE_ERROR]: {
     ta: 'புதுப்பிப்புகளைச் சரிபார்க்க முடியவில்லை',
   },
+
+  // TopBar Updates
+  [k.TOPBAR_UPDATE_PROGRESS]: {
+    ta: 'புதுப்பிக்கிறது',
+  },
+  [k.TOPBAR_UPDATE_RELAUNCH]: {
+    ta: 'மறுதொடக்கம்',
+  },
+  [k.TOPBAR_UPDATE_TOOLTIP_PROGRESS]: {
+    ta: 'பதிவிறக்கத்தைக் காண கிளிக் செய்க',
+  },
+  [k.TOPBAR_UPDATE_TOOLTIP_READY]: {
+    ta: 'புதுப்பிப்பை நிறுவ மறுதொடக்கம் செய்ய கிளிக் செய்க',
+  },
 };

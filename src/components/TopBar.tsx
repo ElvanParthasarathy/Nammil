@@ -188,13 +188,13 @@ export default function TopBar({
                       },
                     }),
               }}
-              title={updateStatus.status === 'downloaded' ? 'Click to restart & install update' : 'Click to view update download progress'}
+              title={updateStatus.status === 'downloaded' ? t(k.TOPBAR_UPDATE_TOOLTIP_READY) : t(k.TOPBAR_UPDATE_TOOLTIP_PROGRESS)}
             >
               {updateStatus.status === 'downloaded' ? (
                 <>
                   <MaterialSymbol icon="system_update" size={15} />
                   <Typography sx={{ fontSize: '11.5px', fontWeight: 700, letterSpacing: 0.2 }}>
-                    Relaunch to Update
+                    {t(k.TOPBAR_UPDATE_RELAUNCH)}
                   </Typography>
                 </>
               ) : (
@@ -213,7 +213,7 @@ export default function TopBar({
                     <MaterialSymbol icon="sync" size={14} />
                   </Box>
                   <Typography sx={{ fontSize: '11.5px', fontWeight: 600 }}>
-                    {`Updating ${updateStatus.percent || 0}%`}
+                    {`${t(k.TOPBAR_UPDATE_PROGRESS)} ${updateStatus.percent || 0}%`}
                   </Typography>
                 </>
               )}

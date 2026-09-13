@@ -220,4 +220,10 @@ export const en = {
   [k.ABOUT_UPDATE_BTN_RELAUNCH]: 'Relaunch',
   [k.ABOUT_UPDATE_DEV_MODE]: 'Running in development mode',
   [k.ABOUT_UPDATE_ERROR]: 'Could not check for updates',
+
+  // TopBar Updates
+  [k.TOPBAR_UPDATE_PROGRESS]: 'Updating',
+  [k.TOPBAR_UPDATE_RELAUNCH]: 'Relaunch',
+  [k.TOPBAR_UPDATE_TOOLTIP_PROGRESS]: 'Click to view update download progress',
+  [k.TOPBAR_UPDATE_TOOLTIP_READY]: 'Click to restart & install update',
 };

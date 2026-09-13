@@ -791,4 +791,22 @@ export const ml = {
     ml: 'അപ്ഡേറ്റുകൾ പരിശോധിക്കാൻ കഴിഞ്ഞില്ല',
     latn: 'Updates parishodhikkaan kazhinjilla',
   },
+
+  // TopBar Updates
+  [k.TOPBAR_UPDATE_PROGRESS]: {
+    ml: 'പുതുക്കുന്നു',
+    latn: 'Puthukkunnu',
+  },
+  [k.TOPBAR_UPDATE_RELAUNCH]: {
+    ml: 'റീസ്റ്റാർട്ട് ചെയ്യുക',
+    latn: 'Restart Cheyyuka',
+  },
+  [k.TOPBAR_UPDATE_TOOLTIP_PROGRESS]: {
+    ml: 'ഡൗൺലോഡ് പുരോഗതി കാണാൻ ക്ലിക്ക് ചെയ്യുക',
+    latn: 'Download purogathi kaanaan click cheyyuka',
+  },
+  [k.TOPBAR_UPDATE_TOOLTIP_READY]: {
+    ml: 'അപ്ഡേറ്റ് ഇൻസ്റ്റാൾ ചെയ്യാൻ റീസ്റ്റാർട്ട് ചെയ്യുക',
+    latn: 'Update install cheyyaan restart cheyyuka',
+  },
 };
