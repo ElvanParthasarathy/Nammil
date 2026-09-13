@@ -1,7 +1,7 @@
 import React from 'react';
 import { useI18n } from '../i18n/I18nContext';
-import { k } from '../i18n/k';
 import AppLogo from '../assets/app_icon.png';
+import SplashBrandSvg from './SplashBrandSvg';
 
 import './Onboarding/Onboarding.css';
 
@@ -25,7 +25,7 @@ interface SplashScreenProps {
 }
 
 export default function SplashScreen({ userTheme }: SplashScreenProps) {
-  const { t } = useI18n();
+  const { actualLang } = useI18n();
   const prefersDarkMode = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
   const actualMode = userTheme === 'system' ? (prefersDarkMode ? 'dark' : 'light') : userTheme;
 
@@ -49,11 +49,9 @@ export default function SplashScreen({ userTheme }: SplashScreenProps) {
         />
       </div>
 
-      {/* Elvan Navil Parent Branding at the bottom */}
+      {/* Elvan Navil Parent Branding at the bottom — instant vector SVG in exact Elvan Sans font */}
       <div className="splash-footer">
-        <span className="splash-footer-brand">
-          {t(k.ABOUT_PARENT_BRAND_NAME)}
-        </span>
+        <SplashBrandSvg lang={actualLang} />
       </div>
     </div>
   );

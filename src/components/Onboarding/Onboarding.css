@@ -334,6 +334,27 @@ input,
     color: rgba(0, 0, 0, 0.45);
 }
 
+.splash-footer-brand-svg {
+    height: 22px;
+    margin: 0 auto;
+    color: rgba(255, 255, 255, 0.45);
+    display: block;
+}
+
+@media (prefers-color-scheme: light) {
+    .splash-footer-brand-svg {
+        color: rgba(0, 0, 0, 0.45);
+    }
+}
+
+.splash-screen-root.dark .splash-footer-brand-svg {
+    color: rgba(255, 255, 255, 0.45);
+}
+
+.splash-screen-root.light .splash-footer-brand-svg {
+    color: rgba(0, 0, 0, 0.45);
+}
+
 /* =========================================
    COMPONENTS
    ========================================= */
