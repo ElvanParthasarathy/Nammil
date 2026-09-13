@@ -74,6 +74,7 @@ export const en = {
   [k.MEDIA_VIEW]: 'View',
   [k.MEDIA_SHOW_FILE]: 'Show File',
   [k.MEDIA_LOADING_PREVIEW]: 'Loading preview...',
+  [k.MEDIA_LOAD_MORE]: 'Load More',
   [k.MEDIA_SIDEBAR_ALL]: 'All Media',
   [k.MEDIA_DESC_ALL]: 'Everything',
   [k.MEDIA_DESC_IMAGES]: 'Photos and pictures',

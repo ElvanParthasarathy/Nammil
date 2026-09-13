@@ -265,6 +265,10 @@ export const ml = {
     ml: 'പ്രിവ്യൂ ലോഡിംഗ്...',
     latn: 'Preview loading...',
   },
+  [k.MEDIA_LOAD_MORE]: {
+    ml: 'കൂടുതൽ കാണിക്കുക',
+    latn: 'Kooduthal kaanikkuka',
+  },
   [k.MEDIA_SIDEBAR_ALL]: {
     ml: 'എല്ലാ മീഡിയയും',
     latn: 'Ella Media-yum',

@@ -202,6 +202,9 @@ export const ta = {
   [k.MEDIA_LOADING_PREVIEW]: {
     ta: 'முன்னோட்டம்...',
   },
+  [k.MEDIA_LOAD_MORE]: {
+    ta: 'மேலும் ஏற்று',
+  },
   [k.MEDIA_SIDEBAR_ALL]: {
     ta: 'எல்லா ஊடகம்',
   },

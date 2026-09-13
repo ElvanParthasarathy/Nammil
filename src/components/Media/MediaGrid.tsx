@@ -1,19 +1,21 @@
 import React from 'react';
-import { Box, Typography } from '@mui/material';
+import { Box, Typography, Button } from '@mui/material';
 import MaterialSymbol from '../shared/MaterialSymbol';
 import { useI18n } from '../../i18n/I18nContext';
 import { k } from '../../i18n/k';
+import { useIsDark } from '../shared/hooks';
 import MediaCard from './MediaCard';
-import InfiniteSentinel from './InfiniteSentinel';
 
 interface MediaGridProps {
   groupedMedia: Record<string, any[]>;
   hasMore?: boolean;
+  remainingCount?: number;
   onLoadMore?: () => void;
 }
 
-export default function MediaGrid({ groupedMedia, hasMore, onLoadMore }: MediaGridProps) {
+export default function MediaGrid({ groupedMedia, hasMore, remainingCount = 0, onLoadMore }: MediaGridProps) {
   const { t } = useI18n();
+  const isDark = useIsDark();
 
   if (Object.keys(groupedMedia).length === 0) {
     return (
@@ -41,7 +43,31 @@ export default function MediaGrid({ groupedMedia, hasMore, onLoadMore }: MediaGr
       ))}
       
       {hasMore && onLoadMore && (
-        <InfiniteSentinel onLoadMore={onLoadMore} />
+        <Box sx={{ display: 'flex', justifyContent: 'center', mt: 4, mb: 6 }}>
+          <Button
+            variant="outlined"
+            onClick={onLoadMore}
+            startIcon={<MaterialSymbol icon="expand_more" size={20} />}
+            sx={{
+              borderRadius: '500px',
+              px: 4,
+              py: 1.25,
+              fontSize: '14px',
+              fontWeight: 600,
+              textTransform: 'none',
+              color: isDark ? '#fff' : '#000',
+              borderColor: isDark ? 'rgba(255,255,255,0.15)' : 'rgba(0,0,0,0.15)',
+              bgcolor: isDark ? 'rgba(255,255,255,0.04)' : 'rgba(0,0,0,0.02)',
+              boxShadow: isDark ? 'none' : '0 2px 8px rgba(0,0,0,0.04)',
+              '&:hover': {
+                bgcolor: isDark ? 'rgba(255,255,255,0.08)' : 'rgba(0,0,0,0.06)',
+                borderColor: isDark ? 'rgba(255,255,255,0.3)' : 'rgba(0,0,0,0.3)',
+              }
+            }}
+          >
+            {t(k.MEDIA_LOAD_MORE) || 'Load More'} {remainingCount > 0 ? `(${remainingCount})` : ''}
+          </Button>
+        </Box>
       )}
     </>
   );

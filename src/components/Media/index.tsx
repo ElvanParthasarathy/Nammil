@@ -20,7 +20,8 @@ export default function MediaLibrary({ accounts }: any) {
   const [searchQuery, setSearchQuery] = useState('');
   const [debouncedSearch, setDebouncedSearch] = useState('');
   const [mediaItems, setMediaItems] = useState([]);
-  const [visibleCount, setVisibleCount] = useState(50);
+  const PAGE_SIZE = 24;
+  const [visibleCount, setVisibleCount] = useState(PAGE_SIZE);
 
   // Debounce search: only update the filter pipeline 300ms after the user stops typing
   const debounceRef = useRef<ReturnType<typeof setTimeout> | null>(null);
@@ -36,7 +37,7 @@ export default function MediaLibrary({ accounts }: any) {
     if ((window as any).electronAPI) {
       const items = await (window as any).electronAPI.getMediaFiles(activeFilter, activeAccount);
       setMediaItems(items || []);
-      setVisibleCount(50); // Reset pagination on filter change
+      setVisibleCount(PAGE_SIZE); // Reset pagination on filter change
     }
   };
 
@@ -84,10 +85,12 @@ export default function MediaLibrary({ accounts }: any) {
     }, {});
   }, [paginatedMedia, t]);
 
-  // Stable callback reference so InfiniteSentinel doesn't re-mount on every render
+  // Stable callback reference for Load More button
   const handleLoadMore = useCallback(() => {
-    setVisibleCount(prev => prev + 50);
+    setVisibleCount(prev => prev + PAGE_SIZE);
   }, []);
+
+  const remainingCount = Math.max(0, filteredMedia.length - visibleCount);
 
   const sidebar = (
     <MediaSidebar
@@ -111,6 +114,7 @@ export default function MediaLibrary({ accounts }: any) {
       <MediaGrid 
         groupedMedia={groupedMedia} 
         hasMore={visibleCount < filteredMedia.length}
+        remainingCount={remainingCount}
         onLoadMore={handleLoadMore}
       />
     </Box>

@@ -66,8 +66,6 @@ export default React.memo(function MediaCard({ item }: { item: any }) {
         bgcolor: isDark ? 'rgba(255,255,255,0.04)' : '#ffffff',
         boxShadow: isDark ? 'none' : '0 4px 20px rgba(0,0,0,0.03)',
         transition: 'background-color 0.2s',
-        willChange: 'transform',
-        transform: 'translateZ(0)',
       }}
     >
       {/* Thumbnail Area */}
