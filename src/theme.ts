@@ -84,6 +84,22 @@ export const getTheme = (mode) => createTheme({
           }
         }
       }
+    },
+    MuiChip: {
+      styleOverrides: {
+        root: {
+          boxShadow: 'none !important',
+          '&:hover': {
+            boxShadow: 'none !important',
+          },
+          '&:focus': {
+            boxShadow: 'none !important',
+          },
+          '&:active': {
+            boxShadow: 'none !important',
+          }
+        }
+      }
     }
   }
 });

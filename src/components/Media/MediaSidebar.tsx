@@ -55,9 +55,15 @@ export default function MediaSidebar({ accounts, activeAccount, setActiveAccount
               sx={{
                 fontWeight: 600,
                 flexShrink: 0,
+                boxShadow: 'none !important',
                 bgcolor: activeAccount === 'All' ? (isDark ? '#fff' : '#111b21') : (isDark ? 'rgba(255,255,255,0.05)' : 'rgba(0,0,0,0.05)'),
                 color: activeAccount === 'All' ? (isDark ? '#000' : '#fff') : 'var(--mac-text)',
-                '&:hover': { bgcolor: activeAccount === 'All' ? undefined : (isDark ? 'rgba(255,255,255,0.1)' : 'rgba(0,0,0,0.1)') }
+                '&:hover': {
+                  bgcolor: activeAccount === 'All' ? (isDark ? '#fff' : '#111b21') : (isDark ? 'rgba(255,255,255,0.1)' : 'rgba(0,0,0,0.1)'),
+                  boxShadow: 'none !important'
+                },
+                '&:focus': { boxShadow: 'none !important' },
+                '&:active': { boxShadow: 'none !important' }
               }}
             />
           )}
@@ -83,9 +89,15 @@ export default function MediaSidebar({ accounts, activeAccount, setActiveAccount
                 sx={{
                   fontWeight: 600,
                   flexShrink: 0,
+                  boxShadow: 'none !important',
                   bgcolor: activeAccount === a.name ? (isDark ? '#fff' : '#111b21') : (isDark ? 'rgba(255,255,255,0.05)' : 'rgba(0,0,0,0.05)'),
                   color: activeAccount === a.name ? (isDark ? '#000' : '#fff') : 'var(--mac-text)',
-                  '&:hover': { bgcolor: activeAccount === a.name ? undefined : (isDark ? 'rgba(255,255,255,0.1)' : 'rgba(0,0,0,0.1)') }
+                  '&:hover': {
+                    bgcolor: activeAccount === a.name ? (isDark ? '#fff' : '#111b21') : (isDark ? 'rgba(255,255,255,0.1)' : 'rgba(0,0,0,0.1)'),
+                    boxShadow: 'none !important'
+                  },
+                  '&:focus': { boxShadow: 'none !important' },
+                  '&:active': { boxShadow: 'none !important' }
                 }}
               />
             )}

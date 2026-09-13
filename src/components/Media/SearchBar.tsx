@@ -58,9 +58,15 @@ export default function SearchBar({ searchQuery, setSearchQuery, activeFilter, d
               onClick={() => setDocFormatFilter(f.id)}
               sx={{
                 fontWeight: 600,
+                boxShadow: 'none !important',
                 bgcolor: docFormatFilter === f.id ? (isDark ? '#fff' : '#111b21') : (isDark ? 'rgba(255,255,255,0.05)' : 'rgba(0,0,0,0.05)'),
                 color: docFormatFilter === f.id ? (isDark ? '#000' : '#fff') : 'var(--mac-text)',
-                '&:hover': { bgcolor: docFormatFilter === f.id ? undefined : (isDark ? 'rgba(255,255,255,0.1)' : 'rgba(0,0,0,0.1)') },
+                '&:hover': {
+                  bgcolor: docFormatFilter === f.id ? (isDark ? '#fff' : '#111b21') : (isDark ? 'rgba(255,255,255,0.1)' : 'rgba(0,0,0,0.1)'),
+                  boxShadow: 'none !important'
+                },
+                '&:focus': { boxShadow: 'none !important' },
+                '&:active': { boxShadow: 'none !important' },
                 border: 'none'
               }}
             />
