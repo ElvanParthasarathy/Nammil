@@ -83,7 +83,7 @@ export default function DualPanelLayout({ sidebar, content, title }: DualPanelLa
   const rightScroll = useAutoHideScrollbar();
 
   const cssVars = {
-    '--mac-card-bg': isDark ? '#1f2020' : '#FFFFFF', 
+    '--mac-card-bg': isDark ? '#282929' : '#FFFFFF', 
     '--mac-selection-hover': isDark ? 'rgba(255,255,255,0.05)' : 'rgba(0,0,0,0.05)',
     '--mac-text': isDark ? '#ffffff' : '#000000',
     '--mac-text-secondary': isDark ? '#aaaaaa' : '#666666',

@@ -22,15 +22,15 @@ export function SettingsSection({ title, description, children, sx, paperSx }: S
         sx={{ 
           borderRadius: '24px', 
           overflow: 'hidden', 
-          bgcolor: 'var(--mac-card-bg, #1f2020)',
-          border: 'none',
+          bgcolor: 'var(--mac-card-bg, #282929)',
+          border: (theme) => theme.palette.mode === 'dark' ? '1px solid rgba(255, 255, 255, 0.05)' : 'none',
           ...paperSx
         }}
       >
         {React.Children.toArray(children).filter(Boolean).map((child, index, array) => (
           <React.Fragment key={index}>
             {child}
-            {index < array.length - 1 && <Divider sx={{ ml: '20px', mr: '20px', borderColor: (theme) => theme.palette.mode === 'dark' ? 'rgba(255, 255, 255, 0.04)' : 'rgba(0, 0, 0, 0.04)' }} />}
+            {index < array.length - 1 && <Divider sx={{ ml: '20px', mr: '20px', borderColor: (theme) => theme.palette.mode === 'dark' ? 'rgba(255, 255, 255, 0.06)' : 'rgba(0, 0, 0, 0.04)' }} />}
           </React.Fragment>
         ))}
       </Paper>
