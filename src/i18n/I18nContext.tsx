@@ -56,22 +56,34 @@ const I18nContext = createContext<I18nContextProps>({
 
 export const useI18n = () => useContext(I18nContext);
 
+function resolveLanguage(lang: string): string {
+  if (lang === 'system') {
+    const navLang = typeof navigator !== 'undefined' ? navigator.language.toLowerCase() : '';
+    return navLang.startsWith('ta') ? 'ta' : 'en';
+  }
+  return lang;
+}
+
 export const I18nProvider = ({ children, initialLang = 'system' }: { children: ReactNode, initialLang?: string }) => {
-  const [userLang, setUserLang] = useState(initialLang);
-  const [actualLang, setActualLang] = useState('en');
+  const [userLang, setUserLang] = useState(() => {
+    try {
+      const saved = localStorage.getItem('nammil-language');
+      if (saved) return saved;
+    } catch {}
+    return initialLang;
+  });
+  const [actualLang, setActualLang] = useState(() => resolveLanguage(userLang));
 
   useEffect(() => {
-    let resolved = userLang;
-    if (userLang === 'system') {
-      const navLang = navigator.language.toLowerCase();
-      if (navLang.startsWith('ta')) {
-        resolved = 'ta';
-      } else {
-        resolved = 'en'; // Default fallback
-      }
-    }
-    setActualLang(resolved);
+    setActualLang(resolveLanguage(userLang));
   }, [userLang]);
+
+  const handleSetLang = (newLang: string) => {
+    setUserLang(newLang);
+    try {
+      localStorage.setItem('nammil-language', newLang);
+    } catch {}
+  };
 
   const t = (key: string) => {
     if (actualLang === 'en') return (en as any)[key] || key;
@@ -104,7 +116,7 @@ export const I18nProvider = ({ children, initialLang = 'system' }: { children: R
   };
 
   return (
-    <I18nContext.Provider value={{ lang: userLang, actualLang, setLang: setUserLang, t }}>
+    <I18nContext.Provider value={{ lang: userLang, actualLang, setLang: handleSetLang, t }}>
       {children}
     </I18nContext.Provider>
   );

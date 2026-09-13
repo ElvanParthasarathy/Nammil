@@ -1,5 +1,6 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React from 'react';
 import { useI18n } from '../i18n/I18nContext';
+import { k } from '../i18n/k';
 import AppLogo from '../assets/app_icon.png';
 
 import './Onboarding/Onboarding.css';
@@ -19,30 +20,12 @@ export const SPLASH_COORDINATES = {
   footerOpacity: 0.45,
 };
 
-// Brand name in each script
-const BRAND_NAMES: Record<string, string> = {
-  ta: 'நம்மில்',
-  en: 'Nammil',
-  ml: 'നമ്മിൽ',
-};
-
-// Cycle order per language setting — primary script first, then others. No looping.
-const LANG_ORDER: Record<string, string[]> = {
-  ta:      ['ta', 'en', 'ml'],
-  ta_latn: ['en', 'ta', 'ml'],
-  ta_ml:   ['ml', 'ta', 'en'],
-  en:      ['en', 'ta', 'ml'],
-  ml:      ['ml', 'en', 'ta'],
-  ml_latn: ['en', 'ml', 'ta'],
-  ml_tam:  ['ta', 'ml', 'en'],
-  system:  ['en', 'ta', 'ml'],
-};
-
 interface SplashScreenProps {
   userTheme: string;
 }
 
 export default function SplashScreen({ userTheme }: SplashScreenProps) {
+  const { t } = useI18n();
   const prefersDarkMode = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
   const actualMode = userTheme === 'system' ? (prefersDarkMode ? 'dark' : 'light') : userTheme;
 
@@ -69,7 +52,7 @@ export default function SplashScreen({ userTheme }: SplashScreenProps) {
       {/* Elvan Navil Parent Branding at the bottom */}
       <div className="splash-footer">
         <span className="splash-footer-brand">
-          Elvan Navil
+          {t(k.ABOUT_PARENT_BRAND_NAME)}
         </span>
       </div>
     </div>

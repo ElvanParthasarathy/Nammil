@@ -280,6 +280,30 @@
       <span class="splash-footer-brand">Elvan Navil</span>
     </div>
   </div>
+  <script>
+    (function() {
+      try {
+        var brandMap = {
+          'ta': 'எல்வன் நவில்',
+          'ta_ml': 'എൽവൻ നവിൽ',
+          'ml': 'എൽവൻ നവിൽ',
+          'ml_tam': 'எல்வன் நவில்',
+          'en': 'Elvan Navil',
+          'ta_latn': 'Elvan Navil',
+          'ml_latn': 'Elvan Navil'
+        };
+        var savedLang = localStorage.getItem('nammil-language');
+        if (!savedLang || savedLang === 'system') {
+          var navLang = (navigator.language || '').toLowerCase();
+          savedLang = navLang.startsWith('ta') ? 'ta' : 'en';
+        }
+        if (savedLang && brandMap[savedLang]) {
+          var brandEl = document.querySelector('#splash-overlay .splash-footer-brand');
+          if (brandEl) brandEl.textContent = brandMap[savedLang];
+        }
+      } catch(e) {}
+    })();
+  </script>
 
   <div id="root"></div>
   <script type="module" src="/src/main.tsx"></script>

@@ -10,6 +10,7 @@ export default function WelcomePhase({ onContinue }: { onContinue: () => void, s
 
     const handleLanguageSelect = (code: string) => {
         setLang(code);
+        try { localStorage.setItem('nammil-language', code); } catch {}
         if ((window as any).electronAPI) {
             (window as any).electronAPI.saveSetting('language', code);
         }
