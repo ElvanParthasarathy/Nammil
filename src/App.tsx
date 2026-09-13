@@ -222,6 +222,12 @@ function App() {
   const theme = getTheme(actualMode);
 
   if (!settingsLoaded || showSplash) {
+    const hasHtmlSplash = typeof document !== 'undefined' && !!document.getElementById('splash-overlay');
+    if (hasHtmlSplash) {
+      return (
+        <Box sx={{ width: '100vw', height: '100vh', bgcolor: actualMode === 'dark' ? '#0A0A0A' : '#FAFAFA' }} />
+      );
+    }
     return (
       <Box sx={{ width: '100vw', height: '100vh', bgcolor: actualMode === 'dark' ? '#0A0A0A' : '#FAFAFA' }}>
         <SplashScreen userTheme={userTheme} />

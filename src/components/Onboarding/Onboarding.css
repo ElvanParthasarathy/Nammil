@@ -236,17 +236,17 @@ input,
     padding: 0;
     display: block;
     flex-shrink: 0;
-    filter: drop-shadow(0 4px 12px rgba(0, 0, 0, 0.25));
+    filter: none !important;
     user-select: none;
     pointer-events: none;
 }
 
 .splash-screen-root.light .splash-logo {
-    filter: none;
+    filter: none !important;
 }
 
 .splash-screen-root.dark .splash-logo {
-    filter: drop-shadow(0 4px 12px rgba(0, 0, 0, 0.25));
+    filter: none !important;
 }
 
 .splash-brand-wrap {
