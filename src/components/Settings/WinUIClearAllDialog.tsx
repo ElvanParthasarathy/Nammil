@@ -1,10 +1,11 @@
 import React from 'react';
-import { Box, Typography, Modal, Paper, TextField } from '@mui/material';
+import { Box, Typography, Modal, Paper } from '@mui/material';
 import { X, Warning } from '@phosphor-icons/react';
 import { useIsDark } from '../shared/hooks';
 import { useI18n } from '../../i18n/I18nContext';
 import { Material3Button } from '../shared/Material3Button';
 import { Material3IconButton } from '../shared/Material3IconButton';
+import { Material3TextField } from '../shared/Material3TextField';
 import { k } from '../../i18n/k';
 
 interface WinUIClearAllDialogProps {
@@ -62,30 +63,18 @@ export default function WinUIClearAllDialog({ open, onClose, onConfirm, accountN
               {t(k.DIALOG_CLEAR_ALL_DESC)}
             </Typography>
           </Box>
-          <TextField
+          <Material3TextField
             autoFocus
             fullWidth
-            variant="outlined"
             placeholder={t(k.DIALOG_ACCOUNT_NAME_LABEL)}
             value={accountName}
             onChange={(e) => onAccountNameChange(e.target.value)}
             onKeyDown={(e) => { if (e.key === 'Enter' && accountName.trim()) onConfirm(); }}
             sx={{
-              '& .MuiOutlinedInput-root': {
-                color: isDark ? '#fff' : '#000',
-                bgcolor: isDark ? 'rgba(255,255,255,0.06)' : 'rgba(0,0,0,0.04)',
-                borderRadius: '100px',
-                px: 2,
-                '& fieldset': {
-                  border: 'none',
-                },
-                '&:hover': {
-                  bgcolor: isDark ? 'rgba(255,255,255,0.09)' : 'rgba(0,0,0,0.07)',
-                },
-                '&.Mui-focused': {
-                  bgcolor: isDark ? 'rgba(255,255,255,0.12)' : 'rgba(0,0,0,0.1)',
-                },
-              },
+              bgcolor: isDark ? 'rgba(255,255,255,0.06)' : 'rgba(0,0,0,0.04)',
+              color: isDark ? '#fff' : '#000',
+              borderRadius: '100px',
+              '& fieldset': { border: 'none' },
             }}
           />
         </Box>

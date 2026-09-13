@@ -1,9 +1,10 @@
 import React from 'react';
-import { Box, OutlinedInput, InputAdornment, Chip } from '@mui/material';
+import { Box, Chip } from '@mui/material';
 import { MagnifyingGlass } from '@phosphor-icons/react';
 import { useI18n } from '../../i18n/I18nContext';
 import { k } from '../../i18n/k';
 import { useIsDark } from '../shared/hooks';
+import { Material3TextField } from '../shared/Material3TextField';
 
 interface SearchBarProps {
   searchQuery: string;
@@ -19,27 +20,18 @@ export default function SearchBar({ searchQuery, setSearchQuery, activeFilter, d
 
   return (
     <Box sx={{ mb: 4, display: 'flex', flexDirection: 'column', gap: 2 }}>
-      <OutlinedInput
+      <Material3TextField
         fullWidth
         placeholder={t(k.MEDIA_SEARCH_PLACEHOLDER)}
         value={searchQuery}
         onChange={(e) => setSearchQuery(e.target.value)}
-        size="small"
-        startAdornment={
-          <InputAdornment position="start">
-            <MagnifyingGlass size={20} color={isDark ? '#888' : '#aaa'} />
-          </InputAdornment>
-        }
+        leadingIcon={<MagnifyingGlass size={20} color={isDark ? '#888' : '#aaa'} />}
         sx={{
           bgcolor: isDark ? 'rgba(255,255,255,0.05)' : '#ffffff',
           boxShadow: isDark ? 'none' : '0 4px 20px rgba(0,0,0,0.03)',
           borderRadius: '500px',
-          pl: 2,
           '& fieldset': { border: 'none' },
-          '&:hover fieldset': { border: 'none' },
-          '&.Mui-focused fieldset': { border: 'none' },
-          '&.Mui-focused': { bgcolor: isDark ? 'rgba(255,255,255,0.1)' : '#ffffff', boxShadow: isDark ? 'none' : '0 4px 20px rgba(0,0,0,0.06)' },
-          '& input': { color: 'var(--mac-text)' }
+          color: 'var(--mac-text)',
         }}
       />
 
