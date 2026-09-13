@@ -126,7 +126,13 @@ class NotificationManager {
       if (mainWindow && !mainWindow.isDestroyed()) {
         if (mainWindow.isMinimized()) mainWindow.restore();
         mainWindow.show();
+        mainWindow.setAlwaysOnTop(true);
         mainWindow.focus();
+        setTimeout(() => {
+          if (mainWindow && !mainWindow.isDestroyed()) {
+            mainWindow.setAlwaysOnTop(false);
+          }
+        }, 300);
 
         if (accountId) {
           Object.values(views).forEach(view => {

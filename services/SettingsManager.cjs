@@ -367,12 +367,6 @@ class SettingsManager {
 
         if (mainWindow) mainWindow.webContents.send('migration-progress', { status: 'switching' });
         this.setMediaFolder(newBase);
-        try {
-          const { updateMediaBaseDir } = require('../database.js');
-          updateMediaBaseDir(oldBase, newBase);
-        } catch (dbErr) {
-          console.error('Failed to update DB base dir:', dbErr);
-        }
 
         if (mainWindow) mainWindow.webContents.send('migration-progress', { status: 'cleaning' });
         try {
