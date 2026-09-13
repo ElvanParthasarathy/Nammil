@@ -1,10 +1,11 @@
 import React from 'react';
-import { Box, Typography, Modal, Paper } from '@mui/material';
+import { Box, Typography } from '@mui/material';
 import { X, Warning, ArrowRight } from '@phosphor-icons/react';
 import { useIsDark } from '../shared/hooks';
 import { useI18n } from '../../i18n/I18nContext';
 import { Material3Button } from '../shared/Material3Button';
 import { Material3IconButton } from '../shared/Material3IconButton';
+import { Material3Dialog } from '../shared/Material3Dialog';
 import { k } from '../../i18n/k';
 
 interface WinUIDeleteDialogProps {
@@ -19,18 +20,8 @@ export default function WinUIDeleteDialog({ open, onClose, onConfirm, accountNam
   const { t } = useI18n();
 
   return (
-    <Modal open={open} onClose={onClose} sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-      <Paper
-        elevation={24}
-        sx={{
-          width: 500,
-          borderRadius: '16px',
-          bgcolor: isDark ? '#202020' : '#ffffff',
-          overflow: 'hidden',
-          outline: 'none',
-          boxShadow: isDark ? '0 10px 30px rgba(0,0,0,0.5)' : '0 10px 30px rgba(0,0,0,0.2)',
-        }}
-      >
+    <Material3Dialog open={open} onClose={onClose} width={500}>
+      <Box sx={{ width: '100%', bgcolor: isDark ? '#202020' : '#ffffff', overflow: 'hidden' }}>
         {/* Header */}
         <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', p: 1.5, pb: 0 }}>
           <Typography sx={{ fontSize: '13px', color: isDark ? '#fff' : '#000', ml: 1 }}>
@@ -100,7 +91,7 @@ export default function WinUIDeleteDialog({ open, onClose, onConfirm, accountNam
             {t(k.BTN_CANCEL)}
           </Material3Button>
         </Box>
-      </Paper>
-    </Modal>
+      </Box>
+    </Material3Dialog>
   );
 }
