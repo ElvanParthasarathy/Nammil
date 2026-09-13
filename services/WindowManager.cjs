@@ -72,12 +72,22 @@ class WindowManager {
 
     this.mainWindow.once('ready-to-show', showWindow);
 
-    // Safety fallback: if ready-to-show is delayed by Vite compilation, force show within 1.5s
-    setTimeout(showWindow, 1500);
+    // Safety fallback: if ready-to-show is delayed by asset loading, force show within 6s
+    setTimeout(showWindow, 6000);
 
     // Load frontend
     if (process.env.VITE_DEV_SERVER_URL) {
-      this.mainWindow.loadURL(process.env.VITE_DEV_SERVER_URL);
+      const devUrl = process.env.VITE_DEV_SERVER_URL;
+      const loadDev = () => {
+        if (!this.mainWindow || this.mainWindow.isDestroyed()) return;
+        this.mainWindow.loadURL(devUrl).catch(() => {});
+      };
+      loadDev();
+      this.mainWindow.webContents.on('did-fail-load', (_event, errorCode) => {
+        if (errorCode === -102 || errorCode === -105 || errorCode === -100) {
+          setTimeout(loadDev, 1000);
+        }
+      });
     } else {
       this.mainWindow.loadFile(path.join(__dirname, '..', 'dist', 'index.html'));
     }
