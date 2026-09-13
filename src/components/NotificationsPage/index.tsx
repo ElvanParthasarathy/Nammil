@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Box, Button, Typography, IconButton, Chip, Stack, Paper, Avatar, Collapse } from '@mui/material';
+import { Box, Button, Typography, IconButton, Stack, Paper, Avatar, Collapse } from '@mui/material';
 import { Bell, Trash, X, CheckCircle, ChatCircle, ArrowRight, CaretUp, CaretDown } from '@phosphor-icons/react';
 import DualPanelLayout from '../shared/DualPanelLayout';
 import NotificationsSidebar from './NotificationsSidebar';

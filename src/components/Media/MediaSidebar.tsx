@@ -1,10 +1,12 @@
 import React from 'react';
-import { Box, Chip, useMediaQuery, Tooltip, IconButton, Avatar, Typography, Divider } from '@mui/material';
+import { Box, useMediaQuery, Tooltip, Avatar, Typography, Divider } from '@mui/material';
 import { FolderOpen, Image, VideoCamera, FileText, Headphones } from '@phosphor-icons/react';
 import { useI18n } from '../../i18n/I18nContext';
 import { k } from '../../i18n/k';
 import { useIsDark } from '../shared/hooks';
 import { SidebarItem } from '../shared/SettingsSection';
+import { Material3Chip } from '../shared/Material3Chip';
+import { Material3IconButton } from '../shared/Material3IconButton';
 
 interface MediaSidebarProps {
   accounts: any[];
@@ -38,26 +40,26 @@ export default function MediaSidebar({ accounts, activeAccount, setActiveAccount
       >
         <Tooltip title={isSmallScreen ? t(k.MEDIA_ALL) : ''} placement="right" disableHoverListener={!isSmallScreen}>
           {isSmallScreen ? (
-            <IconButton 
+            <Material3IconButton 
               onClick={() => setActiveAccount('All')}
+              size="medium"
               sx={{
                 bgcolor: activeAccount === 'All' ? (isDark ? 'rgba(255,255,255,0.1)' : 'rgba(0,0,0,0.06)') : 'transparent',
                 color: isDark ? '#fff' : '#000',
-                width: 36, height: 36,
               }}
             >
               <Typography sx={{ fontWeight: 700, fontSize: '15px' }}>{t(k.MEDIA_ALL).charAt(0).toUpperCase()}</Typography>
-            </IconButton>
+            </Material3IconButton>
           ) : (
-            <Chip
+            <Material3Chip
               label={t(k.MEDIA_ALL)}
+              selected={activeAccount === 'All'}
               onClick={() => setActiveAccount('All')}
               sx={{
                 fontWeight: 600,
                 flexShrink: 0,
                 bgcolor: activeAccount === 'All' ? (isDark ? '#fff' : '#111b21') : (isDark ? 'rgba(255,255,255,0.05)' : 'rgba(0,0,0,0.05)'),
                 color: activeAccount === 'All' ? (isDark ? '#000' : '#fff') : 'var(--mac-text)',
-                '&:hover': { bgcolor: activeAccount === 'All' ? undefined : (isDark ? 'rgba(255,255,255,0.1)' : 'rgba(0,0,0,0.1)') }
               }}
             />
           )}
@@ -66,26 +68,26 @@ export default function MediaSidebar({ accounts, activeAccount, setActiveAccount
         {accounts.map((a: any) => (
           <Tooltip key={a.id} title={isSmallScreen ? a.name : ''} placement="right" disableHoverListener={!isSmallScreen}>
             {isSmallScreen ? (
-              <IconButton 
+              <Material3IconButton 
                 onClick={() => setActiveAccount(a.name)}
+                size="medium"
                 sx={{
                   bgcolor: activeAccount === a.name ? (isDark ? 'rgba(255,255,255,0.1)' : 'rgba(0,0,0,0.06)') : 'transparent',
                   color: isDark ? '#fff' : '#000',
-                  width: 36, height: 36,
                 }}
               >
                 <Typography sx={{ fontWeight: 700, fontSize: '15px' }}>{a.name.charAt(0).toUpperCase()}</Typography>
-              </IconButton>
+              </Material3IconButton>
             ) : (
-              <Chip
+              <Material3Chip
                 label={a.name}
+                selected={activeAccount === a.name}
                 onClick={() => setActiveAccount(a.name)}
                 sx={{
                   fontWeight: 600,
                   flexShrink: 0,
                   bgcolor: activeAccount === a.name ? (isDark ? '#fff' : '#111b21') : (isDark ? 'rgba(255,255,255,0.05)' : 'rgba(0,0,0,0.05)'),
                   color: activeAccount === a.name ? (isDark ? '#000' : '#fff') : 'var(--mac-text)',
-                  '&:hover': { bgcolor: activeAccount === a.name ? undefined : (isDark ? 'rgba(255,255,255,0.1)' : 'rgba(0,0,0,0.1)') }
                 }}
               />
             )}

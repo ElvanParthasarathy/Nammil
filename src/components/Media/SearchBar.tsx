@@ -1,10 +1,11 @@
 import React from 'react';
-import { Box, Chip } from '@mui/material';
+import { Box } from '@mui/material';
 import { MagnifyingGlass } from '@phosphor-icons/react';
 import { useI18n } from '../../i18n/I18nContext';
 import { k } from '../../i18n/k';
 import { useIsDark } from '../shared/hooks';
 import { Material3TextField } from '../shared/Material3TextField';
+import { Material3Chip } from '../shared/Material3Chip';
 
 interface SearchBarProps {
   searchQuery: string;
@@ -44,16 +45,15 @@ export default function SearchBar({ searchQuery, setSearchQuery, activeFilter, d
             { id: 'PPT', label: t(k.MEDIA_FORMAT_PPT) },
             { id: 'Other', label: t(k.MEDIA_FORMAT_OTHER) }
           ].map(f => (
-            <Chip
+            <Material3Chip
               key={f.id}
               label={f.label}
+              selected={docFormatFilter === f.id}
               onClick={() => setDocFormatFilter(f.id)}
               sx={{
                 fontWeight: 600,
                 bgcolor: docFormatFilter === f.id ? (isDark ? '#fff' : '#111b21') : (isDark ? 'rgba(255,255,255,0.05)' : 'rgba(0,0,0,0.05)'),
                 color: docFormatFilter === f.id ? (isDark ? '#000' : '#fff') : 'var(--mac-text)',
-                '&:hover': { bgcolor: docFormatFilter === f.id ? undefined : (isDark ? 'rgba(255,255,255,0.1)' : 'rgba(0,0,0,0.1)') },
-                border: 'none'
               }}
             />
           ))}
