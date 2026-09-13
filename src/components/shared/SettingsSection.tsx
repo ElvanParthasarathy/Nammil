@@ -86,14 +86,14 @@ export function SidebarItem({ icon, iconColor, title, description, isActive, onC
               justifyContent: 'flex-start',
               textAlign: 'left',
               p: '14px 20px',
-              borderRadius: '18px',
+              borderRadius: '50px',
               cursor: 'pointer',
-              bgcolor: isActive ? (theme: any) => theme.palette.mode === 'dark' ? 'var(--mac-card-bg, #1f2020)' : '#FFFFFF' : 'transparent',
+              bgcolor: isActive ? (theme: any) => theme.palette.mode === 'dark' ? 'var(--mac-card-bg, #282929)' : '#FFFFFF' : 'transparent',
               transition: 'background-color 0.15s ease',
               zIndex: isActive ? 2 : 1,
               '&:hover': {
                 bgcolor: isActive 
-                  ? ((theme: any) => theme.palette.mode === 'dark' ? 'rgba(255, 255, 255, 0.08)' : '#f5f5f5')
+                  ? ((theme: any) => theme.palette.mode === 'dark' ? 'var(--mac-card-bg, #282929)' : '#FFFFFF')
                   : ((theme: any) => theme.palette.mode === 'dark' ? 'rgba(255, 255, 255, 0.05)' : 'rgba(0, 0, 0, 0.04)'),
               },
             }}
