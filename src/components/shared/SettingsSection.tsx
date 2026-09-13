@@ -64,11 +64,11 @@ export function SidebarItem({ icon, iconColor, title, description, isActive, onC
             <IconButton 
               onClick={onClick}
               sx={{ 
-                bgcolor: isActive ? (theme: any) => theme.palette.mode === 'dark' ? 'rgba(255,255,255,0.1)' : 'rgba(0,0,0,0.06)' : 'transparent',
+                bgcolor: isActive ? (theme: any) => theme.palette.mode === 'dark' ? 'rgba(255,255,255,0.1)' : 'rgba(0,0,0,0.08)' : 'transparent',
                 color: (theme: any) => iconColor === 'monochrome' ? (theme.palette.mode === 'dark' ? '#fff' : '#444') : '#ffffff',
                 '&:hover': {
                   bgcolor: (theme: any) => isActive
-                    ? (theme.palette.mode === 'dark' ? 'rgba(255,255,255,0.15)' : 'rgba(0,0,0,0.09)')
+                    ? (theme.palette.mode === 'dark' ? 'rgba(255,255,255,0.15)' : 'rgba(0,0,0,0.11)')
                     : (theme.palette.mode === 'dark' ? 'rgba(255,255,255,0.08)' : 'rgba(0,0,0,0.05)'),
                 }
               }}
@@ -88,12 +88,12 @@ export function SidebarItem({ icon, iconColor, title, description, isActive, onC
               p: '14px 20px',
               borderRadius: '50px',
               cursor: 'pointer',
-              bgcolor: isActive ? (theme: any) => theme.palette.mode === 'dark' ? 'var(--mac-card-bg, #282929)' : '#FFFFFF' : 'transparent',
+              bgcolor: isActive ? (theme: any) => theme.palette.mode === 'dark' ? 'var(--mac-card-bg, #282929)' : 'rgba(0, 0, 0, 0.08)' : 'transparent',
               transition: 'background-color 0.15s ease',
               zIndex: isActive ? 2 : 1,
               '&:hover': {
                 bgcolor: isActive 
-                  ? ((theme: any) => theme.palette.mode === 'dark' ? 'var(--mac-card-bg, #282929)' : '#FFFFFF')
+                  ? ((theme: any) => theme.palette.mode === 'dark' ? 'var(--mac-card-bg, #282929)' : 'rgba(0, 0, 0, 0.11)')
                   : ((theme: any) => theme.palette.mode === 'dark' ? 'rgba(255, 255, 255, 0.05)' : 'rgba(0, 0, 0, 0.04)'),
               },
             }}
