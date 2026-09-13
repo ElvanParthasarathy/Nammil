@@ -4,6 +4,7 @@ const path = require('path');
 const fs = require('fs');
 const os = require('os');
 const { spawn } = require('child_process');
+const { dialog } = require('electron');
 
 class UpdateManager {
   constructor(app, orchestrator) {
@@ -13,6 +14,9 @@ class UpdateManager {
     this.downloadedInstallerPath = null;
     this._checkingApi = false;
     this._isDownloading = false;
+    this._lastFocusCheck = 0;
+    this._isPrompting = false;
+    this._dismissedVersions = new Set();
     this.currentStatus = {
       status: 'idle', // 'idle' | 'checking' | 'available' | 'not-available' | 'downloading' | 'downloaded' | 'error'
       version: this.app && typeof this.app.getVersion === 'function' ? this.app.getVersion() : '1.1.0',
@@ -39,7 +43,7 @@ class UpdateManager {
   init() {
     const updater = this._getAutoUpdater();
     if (updater) {
-      updater.autoDownload = true;
+      updater.autoDownload = false;
       updater.autoInstallOnAppQuit = true;
 
       // Always ensure app-update.yml exists in userData so electron-updater never fails with ENOENT
@@ -78,6 +82,7 @@ class UpdateManager {
           releaseDate: info.releaseDate,
           error: null
         });
+        this._promptUpdateAvailable(info.version, null, 0);
       });
 
       updater.on('update-not-available', (info) => {
@@ -110,6 +115,7 @@ class UpdateManager {
           newVersion: info.version,
           percent: 100
         });
+        this._promptUpdateDownloaded(info.version);
       });
     }
 
@@ -210,10 +216,12 @@ class UpdateManager {
                   downloadUrl: exeAsset ? exeAsset.browser_download_url : null
                 });
 
-                // Auto-download asset if found
-                if (exeAsset && exeAsset.browser_download_url) {
-                  this._downloadAsset(exeAsset.browser_download_url, exeAsset.size || 0);
-                }
+                // Prompt user before downloading
+                this._promptUpdateAvailable(
+                  latestTag,
+                  exeAsset ? exeAsset.browser_download_url : null,
+                  exeAsset ? (exeAsset.size || 0) : 0
+                );
               } else {
                 this._updateState({
                   status: 'not-available',
@@ -294,6 +302,7 @@ class UpdateManager {
             status: 'downloaded',
             percent: 100
           });
+          this._promptUpdateDownloaded(this.currentStatus.newVersion);
         });
 
         fileStream.on('error', (err) => {
@@ -356,13 +365,120 @@ class UpdateManager {
     }
   }
 
+  _setupWindowFocusListener() {
+    try {
+      const getWin = () => this.orchestrator && this.orchestrator.windowManager && this.orchestrator.windowManager.mainWindow;
+      const win = getWin();
+      if (win && !win.isDestroyed()) {
+        win.on('focus', () => {
+          this._onWindowFocus();
+        });
+      }
+    } catch (e) {
+      console.warn('[UpdateManager] Could not attach focus listener:', e.message);
+    }
+  }
+
+  _onWindowFocus() {
+    if (!this.app || !this.app.isPackaged) return;
+    const now = Date.now();
+    // Throttle focus checks: at most once every 15 minutes
+    if (now - this._lastFocusCheck > 15 * 60 * 1000) {
+      this._lastFocusCheck = now;
+      this.checkForUpdates().catch((err) => {
+        console.log('[UpdateManager] Focus check skipped:', err.message);
+      });
+    }
+  }
+
+  async _promptUpdateAvailable(newVersion, downloadUrl, size) {
+    if (this._isPrompting || this._dismissedVersions.has(newVersion)) return;
+    const win = this.orchestrator && this.orchestrator.windowManager && this.orchestrator.windowManager.mainWindow;
+    if (!win || win.isDestroyed()) return;
+
+    this._isPrompting = true;
+    try {
+      const { response } = await dialog.showMessageBox(win, {
+        type: 'info',
+        title: 'Update Available',
+        message: `A new version of Nammil (v${newVersion}) is available!`,
+        detail: 'Would you like to download and install this update now?',
+        buttons: ['Update Now', 'Later'],
+        defaultId: 0,
+        cancelId: 1,
+        noLink: true
+      });
+
+      if (response === 0) {
+        // User clicked "Update Now"
+        if (downloadUrl) {
+          this._downloadAsset(downloadUrl, size);
+        } else {
+          const updater = this._getAutoUpdater();
+          if (updater && typeof updater.downloadUpdate === 'function') {
+            updater.downloadUpdate();
+          }
+        }
+      } else {
+        // User clicked "Later"
+        this._dismissedVersions.add(newVersion);
+      }
+    } catch (e) {
+      console.warn('[UpdateManager] Error showing update available dialog:', e.message);
+    } finally {
+      this._isPrompting = false;
+    }
+  }
+
+  async _promptUpdateDownloaded(newVersion) {
+    if (this._isPrompting) return;
+    const win = this.orchestrator && this.orchestrator.windowManager && this.orchestrator.windowManager.mainWindow;
+    if (!win || win.isDestroyed()) return;
+
+    this._isPrompting = true;
+    try {
+      const verText = newVersion ? ` (v${newVersion})` : '';
+      const { response } = await dialog.showMessageBox(win, {
+        type: 'info',
+        title: 'Update Ready to Install',
+        message: `Nammil${verText} has been downloaded.`,
+        detail: 'Restart the app now to apply the update?',
+        buttons: ['Restart & Install', 'Later'],
+        defaultId: 0,
+        cancelId: 1,
+        noLink: true
+      });
+
+      if (response === 0) {
+        this.restartAndInstall();
+      }
+    } catch (e) {
+      console.warn('[UpdateManager] Error showing update downloaded dialog:', e.message);
+    } finally {
+      this._isPrompting = false;
+    }
+  }
+
   registerIPC(ipcMain) {
+    this._setupWindowFocusListener();
+
     ipcMain.handle('check-for-updates', async () => {
       return await this.checkForUpdates();
     });
 
     ipcMain.handle('get-update-status', () => {
       return this.currentStatus;
+    });
+
+    ipcMain.handle('start-download', () => {
+      if (this.currentStatus.downloadUrl) {
+        this._downloadAsset(this.currentStatus.downloadUrl, 0);
+      } else {
+        const updater = this._getAutoUpdater();
+        if (updater && typeof updater.downloadUpdate === 'function') {
+          updater.downloadUpdate();
+        }
+      }
     });
 
     ipcMain.on('restart-and-install', () => {

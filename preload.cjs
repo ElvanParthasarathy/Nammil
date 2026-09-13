@@ -70,6 +70,7 @@ contextBridge.exposeInMainWorld('electronAPI', {
   // ── Auto-Update APIs ──
   checkForUpdates: () => ipcRenderer.invoke('check-for-updates'),
   getUpdateStatus: () => ipcRenderer.invoke('get-update-status'),
+  startDownload: () => ipcRenderer.invoke('start-download'),
   restartAndInstall: () => ipcRenderer.send('restart-and-install'),
   onUpdateStatus: (callback) => {
     const handler = (_event, status) => callback(status);
