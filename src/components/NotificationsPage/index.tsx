@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { Box, Button, Typography, IconButton, Chip, Stack, Paper, Avatar, Collapse } from '@mui/material';
 import MaterialSymbol from '../shared/MaterialSymbol';
 import DualPanelLayout from '../shared/DualPanelLayout';
@@ -42,7 +42,21 @@ export default function NotificationsPage({
 }: NotificationsPageProps) {
   const isDark = useIsDark();
   const { lang, actualLang, t } = useI18n();
-  const [activeAccount, setActiveAccount] = useState<string>('All');
+
+  const userSelectedRef = useRef(false);
+  const [activeAccount, setActiveAccount] = useState<string>(() => accounts?.[0]?.name || 'All');
+
+  useEffect(() => {
+    if (!userSelectedRef.current && accounts?.length && accounts[0]?.name) {
+      setActiveAccount(accounts[0].name);
+    }
+  }, [accounts]);
+
+  const handleAccountChange = (accName: string) => {
+    userSelectedRef.current = true;
+    setActiveAccount(accName);
+  };
+
   const [expandedGroups, setExpandedGroups] = useState<Set<string>>(new Set());
   const [removingIds, setRemovingIds] = useState<Set<string>>(new Set());
   // Compute grouped counts for sidebar
@@ -141,7 +155,7 @@ export default function NotificationsPage({
     <NotificationsSidebar
       accounts={accounts}
       activeAccount={activeAccount}
-      setActiveAccount={setActiveAccount}
+      setActiveAccount={handleAccountChange}
       groupedCounts={groupedCounts}
       onClearAll={onClearAll}
     />

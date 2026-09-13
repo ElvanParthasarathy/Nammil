@@ -14,7 +14,20 @@ export default function MediaLibrary({ accounts }: any) {
   const { t } = useI18n();
   const isDark = useIsDark();
 
-  const [activeAccount, setActiveAccount] = useState('All');
+  const userSelectedRef = useRef(false);
+  const [activeAccount, setActiveAccount] = useState<string>(() => accounts?.[0]?.name || 'All');
+
+  useEffect(() => {
+    if (!userSelectedRef.current && accounts?.length && accounts[0]?.name) {
+      setActiveAccount(accounts[0].name);
+    }
+  }, [accounts]);
+
+  const handleAccountChange = (accName: string) => {
+    userSelectedRef.current = true;
+    setActiveAccount(accName);
+  };
+
   const [activeFilter, setActiveFilter] = useState('All');
   const [docFormatFilter, setDocFormatFilter] = useState('All');
   const [searchQuery, setSearchQuery] = useState('');
@@ -96,7 +109,7 @@ export default function MediaLibrary({ accounts }: any) {
     <MediaSidebar
       accounts={accounts}
       activeAccount={activeAccount}
-      setActiveAccount={setActiveAccount}
+      setActiveAccount={handleAccountChange}
       activeFilter={activeFilter}
       setActiveFilter={setActiveFilter}
     />
