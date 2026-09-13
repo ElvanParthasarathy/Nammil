@@ -53,17 +53,28 @@ export function DeveloperTab() {
               color: 'var(--mac-text)',
               fontSize: '13.5px',
               fontWeight: 600,
+              fontFamily: '"Elvan Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif',
               display: 'inline-flex',
               alignItems: 'center',
               gap: 0.75,
-              transition: 'all 0.15s ease',
+              transition: 'background-color 0.2s ease',
               '&:hover': {
                 bgcolor: isDark ? 'rgba(255, 255, 255, 0.16)' : 'rgba(0, 0, 0, 0.12)',
-                transform: 'translateY(-1px)',
               },
             }}
           >
-            {t(k.ABOUT_VISIT_PORTFOLIO)}
+            <Typography
+              component="span"
+              sx={{
+                fontFamily: 'inherit',
+                fontSize: '13.5px',
+                fontWeight: 600,
+                color: 'inherit',
+                lineHeight: 1,
+              }}
+            >
+              {t(k.ABOUT_VISIT_PORTFOLIO)}
+            </Typography>
             <MaterialSymbol icon="arrow_forward" size={16} />
           </ButtonBase>
         </Box>
@@ -273,19 +284,28 @@ export function BrandTab() {
               color: 'var(--mac-text)',
               fontSize: '13.5px',
               fontWeight: 600,
+              fontFamily: '"Elvan Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif',
               display: 'inline-flex',
               alignItems: 'center',
               gap: 0.75,
-              transition: 'background-color 0.2s ease, box-shadow 0.2s ease',
+              transition: 'background-color 0.2s ease',
               '&:hover': {
                 bgcolor: isDark ? 'rgba(255, 255, 255, 0.15)' : 'rgba(0, 0, 0, 0.12)',
-                boxShadow: isDark 
-                  ? '0 4px 16px rgba(0, 0, 0, 0.5)' 
-                  : '0 4px 14px rgba(0, 0, 0, 0.12)',
               },
             }}
           >
-            elvannavil.vercel.app
+            <Typography
+              component="span"
+              sx={{
+                fontFamily: 'inherit',
+                fontSize: '13.5px',
+                fontWeight: 600,
+                color: 'inherit',
+                lineHeight: 1,
+              }}
+            >
+              elvannavil.vercel.app
+            </Typography>
             <MaterialSymbol icon="arrow_forward" size={16} />
           </ButtonBase>
         </Box>

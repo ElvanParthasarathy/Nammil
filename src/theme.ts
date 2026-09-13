@@ -19,9 +19,17 @@ export const getTheme = (mode) => createTheme({
     fontFamily: '"Elvan Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif',
   },
   components: {
+    MuiButtonBase: {
+      styleOverrides: {
+        root: {
+          fontFamily: '"Elvan Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif',
+        },
+      },
+    },
     MuiButton: {
       styleOverrides: {
         root: {
+          fontFamily: '"Elvan Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif',
           textTransform: 'none',
           borderRadius: 8,
         }
