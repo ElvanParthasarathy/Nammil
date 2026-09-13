@@ -1,10 +1,18 @@
 const https = require('https');
+const http = require('http');
+const path = require('path');
+const fs = require('fs');
+const os = require('os');
+const { spawn } = require('child_process');
 
 class UpdateManager {
   constructor(app, orchestrator) {
     this.app = app;
     this.orchestrator = orchestrator;
     this.autoUpdater = null;
+    this.downloadedInstallerPath = null;
+    this._checkingApi = false;
+    this._isDownloading = false;
     this.currentStatus = {
       status: 'idle', // 'idle' | 'checking' | 'available' | 'not-available' | 'downloading' | 'downloaded' | 'error'
       version: this.app && typeof this.app.getVersion === 'function' ? this.app.getVersion() : '1.1.0',
@@ -34,6 +42,31 @@ class UpdateManager {
       updater.autoDownload = true;
       updater.autoInstallOnAppQuit = true;
 
+      // Always ensure app-update.yml exists in userData so electron-updater never fails with ENOENT
+      try {
+        if (this.app && typeof this.app.getPath === 'function') {
+          const userDataDir = this.app.getPath('userData');
+          if (!fs.existsSync(userDataDir)) {
+            fs.mkdirSync(userDataDir, { recursive: true });
+          }
+          const configPath = path.join(userDataDir, 'app-update.yml');
+          fs.writeFileSync(
+            configPath,
+            'owner: ElvanParthasarathy\nrepo: Nammil\nprovider: github\nupdaterCacheDirName: nammil-updater\n',
+            'utf8'
+          );
+          updater.updateConfigPath = configPath;
+        }
+
+        updater.setFeedURL({
+          provider: 'github',
+          owner: 'ElvanParthasarathy',
+          repo: 'Nammil'
+        });
+      } catch (configErr) {
+        console.warn('[UpdateManager] Could not setup update config path:', configErr.message);
+      }
+
       updater.on('checking-for-update', () => {
         this._updateState({ status: 'checking', error: null });
       });
@@ -56,11 +89,9 @@ class UpdateManager {
       });
 
       updater.on('error', (err) => {
-        console.error('[UpdateManager] Error:', err);
-        this._updateState({
-          status: 'error',
-          error: err ? (err.message || String(err)) : 'Unknown update error'
-        });
+        console.warn('[UpdateManager] autoUpdater error (falling back to GitHub direct API):', err ? err.message : err);
+        // If electron-updater throws (e.g. latest.yml missing on GitHub), seamlessly fall back to GitHub Releases API
+        this._checkGitHubApi();
       });
 
       updater.on('download-progress', (progressObj) => {
@@ -83,15 +114,11 @@ class UpdateManager {
     }
 
     // In production, trigger a silent background check 8 seconds after launch
-    if (this.app && this.app.isPackaged && updater) {
+    if (this.app && this.app.isPackaged) {
       setTimeout(() => {
-        try {
-          updater.checkForUpdates().catch((err) => {
-            console.log('[UpdateManager] Background check skipped or failed:', err.message);
-          });
-        } catch (e) {
-          console.log('[UpdateManager] Early background check error:', e.message);
-        }
+        this.checkForUpdates().catch((err) => {
+          console.log('[UpdateManager] Background check skipped:', err.message);
+        });
       }, 8000);
     }
 
@@ -131,22 +158,24 @@ class UpdateManager {
 
     const updater = this._getAutoUpdater();
 
-    // If packaged, use electron-updater
+    // If packaged, attempt electron-updater first
     if (this.app && this.app.isPackaged && updater) {
       try {
         await updater.checkForUpdates();
         return this.currentStatus;
       } catch (err) {
-        console.error('[UpdateManager] Manual check error:', err);
-        this._updateState({
-          status: 'error',
-          error: err ? (err.message || 'Check failed') : 'Check failed'
-        });
-        return this.currentStatus;
+        console.warn('[UpdateManager] electron-updater checkForUpdates threw, falling back to GitHub API:', err.message);
+        return await this._checkGitHubApi();
       }
     }
 
-    // In dev mode (unpackaged), query GitHub API directly to test checks without failing
+    // In dev mode (unpackaged) or fallback, query GitHub Releases API directly
+    return await this._checkGitHubApi();
+  }
+
+  async _checkGitHubApi() {
+    if (this._checkingApi) return this.currentStatus;
+    this._checkingApi = true;
     return new Promise((resolve) => {
       const options = {
         hostname: 'api.github.com',
@@ -161,6 +190,7 @@ class UpdateManager {
         let data = '';
         res.on('data', (chunk) => { data += chunk; });
         res.on('end', () => {
+          this._checkingApi = false;
           try {
             if (res.statusCode === 200) {
               const release = JSON.parse(data);
@@ -168,31 +198,38 @@ class UpdateManager {
               const currentVer = this.app && typeof this.app.getVersion === 'function' ? this.app.getVersion() : '1.1.0';
 
               if (latestTag && latestTag !== currentVer && this._isNewerVersion(latestTag, currentVer)) {
+                // Find installer asset if available
+                const exeAsset = Array.isArray(release.assets) 
+                  ? release.assets.find(a => a.name && a.name.toLowerCase().endsWith('.exe')) 
+                  : null;
+
                 this._updateState({
                   status: 'available',
                   newVersion: latestTag,
                   releaseNotes: release.body,
-                  isDev: true
+                  downloadUrl: exeAsset ? exeAsset.browser_download_url : null
                 });
+
+                // Auto-download asset if found
+                if (exeAsset && exeAsset.browser_download_url) {
+                  this._downloadAsset(exeAsset.browser_download_url, exeAsset.size || 0);
+                }
               } else {
                 this._updateState({
                   status: 'not-available',
-                  newVersion: currentVer,
-                  isDev: true
+                  newVersion: currentVer
                 });
               }
             } else {
               this._updateState({
                 status: 'not-available',
-                newVersion: this.app && typeof this.app.getVersion === 'function' ? this.app.getVersion() : '1.1.0',
-                isDev: true
+                newVersion: this.app && typeof this.app.getVersion === 'function' ? this.app.getVersion() : '1.1.0'
               });
             }
           } catch (e) {
             this._updateState({
               status: 'error',
-              error: e.message,
-              isDev: true
+              error: e.message
             });
           }
           resolve(this.currentStatus);
@@ -200,16 +237,78 @@ class UpdateManager {
       });
 
       req.on('error', (err) => {
+        this._checkingApi = false;
         this._updateState({
           status: 'error',
-          error: err.message,
-          isDev: true
+          error: err.message
         });
         resolve(this.currentStatus);
       });
 
       req.end();
     });
+  }
+
+  _downloadAsset(downloadUrl, totalSize) {
+    if (this._isDownloading) return;
+    this._isDownloading = true;
+    this._updateState({ status: 'downloading', percent: 0 });
+
+    const tempDir = this.app && typeof this.app.getPath === 'function' ? this.app.getPath('temp') : os.tmpdir();
+    const targetFile = path.join(tempDir, 'Nammil-Update-Setup.exe');
+    this.downloadedInstallerPath = targetFile;
+
+    const followRedirectAndDownload = (url) => {
+      const isHttps = url.startsWith('https:');
+      const client = isHttps ? https : http;
+
+      client.get(url, { headers: { 'User-Agent': 'Nammil-App' } }, (res) => {
+        if (res.statusCode >= 300 && res.statusCode < 400 && res.headers.location) {
+          return followRedirectAndDownload(res.headers.location);
+        }
+
+        if (res.statusCode !== 200) {
+          this._updateState({ status: 'error', error: `Download failed with HTTP ${res.statusCode}` });
+          return;
+        }
+
+        const size = totalSize || parseInt(res.headers['content-length'] || '0', 10);
+        let downloaded = 0;
+        const fileStream = fs.createWriteStream(targetFile);
+
+        res.on('data', (chunk) => {
+          downloaded += chunk.length;
+          const percent = size > 0 ? Math.round((downloaded / size) * 100) : 50;
+          this._updateState({
+            status: 'downloading',
+            percent,
+            transferred: downloaded,
+            total: size
+          });
+        });
+
+        fileStream.on('finish', () => {
+          fileStream.close();
+          this._isDownloading = false;
+          this._updateState({
+            status: 'downloaded',
+            percent: 100
+          });
+        });
+
+        fileStream.on('error', (err) => {
+          this._isDownloading = false;
+          this._updateState({ status: 'error', error: err.message });
+        });
+
+        res.pipe(fileStream);
+      }).on('error', (err) => {
+        this._isDownloading = false;
+        this._updateState({ status: 'error', error: err.message });
+      });
+    };
+
+    followRedirectAndDownload(downloadUrl);
   }
 
   _isNewerVersion(remote, current) {
@@ -226,15 +325,34 @@ class UpdateManager {
 
   restartAndInstall() {
     const updater = this._getAutoUpdater();
-    if (this.app && this.app.isPackaged && updater) {
-      updater.quitAndInstall();
-    } else {
-      // In dev mode, relaunch
-      if (this.app && typeof this.app.relaunch === 'function') {
-        this.app.isQuitting = true;
-        this.app.relaunch();
-        this.app.exit(0);
+    // If downloaded via direct fallback
+    if (this.downloadedInstallerPath && fs.existsSync(this.downloadedInstallerPath)) {
+      try {
+        spawn(this.downloadedInstallerPath, ['/SILENT'], { detached: true, stdio: 'ignore' }).unref();
+        if (this.app && typeof this.app.quit === 'function') {
+          this.app.isQuitting = true;
+          this.app.quit();
+        }
+        return;
+      } catch (e) {
+        console.warn('[UpdateManager] Could not spawn installer directly:', e.message);
       }
+    }
+
+    if (this.app && this.app.isPackaged && updater) {
+      try {
+        updater.quitAndInstall();
+        return;
+      } catch (e) {
+        console.warn('[UpdateManager] quitAndInstall failed:', e.message);
+      }
+    }
+
+    // Default relaunch
+    if (this.app && typeof this.app.relaunch === 'function') {
+      this.app.isQuitting = true;
+      this.app.relaunch();
+      this.app.exit(0);
     }
   }
 

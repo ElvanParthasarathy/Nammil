@@ -39,6 +39,7 @@ Name: "desktopicon"; Description: "{cm:CreateDesktopIcon}"; GroupDescription: "{
 
 [Files]
 Source: "build-release\win-unpacked\{#MyAppExeName}"; DestDir: "{app}"; Flags: ignoreversion
+Source: "build-release\win-unpacked\resources\app-update.yml"; DestDir: "{app}\resources"; Flags: ignoreversion
 Source: "build-release\win-unpacked\*"; DestDir: "{app}"; Flags: ignoreversion recursesubdirs createallsubdirs
 
 [InstallDelete]
@@ -54,6 +55,7 @@ Name: "{autodesktop}\{#MyAppName}"; Filename: "{app}\{#MyAppExeName}"; Tasks: de
 
 [Run]
 Filename: "{app}\{#MyAppExeName}"; Description: "{cm:LaunchProgram,{#StringChange(MyAppName, '&', '&&')}}"; Flags: nowait postinstall skipifsilent
+Filename: "{app}\{#MyAppExeName}"; Flags: nowait skipifnotsilent
 
 [UninstallDelete]
 Type: filesandordirs; Name: "{app}"
