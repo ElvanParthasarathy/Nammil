@@ -1,5 +1,5 @@
 const path = require('path');
-const { WebContentsView, Menu, MenuItem, shell } = require('electron');
+const { WebContentsView, Menu, MenuItem, shell, session } = require('electron');
 
 const USER_AGENT = 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36';
 const WHATSAPP_URL = 'https://web.whatsapp.com';
@@ -294,14 +294,33 @@ class WhatsAppViewManager {
     return this.views[accountId];
   }
 
-  removeView(accountId) {
+  async removeView(accountId) {
     const view = this.views[accountId];
     if (view) {
-      const mainWindow = this.orchestrator.windowManager.mainWindow;
+      const mainWindow = this.orchestrator.windowManager && this.orchestrator.windowManager.mainWindow;
       if (mainWindow && mainWindow.contentView) {
         try { mainWindow.contentView.removeChildView(view); } catch(e){}
       }
+      try {
+        if (view.webContents && !view.webContents.isDestroyed()) {
+          view.webContents.stop();
+          view.webContents.removeAllListeners();
+          view.webContents.destroy();
+        }
+      } catch(e) {
+        console.error(`[Nammil] Error destroying view for ${accountId}:`, e);
+      }
       delete this.views[accountId];
+    }
+
+    try {
+      const sess = session.fromPartition(`persist:${accountId}`);
+      if (sess) {
+        await sess.clearStorageData();
+        await sess.clearCache();
+      }
+    } catch(e) {
+      console.error(`[Nammil] Error clearing session partition for ${accountId}:`, e);
     }
   }
 

@@ -200,6 +200,24 @@ function App() {
     } catch {}
   }, [notifications]);
 
+  // Synchronize notifications and active tab when accounts change (e.g. account deleted)
+  useEffect(() => {
+    if (accounts && accounts.length > 0) {
+      const validAccountIds = new Set(accounts.map((a: any) => a.id));
+      setNotifications((prev) => {
+        const filtered = prev.filter((n) => !n.accountId || validAccountIds.has(n.accountId));
+        return filtered.length !== prev.length ? filtered : prev;
+      });
+
+      if (activeTab.startsWith('wa-')) {
+        const currentWaId = activeTab.replace('wa-', '');
+        if (!validAccountIds.has(currentWaId)) {
+          setActiveTab(`wa-${accounts[0].id}`);
+        }
+      }
+    }
+  }, [accounts, activeTab]);
+
   const actualMode = userTheme === 'system' ? (prefersDarkMode ? 'dark' : 'light') : userTheme;
   const theme = getTheme(actualMode);
 

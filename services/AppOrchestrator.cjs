@@ -63,7 +63,7 @@ class AppOrchestrator {
         try {
           if (this.whatsAppViewManager) {
             for (const acc of settings.accounts) {
-              this.whatsAppViewManager.removeView(acc.id);
+              await this.whatsAppViewManager.removeView(acc.id);
             }
           }
         } catch (e) {

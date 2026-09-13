@@ -69,12 +69,15 @@ class NotificationManager {
 
       for (const accId in views) {
         const v = views[accId];
-        if (v && v.webContents && v.webContents.id === senderWebContentsId) {
+        if (v && v.webContents && !v.webContents.isDestroyed() && v.webContents.id === senderWebContentsId) {
           accountName = v.accountName || accountName;
           accountId = accId;
           break;
         }
       }
+
+      // If notification came from an account that is no longer active / deleted, ignore it
+      if (!accountId) return;
 
       if (s.mutedAccounts && (s.mutedAccounts.includes(accountName) || (accountId && s.mutedAccounts.includes(accountId)))) return;
 
@@ -94,8 +97,8 @@ class NotificationManager {
       if (mainWindow && !mainWindow.isDestroyed() && mainWindow.webContents) {
         mainWindow.webContents.send('nammil-received-notification', {
           id: Date.now() + '-' + Math.random().toString(36).substr(2, 9),
-          accountId: accountId || 'unknown',
-          accountName: accountName || 'WhatsApp',
+          accountId: accountId,
+          accountName: accountName,
           title: data.sender || 'WhatsApp',
           body: data.preview || '',
           icon: data.icon || null,
@@ -111,11 +114,13 @@ class NotificationManager {
 
       for (const accId in views) {
         const v = views[accId];
-        if (v && v.webContents && v.webContents.id === senderWebContentsId) {
+        if (v && v.webContents && !v.webContents.isDestroyed() && v.webContents.id === senderWebContentsId) {
           accountId = accId;
           break;
         }
       }
+
+      if (!accountId) return;
 
       const mainWindow = this.orchestrator.windowManager.mainWindow;
       if (mainWindow && !mainWindow.isDestroyed()) {

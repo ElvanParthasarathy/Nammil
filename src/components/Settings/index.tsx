@@ -26,12 +26,12 @@ export default function Settings({ accounts, setAccounts, userTheme, setUserThem
   const handleMenuClick = (event: React.MouseEvent<HTMLButtonElement>) => setAnchorEl(event.currentTarget);
   const handleMenuClose = () => setAnchorEl(null);
 
-  const confirmClearAll = () => {
+  const confirmClearAll = async () => {
     if (!clearAllName.trim()) return;
     const sanitized = sanitizeName(clearAllName);
     const newAccounts = [{ id: sanitized, name: sanitized }];
     setAccounts(newAccounts);
-    if ((window as any).electronAPI) (window as any).electronAPI.updateAccounts(newAccounts);
+    if ((window as any).electronAPI) await (window as any).electronAPI.updateAccounts(newAccounts);
     setIsClearing(false);
   };
 

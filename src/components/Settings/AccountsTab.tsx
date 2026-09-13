@@ -48,7 +48,7 @@ export default function AccountsTab({ accounts, setAccounts }: any) {
     
     const newAccounts = accounts.filter((_: any, i: number) => i !== index);
     setAccounts(newAccounts);
-    if ((window as any).electronAPI) (window as any).electronAPI.updateAccounts(newAccounts);
+    if ((window as any).electronAPI) await (window as any).electronAPI.updateAccounts(newAccounts);
     setAccountToDelete(null);
   };
 

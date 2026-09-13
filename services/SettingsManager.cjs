@@ -170,9 +170,9 @@ class SettingsManager {
       return settings.accounts;
     });
 
-    ipcMain.handle('update-accounts', (event, newAccounts) => {
+    ipcMain.handle('update-accounts', async (event, newAccounts) => {
       let settings = this.getSettingsSync();
-      const oldAccounts = settings.accounts;
+      const oldAccounts = settings.accounts || [];
       
       newAccounts.forEach(newAcc => {
         const oldAcc = oldAccounts.find(a => a.id === newAcc.id);
@@ -189,15 +189,23 @@ class SettingsManager {
       const removedIds = oldIds.filter(id => !newIds.includes(id));
       const addedAccounts = newAccounts.filter(a => !oldIds.includes(a.id));
       
-      removedIds.forEach(id => {
-        orchestrator.whatsAppViewManager.removeView(id);
-      });
+      for (const id of removedIds) {
+        await orchestrator.whatsAppViewManager.removeView(id);
+      }
 
       addedAccounts.forEach(acc => {
         orchestrator.whatsAppViewManager.createView(acc.id, acc.name);
       });
 
       settings.accounts = newAccounts;
+      if (settings.accountSounds) {
+        removedIds.forEach(id => {
+          delete settings.accountSounds[id];
+        });
+      }
+      if (settings.mutedAccounts && Array.isArray(settings.mutedAccounts)) {
+        settings.mutedAccounts = settings.mutedAccounts.filter(m => !removedIds.includes(m));
+      }
       this.saveSettingsSync(settings);
       orchestrator.whatsAppViewManager.resizeViews();
       return settings.accounts;
