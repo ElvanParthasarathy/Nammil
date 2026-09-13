@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from 'react';
-import { Box, Typography, Select, MenuItem } from '@mui/material';
+import { Box, Typography } from '@mui/material';
 import { SpeakerHigh } from '@phosphor-icons/react';
 import { useI18n } from '../../i18n/I18nContext';
 import { k } from '../../i18n/k';
 import { SettingsSection, SettingsRow } from '../shared/SettingsSection';
 import { Material3Switch } from '../shared/Material3Switch';
 import { Material3IconButton } from '../shared/Material3IconButton';
+import { Material3Select, Material3SelectOption } from '../shared/Material3Select';
 import { useIsDark } from '../shared/hooks';
 
 export default function NotificationsTab({ accounts }: any) {
@@ -138,7 +139,7 @@ export default function NotificationsTab({ accounts }: any) {
                     >
                       <SpeakerHigh size={18} />
                     </Material3IconButton>
-                    <Select
+                    <Material3Select
                       value={currentAccSound}
                       onChange={(e) => handleAccountSoundChange(acc.id, e.target.value)}
                       size="small"
@@ -146,20 +147,16 @@ export default function NotificationsTab({ accounts }: any) {
                       sx={{
                         minWidth: 110,
                         borderRadius: '12px',
-                        color: 'var(--mac-text)',
-                        '.MuiOutlinedInput-notchedOutline': { borderColor: 'var(--mac-divider)' },
-                        '&:hover .MuiOutlinedInput-notchedOutline': { borderColor: 'var(--mac-text-secondary)' },
-                        '&.Mui-focused .MuiOutlinedInput-notchedOutline': { borderColor: 'var(--mac-text)' }
                       }}
                     >
-                      <MenuItem value="kumizhi">{t(k.NOTIF_SOUND_KUMIZHI)}</MenuItem>
-                      <MenuItem value="thuli">{t(k.NOTIF_SOUND_THULI)}</MenuItem>
-                      <MenuItem value="thullal">{t(k.NOTIF_SOUND_THULLAL)}</MenuItem>
-                      <MenuItem value="thendral">{t(k.NOTIF_SOUND_THENDRAL)}</MenuItem>
-                      <MenuItem value="minnal">{t(k.NOTIF_SOUND_MINNAL)}</MenuItem>
-                      <MenuItem value="alai">{t(k.NOTIF_SOUND_ALAI)}</MenuItem>
-                      <MenuItem value="silent">{t(k.NOTIF_SOUND_SILENT)}</MenuItem>
-                    </Select>
+                      <Material3SelectOption value="kumizhi">{t(k.NOTIF_SOUND_KUMIZHI)}</Material3SelectOption>
+                      <Material3SelectOption value="thuli">{t(k.NOTIF_SOUND_THULI)}</Material3SelectOption>
+                      <Material3SelectOption value="thullal">{t(k.NOTIF_SOUND_THULLAL)}</Material3SelectOption>
+                      <Material3SelectOption value="thendral">{t(k.NOTIF_SOUND_THENDRAL)}</Material3SelectOption>
+                      <Material3SelectOption value="minnal">{t(k.NOTIF_SOUND_MINNAL)}</Material3SelectOption>
+                      <Material3SelectOption value="alai">{t(k.NOTIF_SOUND_ALAI)}</Material3SelectOption>
+                      <Material3SelectOption value="silent">{t(k.NOTIF_SOUND_SILENT)}</Material3SelectOption>
+                    </Material3Select>
                     <Material3Switch
                       checked={!isMuted}
                       onChange={() => toggleAccountMute(acc.id)}

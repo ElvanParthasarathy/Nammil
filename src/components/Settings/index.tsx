@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Box, Typography, Menu, MenuItem } from '@mui/material';
+import { Box, Typography } from '@mui/material';
 import { ChatCircle, Palette, Translate, CaretLeft, Gear, DotsThreeVertical, HardDrives, Bell, Info, Code, Sparkle } from '@phosphor-icons/react';
 import { useI18n } from '../../i18n/I18nContext';
 import { k } from '../../i18n/k';
@@ -7,6 +7,7 @@ import { SidebarItem } from '../shared/SettingsSection';
 import DualPanelLayout from '../shared/DualPanelLayout';
 import { useIsDark } from '../shared/hooks';
 import { Material3IconButton } from '../shared/Material3IconButton';
+import { Material3Menu, Material3MenuItem } from '../shared/Material3Menu';
 import { sanitizeName } from './validation';
 import WinUIClearAllDialog from './WinUIClearAllDialog';
 import AccountsTab from './AccountsTab';
@@ -150,7 +151,7 @@ export default function Settings({ accounts, setAccounts, userTheme, setUserThem
             >
               <DotsThreeVertical size={20} weight="bold" />
             </Material3IconButton>
-            <Menu
+            <Material3Menu
               anchorEl={anchorEl}
               open={Boolean(anchorEl)}
               onClose={handleMenuClose}
@@ -166,10 +167,8 @@ export default function Settings({ accounts, setAccounts, userTheme, setUserThem
                   overflow: 'hidden'
                 }
               }}
-              transformOrigin={{ horizontal: 'right', vertical: 'top' }}
-              anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}
             >
-              <MenuItem 
+              <Material3MenuItem 
                 onClick={() => { handleMenuClose(); setClearAllName(''); setIsClearing(true); }}
                 sx={{ 
                   color: isDark ? '#ff4d4d' : '#d32f2f', 
@@ -177,14 +176,11 @@ export default function Settings({ accounts, setAccounts, userTheme, setUserThem
                   fontWeight: 600, 
                   py: 1.5,
                   px: 2,
-                  '&:hover': {
-                    bgcolor: isDark ? 'rgba(255, 77, 77, 0.15)' : 'rgba(211, 47, 47, 0.08)'
-                  }
                 }}
               >
                 {t(k.BTN_CLEAR_ALL)}
-              </MenuItem>
-            </Menu>
+              </Material3MenuItem>
+            </Material3Menu>
           </>
         )}
       </Box>
