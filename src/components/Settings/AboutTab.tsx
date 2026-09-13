@@ -520,19 +520,7 @@ export function BrandTab() {
         </Box>
       </SettingsSection>
 
-      {/* Founder & Developer */}
-      <SettingsSection title={t(k.ABOUT_BRAND_CREATOR_TITLE)} sx={{ mb: 2 }}>
-        <SettingsRow
-          icon={<MaterialSymbol icon="person" size={20} fill={true} />}
-          iconColor="monochrome"
-          title={t(k.ABOUT_DEV_NAME)}
-          description={t(k.ABOUT_BRAND_CREATOR_DESC)}
-          control={<MaterialSymbol icon="open_in_new" size={18} color="var(--mac-text-secondary)" />}
-          onClick={() => openUrl('https://jaiprakashpartha.vercel.app/')}
-        />
-      </SettingsSection>
-
-      {/* Open Source & License under Elvan Navil */}
+      {/* Open Source & License */}
       <SettingsSection title={t(k.ABOUT_LICENSE_TITLE)} sx={{ mb: 2 }}>
         <SettingsRow
           icon={<MaterialSymbol icon="verified_user" size={20} fill={true} />}
@@ -552,24 +540,20 @@ export function BrandTab() {
         />
       </SettingsSection>
 
-      {/* Legal & Terms under Elvan Navil */}
+      {/* Notice & Privacy */}
       <SettingsSection title={t(k.ABOUT_TERMS_TITLE)} sx={{ mb: 2 }}>
-        <Box sx={{ p: 2.5 }}>
-          <Typography sx={{ fontSize: '13px', lineHeight: '21px', color: 'var(--mac-text-secondary)', opacity: 0.9 }}>
-            {t(k.ABOUT_TERMS_DISCLAIMER)}
-          </Typography>
-          <Box sx={{ mt: 2, pt: 2, borderTop: isDark ? '1px solid rgba(255,255,255,0.06)' : '1px solid rgba(0,0,0,0.06)' }}>
-            <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, mb: 0.5 }}>
-              <MaterialSymbol icon="lock" size={16} fill={true} style={{ color: '#00c853' }} />
-              <Typography sx={{ fontSize: '13.5px', fontWeight: 600, color: 'var(--mac-text)' }}>
-                {t(k.ABOUT_TERMS_PRIVACY)}
-              </Typography>
-            </Box>
-            <Typography sx={{ fontSize: '12.5px', lineHeight: '19px', color: 'var(--mac-text-secondary)', opacity: 0.8 }}>
-              {t(k.ABOUT_TERMS_PRIVACY_DESC)}
-            </Typography>
-          </Box>
-        </Box>
+        <SettingsRow
+          icon={<MaterialSymbol icon="lock" size={20} fill={true} />}
+          iconColor="monochrome"
+          title={t(k.ABOUT_TERMS_PRIVACY)}
+          description={t(k.ABOUT_TERMS_PRIVACY_DESC)}
+        />
+        <SettingsRow
+          icon={<MaterialSymbol icon="info" size={20} fill={true} />}
+          iconColor="monochrome"
+          title={t(k.ABOUT_TERMS_DISCLAIMER_TITLE)}
+          description={t(k.ABOUT_TERMS_DISCLAIMER)}
+        />
       </SettingsSection>
 
       {/* Footer: Version, Brand, and Copyright */}
@@ -578,7 +562,7 @@ export function BrandTab() {
           {t(k.ABOUT_PARENT_BRAND_NAME)} • {t(k.BRAND_NAME)} {version}
         </Typography>
         <Typography sx={{ mt: 0.5, fontSize: '12px', color: 'var(--mac-text-secondary)', opacity: 0.35 }}>
-          © 2026 {t(k.ABOUT_PARENT_BRAND_NAME)}. {t(k.ABOUT_ALL_RIGHTS_RESERVED)} • Open Source under MIT License
+          © 2026 {t(k.ABOUT_PARENT_BRAND_NAME)} • Open Source under MIT License
         </Typography>
       </Box>
     </Box>
