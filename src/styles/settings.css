@@ -72,7 +72,12 @@
     border-radius: 8px;
     border: 2px solid transparent;
     background-clip: content-box;
-    transition: background-color 0.3s ease;
+}
+
+/* Pure CSS hover: reveal scrollbar when hovering the column */
+.s2-col-left:hover::-webkit-scrollbar-thumb,
+.s2-col-right:hover::-webkit-scrollbar-thumb {
+    background-color: var(--scrollbar-thumb, rgba(150, 150, 150, 0.45));
 }
 
 /* Hover or active directly on the scrollbar thumb */

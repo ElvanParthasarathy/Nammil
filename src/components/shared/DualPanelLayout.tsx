@@ -12,7 +12,7 @@ function useAutoHideScrollbar() {
   const ref = React.useRef<HTMLDivElement>(null);
   const timerRef = React.useRef<ReturnType<typeof setTimeout> | null>(null);
 
-  const showBriefly = React.useCallback(() => {
+  const handleScroll = React.useCallback(() => {
     if (ref.current) {
       ref.current.classList.add('scrollbar-visible');
     }
@@ -26,41 +26,6 @@ function useAutoHideScrollbar() {
     }, 1000);
   }, []);
 
-  const handleScroll = React.useCallback(() => {
-    showBriefly();
-  }, [showBriefly]);
-
-  const handleWheel = React.useCallback(() => {
-    showBriefly();
-  }, [showBriefly]);
-
-  const handleMouseMove = React.useCallback((e: React.MouseEvent<HTMLDivElement>) => {
-    const rect = e.currentTarget.getBoundingClientRect();
-    const distanceFromRight = rect.right - e.clientX;
-    // When mouse is near the scrollbar (within 24px of the right edge)
-    if (distanceFromRight >= 0 && distanceFromRight <= 24) {
-      if (ref.current) ref.current.classList.add('scrollbar-visible');
-      if (timerRef.current) {
-        clearTimeout(timerRef.current);
-      }
-    } else {
-      // If mouse moved back into the content area, start a brief fade-out timer
-      if (timerRef.current) {
-        clearTimeout(timerRef.current);
-      }
-      timerRef.current = setTimeout(() => {
-        if (ref.current) ref.current.classList.remove('scrollbar-visible');
-      }, 600);
-    }
-  }, []);
-
-  const handleMouseLeave = React.useCallback(() => {
-    if (timerRef.current) {
-      clearTimeout(timerRef.current);
-    }
-    if (ref.current) ref.current.classList.remove('scrollbar-visible');
-  }, []);
-
   React.useEffect(() => {
     return () => {
       if (timerRef.current) {
@@ -72,9 +37,6 @@ function useAutoHideScrollbar() {
   return {
     ref,
     onScroll: handleScroll,
-    onWheel: handleWheel,
-    onMouseMove: handleMouseMove,
-    onMouseLeave: handleMouseLeave,
   };
 }
 
@@ -108,9 +70,6 @@ export default function DualPanelLayout({ sidebar, content, title }: DualPanelLa
           ref={leftScroll.ref}
           className="s2-col-left"
           onScroll={leftScroll.onScroll}
-          onWheel={leftScroll.onWheel}
-          onMouseMove={leftScroll.onMouseMove}
-          onMouseLeave={leftScroll.onMouseLeave}
           sx={{ 
             paddingRight: isSmallScreen ? '8px' : '24px', 
             paddingLeft: isSmallScreen ? '8px' : '24px', 
@@ -136,9 +95,6 @@ export default function DualPanelLayout({ sidebar, content, title }: DualPanelLa
           ref={rightScroll.ref}
           className="s2-col-right"
           onScroll={rightScroll.onScroll}
-          onWheel={rightScroll.onWheel}
-          onMouseMove={rightScroll.onMouseMove}
-          onMouseLeave={rightScroll.onMouseLeave}
         >
           {content}
         </Box>
