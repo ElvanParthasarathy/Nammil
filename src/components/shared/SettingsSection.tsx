@@ -23,7 +23,7 @@ export function SettingsSection({ title, description, children, sx, paperSx }: S
           borderRadius: '24px', 
           overflow: 'hidden', 
           bgcolor: 'var(--mac-card-bg, #282929)',
-          border: (theme) => theme.palette.mode === 'dark' ? '1px solid rgba(255, 255, 255, 0.05)' : 'none',
+          border: 'none',
           ...paperSx
         }}
       >
