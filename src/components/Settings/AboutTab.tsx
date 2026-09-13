@@ -487,7 +487,7 @@ export function BrandTab() {
           iconColor="monochrome"
           title={t(k.ABOUT_LICENSE_TYPE)}
           description={t(k.ABOUT_LICENSE_DESC)}
-          control={<MaterialSymbol icon="open_in_new" size={18} color="var(--mac-text-secondary)" />}
+          control={<MaterialSymbol icon="chevron_right" size={18} color="var(--mac-text-secondary)" />}
           onClick={() => openUrl('https://github.com/ElvanParthasarathy/Nammil/blob/main/LICENSE')}
         />
         <SettingsRow
@@ -495,7 +495,7 @@ export function BrandTab() {
           iconColor="monochrome"
           title={t(k.ABOUT_SOURCE_CODE)}
           description={t(k.ABOUT_SOURCE_CODE_DESC)}
-          control={<MaterialSymbol icon="open_in_new" size={18} color="var(--mac-text-secondary)" />}
+          control={<MaterialSymbol icon="chevron_right" size={18} color="var(--mac-text-secondary)" />}
           onClick={() => openUrl('https://github.com/ElvanParthasarathy/Nammil')}
         />
         <SettingsRow
@@ -503,7 +503,7 @@ export function BrandTab() {
           iconColor="monochrome"
           title={t(k.ABOUT_ISSUES)}
           description={t(k.ABOUT_ISSUES_DESC)}
-          control={<MaterialSymbol icon="open_in_new" size={18} color="var(--mac-text-secondary)" />}
+          control={<MaterialSymbol icon="chevron_right" size={18} color="var(--mac-text-secondary)" />}
           onClick={() => openUrl('https://github.com/ElvanParthasarathy/Nammil/issues')}
         />
         <SettingsRow
@@ -511,7 +511,7 @@ export function BrandTab() {
           iconColor="monochrome"
           title={t(k.ABOUT_RELEASES)}
           description={t(k.ABOUT_RELEASES_DESC)}
-          control={<MaterialSymbol icon="open_in_new" size={18} color="var(--mac-text-secondary)" />}
+          control={<MaterialSymbol icon="chevron_right" size={18} color="var(--mac-text-secondary)" />}
           onClick={() => openUrl('https://github.com/ElvanParthasarathy/Nammil/releases')}
         />
       </SettingsSection>
