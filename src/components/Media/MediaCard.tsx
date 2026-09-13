@@ -1,6 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { Box, Typography, Skeleton } from '@mui/material';
-import { Material3Button } from '../shared/Material3Button';
+import { Box, Typography, Button, IconButton, Tooltip, Skeleton } from '@mui/material';
 import { VideoCamera, FileText, FileAudio, FilePdf, FileDoc, FileXls, FilePpt, FileArchive, Image as ImageIcon } from '@phosphor-icons/react';
 
 const getFileIcon = (fileName: string, mediaType: string, size: number, weight: any = 'regular', color?: string) => {
@@ -153,28 +152,28 @@ export default function MediaCard({ item }: { item: any }) {
 
       {/* Action Footer */}
       <Box sx={{ display: 'flex', gap: 1, px: 2, pb: 2, pt: 0 }}>
-        <Material3Button
-          fullWidth
-          size="small"
+        <Button
+          fullWidth size="small"
           sx={{ 
             color: isDark ? '#fff' : '#000', fontSize: '12px', fontWeight: 600, textTransform: 'none', py: 1, 
             borderRadius: '500px', bgcolor: isDark ? 'rgba(255,255,255,0.05)' : 'rgba(0,0,0,0.05)',
+            '&:hover': { bgcolor: isDark ? 'rgba(255,255,255,0.1)' : 'rgba(0,0,0,0.1)' } 
           }}
           onClick={() => handleOpenSystem(item.filePath)}
         >
           {t(k.MEDIA_VIEW)}
-        </Material3Button>
-        <Material3Button
-          fullWidth
-          size="small"
+        </Button>
+        <Button
+          fullWidth size="small"
           sx={{ 
             color: isDark ? '#fff' : '#000', fontSize: '12px', fontWeight: 600, textTransform: 'none', py: 1, 
             borderRadius: '500px', bgcolor: isDark ? 'rgba(255,255,255,0.05)' : 'rgba(0,0,0,0.05)',
+            '&:hover': { bgcolor: isDark ? 'rgba(255,255,255,0.1)' : 'rgba(0,0,0,0.1)' } 
           }}
           onClick={() => (window as any).electronAPI?.showInFolder(item.filePath)}
         >
           {t(k.MEDIA_SHOW_FILE)}
-        </Material3Button>
+        </Button>
       </Box>
     </Box>
   );

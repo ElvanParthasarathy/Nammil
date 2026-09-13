@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
-import { Box, Typography, Stack, Paper, Avatar, Collapse } from '@mui/material';
-import { Material3Button } from '../shared/Material3Button';
+import { Box, Button, Typography, IconButton, Chip, Stack, Paper, Avatar, Collapse } from '@mui/material';
 import { Bell, Trash, X, CheckCircle, ChatCircle, ArrowRight, CaretUp, CaretDown } from '@phosphor-icons/react';
 import DualPanelLayout from '../shared/DualPanelLayout';
 import NotificationsSidebar from './NotificationsSidebar';
@@ -172,20 +171,27 @@ export default function NotificationsPage({
         </Stack>
 
         {filteredNotifications.length > 0 && (
-          <Material3Button
+          <Button
             variant="text"
-            leadingIcon={<Trash size={18} />}
+            startIcon={<Trash size={18} />}
             onClick={handleClearCurrent}
             sx={{
               borderRadius: '24px',
+              textTransform: 'none',
               fontWeight: 600,
               color: 'text.secondary',
               px: 2,
               mr: 2.5,
+              '&:hover': {
+                bgcolor: isDark ? 'rgba(255,255,255,0.05)' : 'rgba(0,0,0,0.04)',
+                color: 'text.primary',
+                transform: 'none',
+                boxShadow: 'none'
+              }
             }}
           >
             {activeAccount === 'All' ? t(k.BTN_CLEAR_ALL) : `${t(k.BTN_CLEAR)} ${activeAccount}`}
-          </Material3Button>
+          </Button>
         )}
       </Box>
 
@@ -279,17 +285,18 @@ export default function NotificationsPage({
         {/* Bottom DEV Button */}
         {import.meta.env.DEV && onAddDevTestNotification && (
           <Box sx={{ display: 'flex', justifyContent: 'center', mt: 4 }}>
-            <Material3Button
+            <Button
               variant="outlined"
               onClick={onAddDevTestNotification}
               sx={{
                 borderRadius: '24px',
+                textTransform: 'none',
                 fontWeight: 600,
                 px: 3,
               }}
             >
               Dev: Add Test Notifs
-            </Material3Button>
+            </Button>
           </Box>
         )}
       </Box>

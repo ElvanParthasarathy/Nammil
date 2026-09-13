@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Box } from '@mui/material';
+import { Box, Typography, TextField, Button, IconButton, Dialog, DialogTitle, DialogContent, DialogActions } from '@mui/material';
 import { ChatCircle, Trash, Plus } from '@phosphor-icons/react';
 import { useI18n } from '../../i18n/I18nContext';
 import { k } from '../../i18n/k';
@@ -8,7 +8,6 @@ import { SettingsSection, SettingsRow } from '../shared/SettingsSection';
 import { sanitizeName, validateAccountName } from './validation';
 import WinUIDeleteDialog from './WinUIDeleteDialog';
 import WinUIAddDialog from './WinUIAddDialog';
-import { Material3IconButton } from '../shared/Material3IconButton';
 
 export default function AccountsTab({ accounts, setAccounts }: any) {
   const isDark = useIsDark();
@@ -67,19 +66,21 @@ export default function AccountsTab({ accounts, setAccounts }: any) {
               control={
                 <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.5 }}>
                   {accounts.length > 1 && (
-                    <Material3IconButton 
-                      onClick={(e: any) => { e.stopPropagation(); handleRemoveAccount(index); }} 
+                    <IconButton 
+                      onClick={(e) => { e.stopPropagation(); handleRemoveAccount(index); }} 
                       size="small"
                       sx={{ 
                         color: 'var(--mac-text-secondary)', 
                         bgcolor: isDark ? 'rgba(255,255,255,0.08)' : 'rgba(0,0,0,0.05)',
+                        padding: '8px',
                         '&:hover': { 
                           color: 'var(--mac-text)',
+                          bgcolor: isDark ? 'rgba(255,255,255,0.12)' : 'rgba(0,0,0,0.08)'
                         } 
                       }}
                     >
                       <Trash size={18} />
-                    </Material3IconButton>
+                    </IconButton>
                   )}
                 </Box>
               }

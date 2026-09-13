@@ -1,7 +1,5 @@
 import React from 'react';
-import { Box, Typography, Paper, ButtonBase, Tooltip, useMediaQuery } from '@mui/material';
-import { Material3IconButton } from './Material3IconButton';
-import { Material3Divider } from './Material3Divider';
+import { Box, Typography, Divider, Paper, ButtonBase, Tooltip, useMediaQuery, IconButton } from '@mui/material';
 
 export interface SettingsSectionProps {
   title?: string;
@@ -32,7 +30,7 @@ export function SettingsSection({ title, description, children, sx, paperSx }: S
         {React.Children.toArray(children).filter(Boolean).map((child, index, array) => (
           <React.Fragment key={index}>
             {child}
-            {index < array.length - 1 && <Material3Divider sx={{ mx: 2.5, borderColor: 'var(--mac-divider)' }} />}
+            {index < array.length - 1 && <Divider sx={{ ml: '20px', mr: '20px', borderColor: (theme) => theme.palette.mode === 'dark' ? 'rgba(255, 255, 255, 0.04)' : 'rgba(0, 0, 0, 0.04)' }} />}
           </React.Fragment>
         ))}
       </Paper>
@@ -63,15 +61,20 @@ export function SidebarItem({ icon, iconColor, title, description, isActive, onC
       <Tooltip title={isSmallScreen ? title : ''} placement="right" disableHoverListener={!isSmallScreen}>
         {isSmallScreen ? (
           <Box sx={{ display: 'flex', justifyContent: 'center', my: 1, width: '100%', zIndex: isActive ? 2 : 1 }}>
-            <Material3IconButton 
+            <IconButton 
               onClick={onClick}
               sx={{ 
                 bgcolor: isActive ? (theme: any) => theme.palette.mode === 'dark' ? 'rgba(255,255,255,0.1)' : 'rgba(0,0,0,0.06)' : 'transparent',
                 color: (theme: any) => iconColor === 'monochrome' ? (theme.palette.mode === 'dark' ? '#fff' : '#444') : '#ffffff',
+                '&:hover': {
+                  bgcolor: (theme: any) => isActive
+                    ? (theme.palette.mode === 'dark' ? 'rgba(255,255,255,0.15)' : 'rgba(0,0,0,0.09)')
+                    : (theme.palette.mode === 'dark' ? 'rgba(255,255,255,0.08)' : 'rgba(0,0,0,0.05)'),
+                }
               }}
             >
               {icon}
-            </Material3IconButton>
+            </IconButton>
           </Box>
         ) : (
           <ButtonBase 

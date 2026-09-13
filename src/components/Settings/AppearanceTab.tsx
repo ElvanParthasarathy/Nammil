@@ -1,12 +1,11 @@
 import React from 'react';
-import { Box, Typography, ButtonBase } from '@mui/material';
+import { Box, Typography, ButtonBase, IconButton } from '@mui/material';
 import { CheckCircle, Circle } from '@phosphor-icons/react';
 import { useI18n } from '../../i18n/I18nContext';
 import { k } from '../../i18n/k';
 import { useIsDark } from '../shared/hooks';
 import { SettingsSection, SettingsRow } from '../shared/SettingsSection';
 import { Material3Switch } from '../shared/Material3Switch';
-import { Material3IconButton } from '../shared/Material3IconButton';
 
 export default function AppearanceTab({ userTheme, setUserTheme }: any) {
   const isDark = useIsDark();
@@ -72,11 +71,15 @@ export default function AppearanceTab({ userTheme, setUserTheme }: any) {
               {t(k.THEME_LIGHT)}
             </Typography>
 
-            <Material3IconButton
+            <IconButton
               onClick={() => handleThemeChange('light')}
               size="small"
               sx={{
                 color: userTheme === 'light' ? 'var(--mac-text)' : 'var(--mac-text-secondary)',
+                p: '4px',
+                '&:hover': {
+                  bgcolor: isDark ? 'rgba(255, 255, 255, 0.08)' : 'rgba(0, 0, 0, 0.06)',
+                }
               }}
             >
               {userTheme === 'light' ? (
@@ -84,7 +87,7 @@ export default function AppearanceTab({ userTheme, setUserTheme }: any) {
               ) : (
                 <Circle weight="regular" size={22} />
               )}
-            </Material3IconButton>
+            </IconButton>
           </Box>
 
           {/* Dark Mode Option */}
@@ -135,11 +138,15 @@ export default function AppearanceTab({ userTheme, setUserTheme }: any) {
               {t(k.THEME_DARK)}
             </Typography>
 
-            <Material3IconButton
+            <IconButton
               onClick={() => handleThemeChange('dark')}
               size="small"
               sx={{
                 color: userTheme === 'dark' ? 'var(--mac-text)' : 'var(--mac-text-secondary)',
+                p: '4px',
+                '&:hover': {
+                  bgcolor: isDark ? 'rgba(255, 255, 255, 0.08)' : 'rgba(0, 0, 0, 0.06)',
+                }
               }}
             >
               {userTheme === 'dark' ? (
@@ -147,7 +154,7 @@ export default function AppearanceTab({ userTheme, setUserTheme }: any) {
               ) : (
                 <Circle weight="regular" size={22} />
               )}
-            </Material3IconButton>
+            </IconButton>
           </Box>
         </Box>
 

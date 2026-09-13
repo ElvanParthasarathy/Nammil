@@ -1,11 +1,9 @@
 import React, { useState, useEffect } from 'react';
-import { Box, Typography, Tooltip } from '@mui/material';
+import { Box, Typography, Button, CircularProgress, IconButton, Tooltip } from '@mui/material';
 import { HardDrives, Warning, Trash, FolderOpen } from '@phosphor-icons/react';
 import { useI18n } from '../../i18n/I18nContext';
 import { k } from '../../i18n/k';
 import { SettingsSection as SettingsSection, SettingsRow } from '../shared/SettingsSection';
-import { Material3IconButton } from '../shared/Material3IconButton';
-import { Material3CircularProgress } from '../shared/Material3Progress';
 import { useIsDark } from '../shared/hooks';
 
 export default function StorageTab() {
@@ -63,16 +61,19 @@ export default function StorageTab() {
           description={currentPath || '...'}
           control={
             <Tooltip title={t(k.BTN_CHANGE_FOLDER)} placement="top" arrow>
-              <Material3IconButton 
+              <IconButton 
                 onClick={handleChangeFolder}
                 disabled={isMigrating}
                 sx={{ 
                   bgcolor: isDark ? 'rgba(255,255,255,0.08)' : 'rgba(0,0,0,0.06)', 
                   color: 'var(--mac-text)',
+                  '&:hover': {
+                    bgcolor: isDark ? 'rgba(255,255,255,0.15)' : 'rgba(0,0,0,0.1)',
+                  }
                 }}
               >
                 <FolderOpen size={20} weight="bold" />
-              </Material3IconButton>
+              </IconButton>
             </Tooltip>
           }
         />
@@ -82,7 +83,7 @@ export default function StorageTab() {
           description={t(k.RESET_APP_DESC) || "Clear all sessions and return to first setup. Keeps media."}
           control={
             <Tooltip title={t(k.RESET_APP_BTN) || "Reset App"} placement="top" arrow>
-              <Material3IconButton 
+              <IconButton 
                 onClick={async () => {
                   if (window.confirm(t(k.RESET_APP_CONFIRM) || "Are you sure you want to reset all app data? This will log out all accounts but preserve your media folder.")) {
                     if ((window as any).electronAPI) {
@@ -100,10 +101,13 @@ export default function StorageTab() {
                 sx={{ 
                   bgcolor: isDark ? 'rgba(255,255,255,0.08)' : 'rgba(0,0,0,0.06)', 
                   color: 'var(--mac-text)',
+                  '&:hover': {
+                    bgcolor: isDark ? 'rgba(255,255,255,0.15)' : 'rgba(0,0,0,0.1)',
+                  }
                 }}
               >
                 <Trash size={20} weight="bold" />
-              </Material3IconButton>
+              </IconButton>
             </Tooltip>
           }
         />
@@ -112,7 +116,7 @@ export default function StorageTab() {
       {isMigrating && progress && (
         <Box sx={{ mt: 3, p: 3, borderRadius: '16px', bgcolor: isDark ? 'rgba(255,255,255,0.05)' : 'rgba(0,0,0,0.03)', border: '1px solid var(--mac-border)' }}>
           <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
-            <Material3CircularProgress size={20} sx={{ mr: 2, color: 'var(--mac-text)' }} />
+            <CircularProgress size={20} sx={{ mr: 2, color: 'var(--mac-text)' }} />
             <Typography sx={{ fontWeight: 600 }}>
               {progress.status === 'counting' ? 'Analyzing files...' : 
                progress.status === 'copying' ? 'Copying files safely...' :

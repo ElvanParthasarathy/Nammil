@@ -1,10 +1,9 @@
 import React, { useState, useEffect } from 'react';
-import { Box, Typography } from '@mui/material';
+import { Box, Typography, Button } from '@mui/material';
 import { useI18n } from '../../i18n/I18nContext';
 import { k } from '../../i18n/k';
 import { SettingsSection, SettingsRow } from '../shared/SettingsSection';
 import { Material3Switch } from '../shared/Material3Switch';
-import { Material3Button } from '../shared/Material3Button';
 import { useIsDark } from '../shared/hooks';
 
 export default function GeneralTab() {
@@ -124,18 +123,28 @@ export default function GeneralTab() {
         />
         {hwAccelChanged && (
           <Box sx={{ px: '20px', pb: '16px', display: 'flex', justifyContent: 'flex-end' }}>
-            <Material3Button
+            <Button
+              variant="contained"
+              disableElevation
               onClick={handleRestart}
               sx={{
                 borderRadius: '500px',
+                textTransform: 'none',
                 fontWeight: 600,
                 bgcolor: isDark ? 'rgba(255,255,255,0.08)' : 'rgba(0,0,0,0.06)',
                 color: 'var(--mac-text)',
+                border: 'none',
+                boxShadow: 'none',
                 px: 2.5,
+                py: 0.8,
+                '&:hover': {
+                  bgcolor: isDark ? 'rgba(255,255,255,0.15)' : 'rgba(0,0,0,0.1)',
+                  boxShadow: 'none'
+                }
               }}
             >
               {t(k.GENERAL_RESTART_NOW)}
-            </Material3Button>
+            </Button>
           </Box>
         )}
       </SettingsSection>

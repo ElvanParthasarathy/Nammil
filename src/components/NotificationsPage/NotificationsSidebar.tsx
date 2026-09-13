@@ -1,5 +1,5 @@
 import React from 'react';
-import { Box } from '@mui/material';
+import { Box, Button, Typography } from '@mui/material';
 import { Bell, ChatCircle, Trash } from '@phosphor-icons/react';
 import { SidebarItem } from '../shared/SettingsSection';
 import { useIsDark } from '../shared/hooks';

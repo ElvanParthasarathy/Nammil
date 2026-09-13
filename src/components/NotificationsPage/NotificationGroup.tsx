@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
-import { Avatar, Box, Collapse, Paper, Stack, Typography } from '@mui/material';
-import { Material3IconButton } from '../shared/Material3IconButton';
+import { Avatar, Box, Collapse, IconButton, Paper, Stack, Typography } from '@mui/material';
 import { CaretDown, CaretUp, ChatCircle, X } from '@phosphor-icons/react';
 import { NotificationItem } from './index';
 import NotificationSingle from './NotificationSingle';
@@ -142,10 +141,10 @@ export default function NotificationGroup({
             )}
 
             {(onClearGroup || onClearSingle) && (
-              <Material3IconButton
+              <IconButton
                 size="small"
                 className="action-btn"
-                onClick={(e: any) => {
+                onClick={(e) => {
                   e.stopPropagation();
                   if (isExpanded && onClearSingle) {
                     onClearSingle(latest.id);
@@ -156,10 +155,11 @@ export default function NotificationGroup({
                 sx={{
                   color: isDark ? '#888' : '#aaa',
                   p: 0.5,
+                  '&:hover': { color: isDark ? '#fff' : '#111', bgcolor: 'transparent' },
                 }}
               >
                 <X size={16} weight="bold" />
-              </Material3IconButton>
+              </IconButton>
             )}
           </Stack>
         </Stack>

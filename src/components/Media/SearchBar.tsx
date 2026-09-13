@@ -1,11 +1,9 @@
 import React from 'react';
-import { Box } from '@mui/material';
+import { Box, OutlinedInput, InputAdornment, Chip } from '@mui/material';
 import { MagnifyingGlass } from '@phosphor-icons/react';
 import { useI18n } from '../../i18n/I18nContext';
 import { k } from '../../i18n/k';
 import { useIsDark } from '../shared/hooks';
-import { Material3TextField } from '../shared/Material3TextField';
-import { Material3Chip } from '../shared/Material3Chip';
 
 interface SearchBarProps {
   searchQuery: string;
@@ -21,18 +19,27 @@ export default function SearchBar({ searchQuery, setSearchQuery, activeFilter, d
 
   return (
     <Box sx={{ mb: 4, display: 'flex', flexDirection: 'column', gap: 2 }}>
-      <Material3TextField
+      <OutlinedInput
         fullWidth
         placeholder={t(k.MEDIA_SEARCH_PLACEHOLDER)}
         value={searchQuery}
         onChange={(e) => setSearchQuery(e.target.value)}
-        leadingIcon={<MagnifyingGlass size={20} color={isDark ? '#888' : '#aaa'} />}
+        size="small"
+        startAdornment={
+          <InputAdornment position="start">
+            <MagnifyingGlass size={20} color={isDark ? '#888' : '#aaa'} />
+          </InputAdornment>
+        }
         sx={{
           bgcolor: isDark ? 'rgba(255,255,255,0.05)' : '#ffffff',
           boxShadow: isDark ? 'none' : '0 4px 20px rgba(0,0,0,0.03)',
           borderRadius: '500px',
+          pl: 2,
           '& fieldset': { border: 'none' },
-          color: 'var(--mac-text)',
+          '&:hover fieldset': { border: 'none' },
+          '&.Mui-focused fieldset': { border: 'none' },
+          '&.Mui-focused': { bgcolor: isDark ? 'rgba(255,255,255,0.1)' : '#ffffff', boxShadow: isDark ? 'none' : '0 4px 20px rgba(0,0,0,0.06)' },
+          '& input': { color: 'var(--mac-text)' }
         }}
       />
 
@@ -45,15 +52,16 @@ export default function SearchBar({ searchQuery, setSearchQuery, activeFilter, d
             { id: 'PPT', label: t(k.MEDIA_FORMAT_PPT) },
             { id: 'Other', label: t(k.MEDIA_FORMAT_OTHER) }
           ].map(f => (
-            <Material3Chip
+            <Chip
               key={f.id}
               label={f.label}
-              selected={docFormatFilter === f.id}
               onClick={() => setDocFormatFilter(f.id)}
               sx={{
                 fontWeight: 600,
                 bgcolor: docFormatFilter === f.id ? (isDark ? '#fff' : '#111b21') : (isDark ? 'rgba(255,255,255,0.05)' : 'rgba(0,0,0,0.05)'),
                 color: docFormatFilter === f.id ? (isDark ? '#000' : '#fff') : 'var(--mac-text)',
+                '&:hover': { bgcolor: docFormatFilter === f.id ? undefined : (isDark ? 'rgba(255,255,255,0.1)' : 'rgba(0,0,0,0.1)') },
+                border: 'none'
               }}
             />
           ))}
