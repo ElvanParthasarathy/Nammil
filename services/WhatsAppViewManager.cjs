@@ -112,19 +112,47 @@ class WhatsAppViewManager {
             if (!_Orig) return;
 
             const _recentAlerts = new Set();
+            const _activeNotifs = new Set();
 
             window.Notification = function(title, options) {
               var opts = Object.assign({}, options || {}, { silent: true });
               const n = new _Orig(title, opts);
 
-              n.addEventListener('click', function() {
+              // 1. Retain strong reference so V8 Garbage Collection never deletes 'n' before click
+              _activeNotifs.add(n);
+              const cleanup = function() {
+                try { _activeNotifs.delete(n); } catch(e){}
+              };
+              n.addEventListener('close', cleanup);
+              setTimeout(cleanup, 300000); // 5-minute safety retention
+
+              // 2. Trigger our bridge on notification click
+              const onTriggerClick = function() {
+                cleanup();
                 try {
                   if (window.__nammilBridge && window.__nammilBridge.onNotificationClick) {
                     window.__nammilBridge.onNotificationClick();
                   }
                 } catch(e) {}
+              };
+
+              n.addEventListener('click', onTriggerClick);
+
+              // 3. Also wrap n.onclick in case WhatsApp Web sets it directly
+              var _origOnClick = null;
+              Object.defineProperty(n, 'onclick', {
+                get: function() { return _origOnClick; },
+                set: function(fn) {
+                  _origOnClick = function(ev) {
+                    onTriggerClick();
+                    if (typeof fn === 'function') fn.call(n, ev);
+                  };
+                },
+                configurable: true,
+                enumerable: true
               });
 
+              // 4. Send new message data to Nammil in-app notification center
               try {
                 const key = title + ':' + (options && options.body || '');
                 if (!_recentAlerts.has(key)) {

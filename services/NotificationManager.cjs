@@ -120,7 +120,9 @@ class NotificationManager {
         }
       }
 
-      if (!accountId) return;
+      if (!accountId && Object.keys(views).length > 0) {
+        accountId = Object.keys(views)[0];
+      }
 
       const mainWindow = this.orchestrator.windowManager.mainWindow;
       if (mainWindow && !mainWindow.isDestroyed()) {
