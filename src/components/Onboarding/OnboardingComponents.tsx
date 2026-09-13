@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
-import { TextField, Button, InputAdornment, IconButton, Box, CircularProgress, Container, useTheme } from '@mui/material';
+import { TextField, Button, InputAdornment, IconButton, Box, Container, useTheme } from '@mui/material';
+import { Material3CircularProgress } from '../shared/Material3Progress';
 import './Onboarding.css';
 
 export const OnboardingLayout = ({ children, hideLogo, maxWidth = "xs" }: { children: React.ReactNode, hideLogo?: boolean, maxWidth?: "xs" | "sm" | "md" | "lg" | "xl" | false }) => {
@@ -169,6 +170,6 @@ export const OnboardingButton = ({ children, onClick, disabled, loading, seconda
             })
         }}
     >
-        {loading ? <CircularProgress size={24} color="inherit" /> : children}
+        {loading ? <Material3CircularProgress size={24} color="inherit" /> : children}
     </Button>
 );

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Box, Button, IconButton } from '@mui/material';
+import { Box } from '@mui/material';
 import { FolderOpen, User, CaretLeft } from '@phosphor-icons/react';
 import { OnboardingLayout, OnboardingHeader, OnboardingInput, OnboardingButton } from './OnboardingComponents';
 import WelcomePhase from './WelcomePhase';

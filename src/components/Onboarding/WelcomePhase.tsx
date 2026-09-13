@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
 import { OnboardingLayout, OnboardingButton } from './OnboardingComponents';
 import { CheckCircle, GlobeHemisphereWest } from '@phosphor-icons/react';
-import { List, ListItem, ListItemButton, ListItemText, ListItemIcon, Divider } from '@mui/material';
+import { List, ListItem, ListItemButton, ListItemText, ListItemIcon } from '@mui/material';
+import { Material3Divider } from '../shared/Material3Divider';
 import { useI18n } from '../../i18n/I18nContext';
 import { k } from '../../i18n/k';
 
@@ -214,7 +215,7 @@ export default function WelcomePhase({ onContinue }: { onContinue: () => void, s
                                                 )}
                                             </ListItemButton>
                                         </ListItem>
-                                        {index < arr.length - 1 && <Divider sx={{ mx: 3, borderColor: 'var(--onboarding-divider)' }} />}
+                                        {index < arr.length - 1 && <Material3Divider sx={{ mx: 3, borderColor: 'var(--onboarding-divider)' }} />}
                                     </React.Fragment>
                                 ))}
                             </List>
