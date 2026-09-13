@@ -122,7 +122,7 @@ export function AboutAppTab() {
   const { t } = useI18n();
   const isDark = useIsDark();
   const isDesktopWide = useMediaQuery('(min-width: 1200px)');
-  const [version, setVersion] = useState('v2.2.0');
+  const [version, setVersion] = useState('v2.5.11');
 
   useEffect(() => {
     if ((window as any).electronAPI && (window as any).electronAPI.getAppVersion) {
@@ -252,7 +252,7 @@ export function AboutAppTab() {
 export function BrandTab() {
   const { t } = useI18n();
   const isDark = useIsDark();
-  const [version, setVersion] = useState('v2.2.0');
+  const [version, setVersion] = useState('v2.5.11');
 
   useEffect(() => {
     if ((window as any).electronAPI && (window as any).electronAPI.getAppVersion) {
