@@ -410,7 +410,7 @@ export const ta = {
     ta: 'பதிப்பு',
   },
   [k.ABOUT_PARENT_BRAND]: {
-    ta: 'தாய் நிறுவனம்',
+    ta: 'ஒரு பகுதி',
   },
   [k.ABOUT_PARENT_BRAND_NAME]: {
     ta: 'எல்வன் நவில்',

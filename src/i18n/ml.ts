@@ -542,8 +542,8 @@ export const ml = {
     latn: 'Pathippu',
   },
   [k.ABOUT_PARENT_BRAND]: {
-    ml: 'മാതൃ ബ്രാൻഡ്',
-    latn: 'Mathru Brand',
+    ml: 'ഒരു ഭാഗം',
+    latn: 'Part of',
   },
   [k.ABOUT_PARENT_BRAND_NAME]: {
     ml: 'എൽവൻ നവിൽ',
