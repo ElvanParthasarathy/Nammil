@@ -32,7 +32,7 @@ export default function MediaGrid({ groupedMedia, hasMore, onLoadMore }: MediaGr
           <Box sx={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: 3 }}>
             {groupedMedia[date].map((item: any, i: number) => (
               <MediaCard 
-                key={i} 
+                key={item.id || item.filePath || i} 
                 item={item} 
               />
             ))}

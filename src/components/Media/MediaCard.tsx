@@ -20,7 +20,7 @@ import { k } from '../../i18n/k';
 import { useIsDark } from '../shared/hooks';
 import PdfThumbnail from './PdfThumbnail';
 import { getMediaUrl, getThumbUrl, isImageFile, isPdfFile, isOfficeFile, handleOpenSystem } from './mediaUtils';
-export default function MediaCard({ item }: { item: any }) {
+export default React.memo(function MediaCard({ item }: { item: any }) {
   const formatSize = (bytes: number) => {
     if (!bytes) return t(k.MEDIA_UNKNOWN_SIZE);
     if (bytes < 1024) return bytes + ' B';
@@ -178,4 +178,4 @@ export default function MediaCard({ item }: { item: any }) {
       </Box>
     </Box>
   );
-}
+});

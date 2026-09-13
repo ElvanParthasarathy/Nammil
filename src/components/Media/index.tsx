@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from 'react';
-import { Box, Button, Typography, Slide } from '@mui/material';
+import React, { useState, useEffect, useMemo, useCallback, useRef } from 'react';
+import { Box } from '@mui/material';
 import { useI18n } from '../../i18n/I18nContext';
 import { k } from '../../i18n/k';
 import DualPanelLayout from '../shared/DualPanelLayout';
@@ -18,8 +18,19 @@ export default function MediaLibrary({ accounts }: any) {
   const [activeFilter, setActiveFilter] = useState('All');
   const [docFormatFilter, setDocFormatFilter] = useState('All');
   const [searchQuery, setSearchQuery] = useState('');
+  const [debouncedSearch, setDebouncedSearch] = useState('');
   const [mediaItems, setMediaItems] = useState([]);
   const [visibleCount, setVisibleCount] = useState(50);
+
+  // Debounce search: only update the filter pipeline 300ms after the user stops typing
+  const debounceRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  useEffect(() => {
+    if (debounceRef.current) clearTimeout(debounceRef.current);
+    debounceRef.current = setTimeout(() => {
+      setDebouncedSearch(searchQuery);
+    }, 300);
+    return () => { if (debounceRef.current) clearTimeout(debounceRef.current); };
+  }, [searchQuery]);
 
   const fetchMedia = async () => {
     if ((window as any).electronAPI) {
@@ -33,39 +44,50 @@ export default function MediaLibrary({ accounts }: any) {
     fetchMedia();
   }, [activeAccount, activeFilter]);
 
-  const filteredMedia = mediaItems.filter((item: any) => {
-    if (searchQuery && !item.fileName.toLowerCase().includes(searchQuery.toLowerCase())) return false;
-    if (activeFilter === 'Documents' && docFormatFilter !== 'All') {
-      const ext = getFileExtension(item.fileName);
-      if (docFormatFilter === 'PDF' && ext !== 'pdf') return false;
-      if (docFormatFilter === 'Word' && !ext.match(/^(doc|docx)$/)) return false;
-      if (docFormatFilter === 'PPT' && !ext.match(/^(ppt|pptx)$/)) return false;
-      if (docFormatFilter === 'Other' && ext.match(/^(pdf|doc|docx|ppt|pptx)$/)) return false;
-    }
-    return true;
-  }).sort((a: any, b: any) => new Date(b.date || b.downloadedAt || b.createdAt || Date.now()).getTime() - new Date(a.date || a.downloadedAt || a.createdAt || Date.now()).getTime());
+  // Memoize the expensive filter + sort pipeline so it only runs when inputs actually change
+  const filteredMedia = useMemo(() => {
+    return mediaItems.filter((item: any) => {
+      if (debouncedSearch && !item.fileName.toLowerCase().includes(debouncedSearch.toLowerCase())) return false;
+      if (activeFilter === 'Documents' && docFormatFilter !== 'All') {
+        const ext = getFileExtension(item.fileName);
+        if (docFormatFilter === 'PDF' && ext !== 'pdf') return false;
+        if (docFormatFilter === 'Word' && !ext.match(/^(doc|docx)$/)) return false;
+        if (docFormatFilter === 'PPT' && !ext.match(/^(ppt|pptx)$/)) return false;
+        if (docFormatFilter === 'Other' && ext.match(/^(pdf|doc|docx|ppt|pptx)$/)) return false;
+      }
+      return true;
+    }).sort((a: any, b: any) => new Date(b.date || b.downloadedAt || b.createdAt || Date.now()).getTime() - new Date(a.date || a.downloadedAt || a.createdAt || Date.now()).getTime());
+  }, [mediaItems, debouncedSearch, activeFilter, docFormatFilter]);
 
   const paginatedMedia = filteredMedia.slice(0, visibleCount);
 
-  const groupedMedia = paginatedMedia.reduce((acc: any, item: any) => {
-    const d = new Date(item.date || item.downloadedAt || item.createdAt || Date.now());
-    const today = new Date();
-    const yesterday = new Date(today);
-    yesterday.setDate(yesterday.getDate() - 1);
-    
-    let dateKey = '';
-    if (d.toDateString() === today.toDateString()) {
-      dateKey = t(k.DATE_TODAY) || 'Today';
-    } else if (d.toDateString() === yesterday.toDateString()) {
-      dateKey = t(k.DATE_YESTERDAY) || 'Yesterday';
-    } else {
-      dateKey = d.toLocaleDateString(undefined, { weekday: 'short', month: 'short', day: 'numeric', year: 'numeric' });
-    }
-    
-    if (!acc[dateKey]) acc[dateKey] = [];
-    acc[dateKey].push(item);
-    return acc;
-  }, {});
+  // Memoize date grouping so it only recalculates when the visible slice changes
+  const groupedMedia = useMemo(() => {
+    return paginatedMedia.reduce((acc: any, item: any) => {
+      const d = new Date(item.date || item.downloadedAt || item.createdAt || Date.now());
+      const today = new Date();
+      const yesterday = new Date(today);
+      yesterday.setDate(yesterday.getDate() - 1);
+      
+      let dateKey = '';
+      if (d.toDateString() === today.toDateString()) {
+        dateKey = t(k.DATE_TODAY) || 'Today';
+      } else if (d.toDateString() === yesterday.toDateString()) {
+        dateKey = t(k.DATE_YESTERDAY) || 'Yesterday';
+      } else {
+        dateKey = d.toLocaleDateString(undefined, { weekday: 'short', month: 'short', day: 'numeric', year: 'numeric' });
+      }
+      
+      if (!acc[dateKey]) acc[dateKey] = [];
+      acc[dateKey].push(item);
+      return acc;
+    }, {});
+  }, [paginatedMedia, t]);
+
+  // Stable callback reference so InfiniteSentinel doesn't re-mount on every render
+  const handleLoadMore = useCallback(() => {
+    setVisibleCount(prev => prev + 50);
+  }, []);
 
   const sidebar = (
     <MediaSidebar
@@ -89,7 +111,7 @@ export default function MediaLibrary({ accounts }: any) {
       <MediaGrid 
         groupedMedia={groupedMedia} 
         hasMore={visibleCount < filteredMedia.length}
-        onLoadMore={() => setVisibleCount(prev => prev + 50)}
+        onLoadMore={handleLoadMore}
       />
     </Box>
   );
