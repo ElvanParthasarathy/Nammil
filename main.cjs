@@ -37,55 +37,60 @@ if (isDev) {
 const gotTheLock = app.requestSingleInstanceLock({ mode: isDev ? 'dev' : 'release' });
 if (!gotTheLock) {
   app.quit();
-  process.exit(0);
-}
+} else {
+  // 2. Set Windows AppUserModelId for Native Windows Toast Notifications
+  app.setAppUserModelId(APP_ID);
 
-// 2. Set Windows AppUserModelId for Native Windows Toast Notifications
-app.setAppUserModelId(APP_ID);
+  // 3. Register Privileged Protocol Scheme for custom fonts, icons, and thumbnails
+  protocol.registerSchemesAsPrivileged([
+    { scheme: 'nammil', privileges: { standard: true, secure: true, supportFetchAPI: true, bypassCSP: true, corsEnabled: true, stream: true } }
+  ]);
 
-// 3. Register Privileged Protocol Scheme for custom fonts, icons, and thumbnails
-protocol.registerSchemesAsPrivileged([
-  { scheme: 'nammil', privileges: { standard: true, secure: true, supportFetchAPI: true, bypassCSP: true, corsEnabled: true, stream: true } }
-]);
-
-// 3.5. Read settings to force global browser language
-try {
-  const settingsPath = path.join(app.getPath('userData'), 'nammil_settings.json');
-  if (fs.existsSync(settingsPath)) {
-    const settings = JSON.parse(fs.readFileSync(settingsPath, 'utf8'));
-    if (settings.language && settings.language !== 'system') {
-      let langCode = 'en-US';
-      if (settings.language.startsWith('ta')) langCode = 'ta';
-      else if (settings.language.startsWith('ml')) langCode = 'ml';
-      app.commandLine.appendSwitch('lang', langCode);
-    }
-  }
-} catch (e) {
-  console.error('[Nammil] Early language sync failed:', e);
-}
-
-let orchestrator = null;
-
-// 4. Handle second-instance launch (bring running Nammil instance to front)
-app.on('second-instance', () => {
-  if (orchestrator && orchestrator.windowManager && orchestrator.windowManager.mainWindow) {
-    const mainWindow = orchestrator.windowManager.mainWindow;
-    if (mainWindow.isMinimized()) mainWindow.restore();
-    mainWindow.show();
-    mainWindow.setAlwaysOnTop(true);
-    mainWindow.focus();
-    setTimeout(() => {
-      if (mainWindow && !mainWindow.isDestroyed()) {
-        mainWindow.setAlwaysOnTop(false);
+  // 3.5. Read settings to force global browser language
+  try {
+    const settingsPath = path.join(app.getPath('userData'), 'nammil_settings.json');
+    if (fs.existsSync(settingsPath)) {
+      const settings = JSON.parse(fs.readFileSync(settingsPath, 'utf8'));
+      if (settings.language && settings.language !== 'system') {
+        let langCode = 'en-US';
+        if (settings.language.startsWith('ta')) langCode = 'ta';
+        else if (settings.language.startsWith('ml')) langCode = 'ml';
+        app.commandLine.appendSwitch('lang', langCode);
       }
-    }, 300);
+    }
+  } catch (e) {
+    console.error('[Nammil] Early language sync failed:', e);
   }
-});
 
-// 5. Boot the Orchestrator on App Ready
-app.whenReady().then(() => {
-  orchestrator = new AppOrchestrator(app).init();
-});
+  let orchestrator = null;
+
+  // 4. Handle second-instance launch (bring running Nammil instance to front)
+  app.on('second-instance', () => {
+    if (orchestrator && orchestrator.windowManager && orchestrator.windowManager.mainWindow) {
+      const mainWindow = orchestrator.windowManager.mainWindow;
+      if (!mainWindow.isDestroyed()) {
+        if (mainWindow.isMinimized()) mainWindow.restore();
+        mainWindow.show();
+        mainWindow.restore();
+        mainWindow.setAlwaysOnTop(true);
+        mainWindow.focus();
+        setTimeout(() => {
+          if (mainWindow && !mainWindow.isDestroyed()) {
+            mainWindow.setAlwaysOnTop(false);
+          }
+        }, 300);
+        if (orchestrator.whatsAppViewManager) {
+          orchestrator.whatsAppViewManager.resizeViews();
+        }
+      }
+    }
+  });
+
+  // 5. Boot the Orchestrator on App Ready
+  app.whenReady().then(() => {
+    orchestrator = new AppOrchestrator(app).init();
+  });
+}
 
 // 6. Handle Quit & Close Events
 app.on('window-all-closed', () => {

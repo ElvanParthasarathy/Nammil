@@ -1,5 +1,5 @@
 #define MyAppName "Nammil"
-#define MyAppVersion "1.1.7"
+#define MyAppVersion "1.1.8"
 #define MyAppPublisher "Elvan Navil"
 #define MyAppExeName "Nammil.exe"
 #define MyOutputDir "build-release"
@@ -41,7 +41,7 @@ Name: "desktopicon"; Description: "{cm:CreateDesktopIcon}"; GroupDescription: "{
 
 [Files]
 Source: "build-release\win-unpacked\{#MyAppExeName}"; DestDir: "{app}"; Flags: ignoreversion
-Source: "build-release\win-unpacked\resources\app-update.yml"; DestDir: "{app}\resources"; Flags: ignoreversion
+Source: "build-release\win-unpacked\resources\app-update.yml"; DestDir: "{app}\resources"; Flags: ignoreversion skipifsourcedoesntexist
 Source: "build-release\win-unpacked\*"; DestDir: "{app}"; Flags: ignoreversion recursesubdirs createallsubdirs
 
 [InstallDelete]
@@ -56,8 +56,8 @@ Name: "{autoprograms}\{#MyAppName}"; Filename: "{app}\{#MyAppExeName}"
 Name: "{autodesktop}\{#MyAppName}"; Filename: "{app}\{#MyAppExeName}"; Tasks: desktopicon
 
 [Run]
-Filename: "{app}\{#MyAppExeName}"; Description: "{cm:LaunchProgram,{#StringChange(MyAppName, '&', '&&')}}"; Flags: nowait postinstall skipifsilent
-Filename: "{app}\{#MyAppExeName}"; Flags: nowait skipifnotsilent
+Filename: "{app}\{#MyAppExeName}"; Description: "{cm:LaunchProgram,{#StringChange(MyAppName, '&', '&&')}}"; Flags: nowait postinstall skipifsilent runasoriginaluser
+Filename: "{app}\{#MyAppExeName}"; Flags: nowait skipifnotsilent runasoriginaluser
 
 [UninstallDelete]
 Type: filesandordirs; Name: "{app}"
