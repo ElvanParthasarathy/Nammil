@@ -8,6 +8,7 @@ const TrayManager = require('./TrayManager.cjs');
 const WhatsAppViewManager = require('./WhatsAppViewManager.cjs');
 const NotificationManager = require('./NotificationManager.cjs');
 const DownloadManager = require('./DownloadManager.cjs');
+const UpdateManager = require('./UpdateManager.cjs');
 
 class AppOrchestrator {
   constructor(app) {
@@ -18,6 +19,7 @@ class AppOrchestrator {
     this.whatsAppViewManager = null;
     this.notificationManager = null;
     this.downloadManager = null;
+    this.updateManager = null;
   }
 
   init() {
@@ -30,6 +32,7 @@ class AppOrchestrator {
     this.whatsAppViewManager = new WhatsAppViewManager(this.app, this);
     this.notificationManager = new NotificationManager(this.app, this);
     this.downloadManager = new DownloadManager(this.app, this);
+    this.updateManager = new UpdateManager(this.app, this).init();
 
     // 2. Register Protocols
     this.downloadManager.registerProtocols(protocol, nativeImage, net);
@@ -43,6 +46,7 @@ class AppOrchestrator {
     this.downloadManager.registerIPC(ipcMain, shell);
     this.notificationManager.registerIPC(ipcMain, dialog);
     this.whatsAppViewManager.registerIPC(ipcMain);
+    this.updateManager.registerIPC(ipcMain);
 
     ipcMain.on('restart-app', () => {
       this.app.isQuitting = true;

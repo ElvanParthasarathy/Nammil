@@ -208,4 +208,16 @@ export const en = {
   [k.NOTIF_EMPTY_MSG_ALL]: 'New message notifications from your WhatsApp accounts will appear here.',
   [k.NOTIF_EMPTY_MSG_SINGLE]: 'New message notifications from {account} will appear here.',
   [k.BTN_CLEAR]: 'Clear',
+
+  // App Updates
+  [k.ABOUT_UPDATE_TITLE]: 'App Updates',
+  [k.ABOUT_UPDATE_CHECKING]: 'Checking for updates...',
+  [k.ABOUT_UPDATE_UP_TO_DATE]: 'Nammil is up to date',
+  [k.ABOUT_UPDATE_AVAILABLE]: 'Update available',
+  [k.ABOUT_UPDATE_DOWNLOADING]: 'Downloading update...',
+  [k.ABOUT_UPDATE_READY]: 'Update downloaded! Relaunch to apply.',
+  [k.ABOUT_UPDATE_BTN_CHECK]: 'Check for updates',
+  [k.ABOUT_UPDATE_BTN_RELAUNCH]: 'Relaunch',
+  [k.ABOUT_UPDATE_DEV_MODE]: 'Running in development mode',
+  [k.ABOUT_UPDATE_ERROR]: 'Could not check for updates',
 };

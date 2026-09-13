@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Box, Typography, ButtonBase, useMediaQuery } from '@mui/material';
+import { Box, Typography, ButtonBase, useMediaQuery, CircularProgress, LinearProgress } from '@mui/material';
 import MaterialSymbol from '../shared/MaterialSymbol';
 import { useI18n } from '../../i18n/I18nContext';
 import { k } from '../../i18n/k';
@@ -123,6 +123,12 @@ export function AboutAppTab() {
   const isDark = useIsDark();
   const isDesktopWide = useMediaQuery('(min-width: 1200px)');
   const [version, setVersion] = useState(`v${pkg.version}`);
+  const [updateStatus, setUpdateStatus] = useState<any>({
+    status: 'idle',
+    percent: 0,
+    newVersion: '',
+    error: null,
+  });
 
   useEffect(() => {
     if ((window as any).electronAPI && (window as any).electronAPI.getAppVersion) {
@@ -130,7 +136,45 @@ export function AboutAppTab() {
         if (v && v !== '2.2.0') setVersion(`v${v}`);
       });
     }
+
+    const api = (window as any).electronAPI;
+    if (!api) return;
+
+    if (api.getUpdateStatus) {
+      api.getUpdateStatus().then((s: any) => {
+        if (s) {
+          setUpdateStatus(s);
+          if (s.status === 'idle' && api.checkForUpdates) {
+            api.checkForUpdates();
+          }
+        }
+      });
+    }
+
+    if (api.onUpdateStatus) {
+      const unsub = api.onUpdateStatus((s: any) => {
+        if (s) setUpdateStatus(s);
+      });
+      return () => {
+        if (unsub) unsub();
+      };
+    }
   }, []);
+
+  const handleCheckUpdates = () => {
+    const api = (window as any).electronAPI;
+    if (api && api.checkForUpdates) {
+      setUpdateStatus((prev: any) => ({ ...prev, status: 'checking', error: null }));
+      api.checkForUpdates();
+    }
+  };
+
+  const handleRelaunch = () => {
+    const api = (window as any).electronAPI;
+    if (api && api.restartAndInstall) {
+      api.restartAndInstall();
+    }
+  };
 
   return (
     <Box sx={{ width: '100%' }}>
@@ -174,6 +218,123 @@ export function AboutAppTab() {
           {version}
         </Typography>
       </Box>
+
+      {/* App Updates (Chrome-style) */}
+      <SettingsSection title={t(k.ABOUT_UPDATE_TITLE)} sx={{ mb: 2 }}>
+        <Box sx={{ p: '18px 20px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 2 }}>
+          <Box sx={{ display: 'flex', alignItems: 'center', gap: 2, minWidth: 0, flex: 1 }}>
+            {/* Status Icon */}
+            <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', width: 28, height: 28, flexShrink: 0 }}>
+              {updateStatus.status === 'checking' ? (
+                <CircularProgress size={20} thickness={4.5} sx={{ color: 'var(--mac-text)' }} />
+              ) : updateStatus.status === 'downloaded' ? (
+                <MaterialSymbol icon="check_circle" size={24} fill={true} style={{ color: '#00c853' }} />
+              ) : updateStatus.status === 'not-available' ? (
+                <MaterialSymbol icon="check_circle" size={24} fill={true} style={{ color: '#00c853' }} />
+              ) : updateStatus.status === 'available' || updateStatus.status === 'downloading' ? (
+                <MaterialSymbol icon="downloading" size={24} fill={true} style={{ color: '#2196f3' }} />
+              ) : updateStatus.status === 'error' ? (
+                <MaterialSymbol icon="error" size={24} fill={true} style={{ color: '#f44336' }} />
+              ) : (
+                <MaterialSymbol icon="system_update" size={24} fill={true} />
+              )}
+            </Box>
+
+            {/* Status Text & Progress */}
+            <Box sx={{ minWidth: 0, flex: 1 }}>
+              <Typography sx={{ fontSize: '14px', fontWeight: 600, color: 'var(--mac-text)', lineHeight: 1.3 }}>
+                {updateStatus.status === 'checking' && t(k.ABOUT_UPDATE_CHECKING)}
+                {updateStatus.status === 'not-available' && t(k.ABOUT_UPDATE_UP_TO_DATE)}
+                {updateStatus.status === 'available' && `${t(k.ABOUT_UPDATE_AVAILABLE)} (v${updateStatus.newVersion})`}
+                {updateStatus.status === 'downloading' && `${t(k.ABOUT_UPDATE_DOWNLOADING)} (${updateStatus.percent || 0}%)`}
+                {updateStatus.status === 'downloaded' && t(k.ABOUT_UPDATE_READY)}
+                {updateStatus.status === 'error' && t(k.ABOUT_UPDATE_ERROR)}
+                {updateStatus.status === 'idle' && `${t(k.BRAND_NAME)} ${version}`}
+              </Typography>
+
+              <Typography sx={{ fontSize: '12px', color: 'var(--mac-text-secondary)', mt: 0.25, opacity: 0.8 }}>
+                {updateStatus.isDev
+                  ? t(k.ABOUT_UPDATE_DEV_MODE)
+                  : updateStatus.status === 'not-available'
+                  ? `${t(k.BRAND_NAME)} ${version}`
+                  : updateStatus.status === 'error' && updateStatus.error
+                  ? String(updateStatus.error)
+                  : updateStatus.newVersion
+                  ? `v${updateStatus.newVersion}`
+                  : version}
+              </Typography>
+
+              {updateStatus.status === 'downloading' && (
+                <LinearProgress
+                  variant="determinate"
+                  value={updateStatus.percent || 0}
+                  sx={{
+                    mt: 1.25,
+                    height: 6,
+                    borderRadius: 3,
+                    bgcolor: isDark ? 'rgba(255,255,255,0.1)' : 'rgba(0,0,0,0.06)',
+                    '& .MuiLinearProgress-bar': {
+                      borderRadius: 3,
+                      bgcolor: isDark ? '#fff' : '#111b21',
+                    },
+                  }}
+                />
+              )}
+            </Box>
+          </Box>
+
+          {/* Action Button */}
+          {updateStatus.status === 'downloaded' ? (
+            <ButtonBase
+              onClick={handleRelaunch}
+              sx={{
+                px: 2.25,
+                py: 0.85,
+                borderRadius: '50px',
+                bgcolor: '#00c853',
+                color: '#000',
+                fontSize: '13px',
+                fontWeight: 700,
+                fontFamily: 'inherit',
+                flexShrink: 0,
+                transition: 'background-color 0.2s',
+                '&:hover': { bgcolor: '#00b248' },
+              }}
+            >
+              {t(k.ABOUT_UPDATE_BTN_RELAUNCH)}
+            </ButtonBase>
+          ) : (
+            <ButtonBase
+              onClick={handleCheckUpdates}
+              disabled={updateStatus.status === 'checking' || updateStatus.status === 'downloading'}
+              sx={{
+                px: 2.25,
+                py: 0.85,
+                borderRadius: '50px',
+                bgcolor: isDark ? 'rgba(255, 255, 255, 0.1)' : 'rgba(0, 0, 0, 0.08)',
+                color: 'var(--mac-text)',
+                fontSize: '13px',
+                fontWeight: 600,
+                fontFamily: 'inherit',
+                flexShrink: 0,
+                opacity: updateStatus.status === 'checking' || updateStatus.status === 'downloading' ? 0.6 : 1,
+                cursor: updateStatus.status === 'checking' || updateStatus.status === 'downloading' ? 'default' : 'pointer',
+                transition: 'background-color 0.2s',
+                '&:hover': {
+                  bgcolor:
+                    updateStatus.status === 'checking' || updateStatus.status === 'downloading'
+                      ? undefined
+                      : isDark
+                      ? 'rgba(255, 255, 255, 0.15)'
+                      : 'rgba(0, 0, 0, 0.12)',
+                },
+              }}
+            >
+              {t(k.ABOUT_UPDATE_BTN_CHECK)}
+            </ButtonBase>
+          )}
+        </Box>
+      </SettingsSection>
 
       {/* What is Nammil? */}
       <SettingsSection title={t(k.ABOUT_WHAT_IS_NAMMIL)} sx={{ mb: 2 }}>

@@ -66,4 +66,14 @@ contextBridge.exposeInMainWorld('electronAPI', {
   },
   isWhatsAppReady: (accountId) => ipcRenderer.invoke('is-whatsapp-ready', accountId),
   openExternal: (url) => ipcRenderer.send('open-external', url),
+
+  // ── Auto-Update APIs ──
+  checkForUpdates: () => ipcRenderer.invoke('check-for-updates'),
+  getUpdateStatus: () => ipcRenderer.invoke('get-update-status'),
+  restartAndInstall: () => ipcRenderer.send('restart-and-install'),
+  onUpdateStatus: (callback) => {
+    const handler = (_event, status) => callback(status);
+    ipcRenderer.on('update-status-changed', handler);
+    return () => ipcRenderer.removeListener('update-status-changed', handler);
+  },
 });

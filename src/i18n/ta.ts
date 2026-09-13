@@ -564,4 +564,34 @@ export const ta = {
   [k.BTN_CLEAR]: {
     ta: 'அகற்று',
   },
+  [k.ABOUT_UPDATE_TITLE]: {
+    ta: 'செயலி புதுப்பிப்புகள்',
+  },
+  [k.ABOUT_UPDATE_CHECKING]: {
+    ta: 'புதுப்பிப்புகளைத் தேடுகிறது...',
+  },
+  [k.ABOUT_UPDATE_UP_TO_DATE]: {
+    ta: 'நம்மில் அண்மைப் பதிப்பில் உள்ளது',
+  },
+  [k.ABOUT_UPDATE_AVAILABLE]: {
+    ta: 'புதிய பதிப்பு கிடைக்கிறது',
+  },
+  [k.ABOUT_UPDATE_DOWNLOADING]: {
+    ta: 'புதுப்பிப்பைப் பதிவிறக்குகிறது...',
+  },
+  [k.ABOUT_UPDATE_READY]: {
+    ta: 'புதுப்பிப்பு நிறுவத் தயாராக உள்ளது. ஏற்க மறுதொடக்கம் செய்யவும்.',
+  },
+  [k.ABOUT_UPDATE_BTN_CHECK]: {
+    ta: 'சரிபார்க்கவும்',
+  },
+  [k.ABOUT_UPDATE_BTN_RELAUNCH]: {
+    ta: 'மறுதொடக்கம் செய்',
+  },
+  [k.ABOUT_UPDATE_DEV_MODE]: {
+    ta: 'உருவாக்க முறையில் இயங்குகிறது',
+  },
+  [k.ABOUT_UPDATE_ERROR]: {
+    ta: 'புதுப்பிப்புகளைச் சரிபார்க்க முடியவில்லை',
+  },
 };

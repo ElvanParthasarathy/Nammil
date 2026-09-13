@@ -751,4 +751,44 @@ export const ml = {
     ml: 'മായ്ക്കുക',
     latn: 'Maaykkuka',
   },
+  [k.ABOUT_UPDATE_TITLE]: {
+    ml: 'ആപ്പ് അപ്ഡേറ്റുകൾ',
+    latn: 'App Updates',
+  },
+  [k.ABOUT_UPDATE_CHECKING]: {
+    ml: 'അപ്ഡേറ്റുകൾ പരിശോധിക്കുന്നു...',
+    latn: 'Updates parishodhikkunnu...',
+  },
+  [k.ABOUT_UPDATE_UP_TO_DATE]: {
+    ml: 'നമ്മിൽ ഏറ്റവും പുതിയ പതിപ്പിലാണ്',
+    latn: 'Nammil ettavum puthiya pathippilaanu',
+  },
+  [k.ABOUT_UPDATE_AVAILABLE]: {
+    ml: 'പുതിയ പതിപ്പ് ലഭ്യമാണ്',
+    latn: 'Puthiya pathippu labhyamaanu',
+  },
+  [k.ABOUT_UPDATE_DOWNLOADING]: {
+    ml: 'അപ്ഡേറ്റ് ഡൗൺലോഡ് ചെയ്യുന്നു...',
+    latn: 'Update download cheyyunnu...',
+  },
+  [k.ABOUT_UPDATE_READY]: {
+    ml: 'അപ്ഡേറ്റ് തയ്യാറാണ്. മാറ്റങ്ങൾ വരുത്താൻ വീണ്ടും ആരംഭിക്കുക.',
+    latn: 'Update thayyaaranu. Re-open cheyyuka.',
+  },
+  [k.ABOUT_UPDATE_BTN_CHECK]: {
+    ml: 'പരിശോധിക്കുക',
+    latn: 'Parishodhikkuka',
+  },
+  [k.ABOUT_UPDATE_BTN_RELAUNCH]: {
+    ml: 'റീസ്റ്റാർട്ട് ചെയ്യുക',
+    latn: 'Restart Cheyyuka',
+  },
+  [k.ABOUT_UPDATE_DEV_MODE]: {
+    ml: 'ഡെവലപ്‌മെന്റ് മോഡിൽ പ്രവർത്തിക്കുന്നു',
+    latn: 'Development modil pravartthikkunnu',
+  },
+  [k.ABOUT_UPDATE_ERROR]: {
+    ml: 'അപ്ഡേറ്റുകൾ പരിശോധിക്കാൻ കഴിഞ്ഞില്ല',
+    latn: 'Updates parishodhikkaan kazhinjilla',
+  },
 };

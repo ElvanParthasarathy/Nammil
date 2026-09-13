@@ -21,6 +21,11 @@
   "build": {
     "appId": "com.nammil.app",
     "productName": "Nammil",
+    "publish": {
+      "provider": "github",
+      "owner": "ElvanParthasarathy",
+      "repo": "Nammil"
+    },
     "directories": {
       "output": "build-release"
     },
@@ -70,6 +75,7 @@
     "@mui/material": "^9.2.0",
     "adm-zip": "^0.6.0",
     "better-sqlite3": "^13.0.1",
+    "electron-updater": "^6.8.9",
     "pdfjs-dist": "^6.1.200",
     "react": "^19.2.8",
     "react-dom": "^19.2.8",
