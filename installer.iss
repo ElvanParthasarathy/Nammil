@@ -1,9 +1,9 @@
 #define MyAppName "Nammil"
-#define MyAppVersion "1.2.7"
+#define MyAppVersion "1.2.8"
 #define MyAppPublisher "Elvan Navil"
 #define MyAppExeName "Nammil.exe"
 #define MyOutputDir "build-release"
-#define MyAppURL "https://nammil.elvan.dev"
+#define MyAppURL "https://elvannavil.vercel.app"
 #define MyAppId "com.nammil.app"
 
 [Setup]
