@@ -231,7 +231,7 @@ export const en = {
   [k.ABOUT_DEV_ROLE]: 'Founder & Developer • Elvan Navil',
   [k.ABOUT_LICENSE_TITLE]: 'Open Source & License',
   [k.ABOUT_LICENSE_TYPE]: 'MIT License',
-  [k.ABOUT_LICENSE_DESC]: 'Free & open-source software under Elvan Parthasarathy / Elvan Navil',
+  [k.ABOUT_LICENSE_DESC]: 'Free & open-source software under the Elvan Navil brand',
   [k.ABOUT_SOURCE_CODE]: 'Source Code',
   [k.ABOUT_SOURCE_CODE_DESC]: 'github.com/ElvanParthasarathy/Nammil',
   [k.ABOUT_ISSUES]: 'Report an Issue',
@@ -242,4 +242,6 @@ export const en = {
   [k.ABOUT_TERMS_DISCLAIMER]: 'Nammil is an independent open-source desktop companion developed by Elvan Parthasarathy under the Elvan Navil brand. WhatsApp is a registered trademark of WhatsApp LLC and Meta Platforms, Inc. Nammil is not affiliated with, endorsed, sponsored, or certified by WhatsApp or Meta. All WhatsApp Web sessions, messages, and files remain strictly between your device and WhatsApp servers.',
   [k.ABOUT_TERMS_PRIVACY]: '100% Local & Offline Privacy',
   [k.ABOUT_TERMS_PRIVACY_DESC]: 'Nammil has zero telemetry. No messages, session cookies, media, or analytics are ever uploaded to any external server.',
+  [k.ABOUT_BRAND_CREATOR_TITLE]: 'FOUNDER & DEVELOPER',
+  [k.ABOUT_BRAND_CREATOR_DESC]: 'Conceived and architected by Elvan Parthasarathy under the Elvan Navil ecosystem.',
 };

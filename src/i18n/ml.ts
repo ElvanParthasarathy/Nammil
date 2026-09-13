@@ -824,7 +824,7 @@ export const ml = {
     latn: 'MIT License',
   },
   [k.ABOUT_LICENSE_DESC]: {
-    ml: 'എൽവൻ പാർത്ഥസാരഥി / എൽവൻ നവിൽ കീഴിലുള്ള സൗജന്യ ഓപ്പൺ സോഴ്സ് സോഫ്റ്റ്‌വെയർ',
+    ml: 'എൽവൻ നവിൽ ബ്രാൻഡിന് കീഴിലുള്ള സൗജന്യ ഓപ്പൺ സോഴ്സ് സോഫ്റ്റ്‌വെയർ',
     latn: 'Free & open-source software under Elvan Navil',
   },
   [k.ABOUT_SOURCE_CODE]: {
@@ -866,5 +866,13 @@ export const ml = {
   [k.ABOUT_TERMS_PRIVACY_DESC]: {
     ml: 'നമ്മിൽ യാതൊരു വിവരങ്ങളും പുറത്തേക്ക് അയക്കുന്നില്ല. എല്ലാം നിങ്ങളുടെ കമ്പ്യൂട്ടറിൽ പൂർണ്ണമായും സുരക്ഷിതമാണ്.',
     latn: 'Zero telemetry. All data remains strictly local.',
+  },
+  [k.ABOUT_BRAND_CREATOR_TITLE]: {
+    ml: 'സ്ഥാപകനും ഡെവലപ്പറും',
+    latn: 'Founder & Lead Developer',
+  },
+  [k.ABOUT_BRAND_CREATOR_DESC]: {
+    ml: 'എൽവൻ നവിൽ ഡിജിറ്റൽ സംരംഭങ്ങളുടെ ഉപജ്ഞാതാവ് എൽവൻ പാർത്ഥസാരഥി.',
+    latn: 'Conceived and architected by Elvan Parthasarathy under Elvan Navil.',
   },
 };

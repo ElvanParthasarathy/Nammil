@@ -1,4 +1,4 @@
-﻿<div align="center">
+<div align="center">
   <img src="public/app_icon.png" alt="Nammil Logo" width="108" />
   <h1>Nammil (நம்மில்)</h1>
   <p><strong>A beautifully crafted, privacy-focused desktop companion for WhatsApp featuring multi-account sessions, automated media organization, and native notifications.</strong></p>
@@ -166,4 +166,4 @@ The final standalone installer will be generated at:
 
 This project is licensed under the **MIT License** — see the [LICENSE](LICENSE) file for details.
 
-Copyright © 2026 **Elvan Parthasarathy / Elvan Navil**. All rights reserved.
+Copyright © 2026 **Elvan Navil**. All rights reserved.
