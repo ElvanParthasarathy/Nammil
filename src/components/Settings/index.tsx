@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Box, Typography, IconButton, Menu, MenuItem } from '@mui/material';
-import { ChatCircle, Palette, Translate, CaretLeft, Gear, DotsThreeVertical, HardDrives, Bell, Info, Code, Sparkle } from '@phosphor-icons/react';
+import MaterialSymbol from '../shared/MaterialSymbol';
 import { useI18n } from '../../i18n/I18nContext';
 import { k } from '../../i18n/k';
 import { SidebarItem } from '../shared/SettingsSection';
@@ -50,7 +50,7 @@ export default function Settings({ accounts, setAccounts, userTheme, setUserThem
   const sidebar = (
     <>
       <SidebarItem
-        icon={<ChatCircle size={20} weight="fill" />}
+        icon={<MaterialSymbol icon="chat_bubble" size={20} fill={activeTab === 'accounts'} />}
         iconColor="monochrome"
         title={t(k.ACCOUNTS_TITLE)}
         description={t(k.ACCOUNTS_DESC)}
@@ -58,7 +58,7 @@ export default function Settings({ accounts, setAccounts, userTheme, setUserThem
         onClick={() => setActiveTab('accounts')}
       />
       <SidebarItem
-        icon={<Bell size={20} weight="fill" />}
+        icon={<MaterialSymbol icon="notifications" size={20} fill={activeTab === 'notifications'} />}
         iconColor="monochrome"
         title={t(k.NOTIF_TITLE)}
         description={t(k.NOTIF_DESC)}
@@ -66,7 +66,7 @@ export default function Settings({ accounts, setAccounts, userTheme, setUserThem
         onClick={() => setActiveTab('notifications')}
       />
       <SidebarItem
-        icon={<Palette size={20} weight="fill" />}
+        icon={<MaterialSymbol icon="palette" size={20} fill={activeTab === 'appearance'} />}
         iconColor="monochrome"
         title={t(k.THEME_TITLE)}
         description={t(k.THEME_SUBTITLE)}
@@ -74,7 +74,7 @@ export default function Settings({ accounts, setAccounts, userTheme, setUserThem
         onClick={() => setActiveTab('appearance')}
       />
       <SidebarItem
-        icon={<Translate size={20} weight="fill" />}
+        icon={<MaterialSymbol icon="translate" size={20} fill={activeTab === 'language'} />}
         iconColor="monochrome"
         title={t(k.LANG_TITLE)}
         description={t(k.LANG_SUBTITLE)}
@@ -82,7 +82,7 @@ export default function Settings({ accounts, setAccounts, userTheme, setUserThem
         onClick={() => setActiveTab('language')}
       />
       <SidebarItem
-        icon={<HardDrives size={20} weight="fill" />}
+        icon={<MaterialSymbol icon="storage" size={20} fill={activeTab === 'storage'} />}
         iconColor="monochrome"
         title={t(k.STORAGE_TITLE) || 'Storage & Data'}
         description={t(k.STORAGE_DESC) || 'Manage your media folders'}
@@ -90,7 +90,7 @@ export default function Settings({ accounts, setAccounts, userTheme, setUserThem
         onClick={() => setActiveTab('storage')}
       />
       <SidebarItem
-        icon={<Code size={20} weight="fill" />}
+        icon={<MaterialSymbol icon="code" size={20} fill={activeTab === 'developer'} />}
         iconColor="monochrome"
         title={t(k.ABOUT_DEVELOPER)}
         description={t(k.ABOUT_DEVELOPER_DESC)}
@@ -98,7 +98,7 @@ export default function Settings({ accounts, setAccounts, userTheme, setUserThem
         onClick={() => setActiveTab('developer')}
       />
       <SidebarItem
-        icon={<Info size={20} weight="fill" />}
+        icon={<MaterialSymbol icon="info" size={20} fill={activeTab === 'aboutApp'} />}
         iconColor="monochrome"
         title={t(k.ABOUT_APP_TITLE)}
         description={t(k.ABOUT_APP_DESC)}
@@ -106,7 +106,7 @@ export default function Settings({ accounts, setAccounts, userTheme, setUserThem
         onClick={() => setActiveTab('aboutApp')}
       />
       <SidebarItem
-        icon={<Sparkle size={20} weight="fill" />}
+        icon={<MaterialSymbol icon="auto_awesome" size={20} fill={activeTab === 'brand'} />}
         iconColor="monochrome"
         title={t(k.ABOUT_PARENT_BRAND_NAME)}
         description={t(k.ABOUT_BRAND_DESC)}
@@ -118,7 +118,7 @@ export default function Settings({ accounts, setAccounts, userTheme, setUserThem
 
   const content = !activeTab ? (
     <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', height: '100%', color: 'var(--mac-text-secondary, #aaaaaa)' }}>
-      <Gear size={64} weight="fill" style={{ marginBottom: '16px', opacity: 0.5 }} />
+      <MaterialSymbol icon="settings" size={64} fill sx={{ mb: 2, opacity: 0.5 }} />
       <Typography sx={{ fontSize: '24px', fontWeight: 600, color: 'var(--mac-text, #ffffff)' }}>
         {t(k.SETTINGS_TITLE)}
       </Typography>
@@ -135,7 +135,7 @@ export default function Settings({ accounts, setAccounts, userTheme, setUserThem
             mr: 1
           }}
         >
-          <CaretLeft size={20} weight="bold" />
+          <MaterialSymbol icon="arrow_back_ios_new" size={18} />
         </IconButton>
         <Typography sx={{ fontSize: '22px', fontWeight: 600, flexGrow: 1 }}>
           {getActiveTitle()}
@@ -150,7 +150,7 @@ export default function Settings({ accounts, setAccounts, userTheme, setUserThem
                 '&:hover': { bgcolor: isDark ? 'rgba(255,255,255,0.1)' : 'rgba(0,0,0,0.05)' }
               }}
             >
-              <DotsThreeVertical size={20} weight="bold" />
+              <MaterialSymbol icon="more_vert" size={20} />
             </IconButton>
             <Menu
               anchorEl={anchorEl}

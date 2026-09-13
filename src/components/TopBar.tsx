@@ -1,6 +1,6 @@
 import React from 'react';
 import { AppBar, Toolbar, Tabs, Tab, Box, Typography, Badge, useMediaQuery } from '@mui/material';
-import { ChatCircle, Folder, Gear, Bell } from '@phosphor-icons/react';
+import MaterialSymbol from './shared/MaterialSymbol';
 import { useI18n } from '../i18n/I18nContext';
 import { k } from '../i18n/k';
 import NammilLogo from '../assets/nammil_outline.webp';
@@ -127,7 +127,7 @@ export default function TopBar({
                           }
                         }}
                       >
-                        <ChatCircle size={20} weight={isSelected ? "fill" : "regular"} />
+                        <MaterialSymbol icon="chat_bubble" size={20} fill={isSelected} />
                       </Badge>
                     </Box>
                   } 
@@ -181,7 +181,7 @@ export default function TopBar({
                       }
                     }}
                   >
-                    <Bell size={20} weight={activeTab === 'notifications' ? "fill" : "regular"} />
+                    <MaterialSymbol icon="notifications" size={20} fill={activeTab === 'notifications'} />
                   </Badge>
                 </Box>
               }
@@ -190,7 +190,7 @@ export default function TopBar({
               value="media"
               icon={
                 <Box component="span" sx={{ display: 'flex' }} title={t(k.TAB_MEDIA)}>
-                  <Folder size={20} weight={activeTab === 'media' ? "fill" : "regular"} />
+                  <MaterialSymbol icon="folder" size={20} fill={activeTab === 'media'} />
                 </Box>
               }
             />
@@ -198,7 +198,7 @@ export default function TopBar({
               value="settings"
               icon={
                 <Box component="span" sx={{ display: 'flex' }} title={t(k.TAB_SETTINGS)}>
-                  <Gear size={20} weight={activeTab === 'settings' ? "fill" : "regular"} />
+                  <MaterialSymbol icon="settings" size={20} fill={activeTab === 'settings'} />
                 </Box>
               }
             />

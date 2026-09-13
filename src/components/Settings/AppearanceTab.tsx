@@ -1,6 +1,6 @@
 import React from 'react';
 import { Box, Typography, ButtonBase, IconButton } from '@mui/material';
-import { CheckCircle, Circle } from '@phosphor-icons/react';
+import MaterialSymbol from '../shared/MaterialSymbol';
 import { useI18n } from '../../i18n/I18nContext';
 import { k } from '../../i18n/k';
 import { useIsDark } from '../shared/hooks';
@@ -83,9 +83,9 @@ export default function AppearanceTab({ userTheme, setUserTheme }: any) {
               }}
             >
               {userTheme === 'light' ? (
-                <CheckCircle weight="fill" size={22} />
+                <MaterialSymbol icon="check_circle" size={22} fill={true} />
               ) : (
-                <Circle weight="regular" size={22} />
+                <MaterialSymbol icon="radio_button_unchecked" size={22} />
               )}
             </IconButton>
           </Box>
@@ -150,9 +150,9 @@ export default function AppearanceTab({ userTheme, setUserTheme }: any) {
               }}
             >
               {userTheme === 'dark' ? (
-                <CheckCircle weight="fill" size={22} />
+                <MaterialSymbol icon="check_circle" size={22} fill={true} />
               ) : (
-                <Circle weight="regular" size={22} />
+                <MaterialSymbol icon="radio_button_unchecked" size={22} />
               )}
             </IconButton>
           </Box>

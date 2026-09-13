@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Box, Button, IconButton } from '@mui/material';
-import { FolderOpen, User, CaretLeft } from '@phosphor-icons/react';
+import MaterialSymbol from '../shared/MaterialSymbol';
 import { OnboardingLayout, OnboardingHeader, OnboardingInput, OnboardingButton } from './OnboardingComponents';
 import WelcomePhase from './WelcomePhase';
 import { useI18n } from '../../i18n/I18nContext';
@@ -86,7 +86,7 @@ const Onboarding: React.FC<OnboardingProps> = ({ onComplete }) => {
                 WebkitAppRegion: 'no-drag'
             }}
         >
-            <CaretLeft size={24} weight="bold" />
+            <MaterialSymbol icon="arrow_back_ios_new" size={20} />
         </IconButton>
 
         <div style={{
@@ -151,7 +151,7 @@ const Onboarding: React.FC<OnboardingProps> = ({ onComplete }) => {
                         value={accountName}
                         onChange={(e: any) => setAccountName(e.target.value)}
                         placeholder={t(k.OB_ACCOUNT_PLACEHOLDER)}
-                        startIcon={<User size={20} />}
+                        startIcon={<MaterialSymbol icon="person" size={20} />}
                     />
                     
                     <div style={{ display: 'flex', flexDirection: 'column', width: '100%' }}>
@@ -203,7 +203,7 @@ const Onboarding: React.FC<OnboardingProps> = ({ onComplete }) => {
                                     }
                                 }}
                             >
-                                <FolderOpen size={20} weight="fill" />
+                                <MaterialSymbol icon="folder_open" size={20} fill={true} />
                             </IconButton>
                         </div>
                     </div>

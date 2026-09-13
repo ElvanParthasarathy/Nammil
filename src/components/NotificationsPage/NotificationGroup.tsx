@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Avatar, Box, Collapse, IconButton, Paper, Stack, Typography } from '@mui/material';
-import { CaretDown, CaretUp, ChatCircle, X } from '@phosphor-icons/react';
+import MaterialSymbol from '../shared/MaterialSymbol';
 import { NotificationItem } from './index';
 import NotificationSingle from './NotificationSingle';
 
@@ -60,7 +60,7 @@ export default function NotificationGroup({
             {latest.title}
           </Typography>
           <Box sx={{ color: 'text.secondary', display: 'flex', alignItems: 'center', flexShrink: 0 }}>
-            <CaretUp size={16} weight="bold" />
+            <MaterialSymbol icon="keyboard_arrow_up" size={18} />
           </Box>
         </Stack>
       </Collapse>
@@ -136,7 +136,7 @@ export default function NotificationGroup({
                 <Typography sx={{ fontSize: '16px', fontWeight: 500, color: 'text.secondary' }}>
                   {items.length}
                 </Typography>
-                <CaretDown size={18} color={isDark ? '#888' : '#666'} />
+                <MaterialSymbol icon="keyboard_arrow_down" size={18} color={isDark ? '#888' : '#666'} />
               </>
             )}
 
@@ -158,7 +158,7 @@ export default function NotificationGroup({
                   '&:hover': { color: isDark ? '#fff' : '#111', bgcolor: 'transparent' },
                 }}
               >
-                <X size={16} weight="bold" />
+                <MaterialSymbol icon="close" size={16} />
               </IconButton>
             )}
           </Stack>

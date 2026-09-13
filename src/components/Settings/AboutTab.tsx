@@ -1,17 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Box, Typography, ButtonBase, useMediaQuery } from '@mui/material';
-import {
-  CaretRight,
-  ArrowRight,
-  EnvelopeSimple,
-  LinkedinLogo,
-  GithubLogo,
-  MapPin,
-  UsersFour,
-  FolderSimple,
-  BellSimple,
-  ShieldCheck,
-} from '@phosphor-icons/react';
+import MaterialSymbol from '../shared/MaterialSymbol';
 import { useI18n } from '../../i18n/I18nContext';
 import { k } from '../../i18n/k';
 import { SettingsSection, SettingsRow } from '../shared/SettingsSection';
@@ -75,7 +64,7 @@ export function DeveloperTab() {
             }}
           >
             {t(k.ABOUT_VISIT_PORTFOLIO)}
-            <ArrowRight size={15} weight="bold" />
+            <MaterialSymbol icon="arrow_forward" size={16} />
           </ButtonBase>
         </Box>
       </SettingsSection>
@@ -83,31 +72,31 @@ export function DeveloperTab() {
       {/* Connect Section */}
       <SettingsSection title={t(k.ABOUT_CONNECT_TITLE)} sx={{ mb: 2 }}>
         <SettingsRow
-          icon={<EnvelopeSimple size={18} weight="fill" />}
+          icon={<MaterialSymbol icon="mail" size={18} fill={true} />}
           iconColor="monochrome"
           title={t(k.ABOUT_EMAIL)}
           description="jaiprakashpartha@gmail.com"
-          control={<CaretRight size={16} color="var(--mac-text-secondary)" />}
+          control={<MaterialSymbol icon="chevron_right" size={18} color="var(--mac-text-secondary)" />}
           onClick={() => openUrl('mailto:jaiprakashpartha@gmail.com')}
         />
         <SettingsRow
-          icon={<LinkedinLogo size={18} weight="fill" />}
+          icon={<MaterialSymbol icon="work" size={18} fill={true} />}
           iconColor="monochrome"
           title={t(k.ABOUT_LINKEDIN)}
           description="linkedin.com/in/jaiprakashpartha"
-          control={<CaretRight size={16} color="var(--mac-text-secondary)" />}
+          control={<MaterialSymbol icon="chevron_right" size={18} color="var(--mac-text-secondary)" />}
           onClick={() => openUrl('https://www.linkedin.com/in/jaiprakashpartha')}
         />
         <SettingsRow
-          icon={<GithubLogo size={18} weight="fill" />}
+          icon={<MaterialSymbol icon="code" size={18} fill={true} />}
           iconColor="monochrome"
           title={t(k.ABOUT_GITHUB)}
           description="github.com/elvanparthasarathy"
-          control={<CaretRight size={16} color="var(--mac-text-secondary)" />}
+          control={<MaterialSymbol icon="chevron_right" size={18} color="var(--mac-text-secondary)" />}
           onClick={() => openUrl('https://github.com/elvanparthasarathy')}
         />
         <SettingsRow
-          icon={<MapPin size={18} weight="fill" />}
+          icon={<MaterialSymbol icon="location_on" size={18} fill={true} />}
           iconColor="monochrome"
           title={t(k.ABOUT_LOCATION)}
           description={t(k.ABOUT_LOCATION_VAL)}
@@ -193,7 +182,7 @@ export function AboutAppTab() {
           }}
         >
           <SettingsRow
-            icon={<UsersFour size={20} weight="fill" />}
+            icon={<MaterialSymbol icon="group" size={20} fill={true} />}
             iconColor="monochrome"
             title={t(k.ABOUT_FEAT_MULTI_ACCOUNT)}
             description={t(k.ABOUT_FEAT_MULTI_ACCOUNT_DESC)}
@@ -205,7 +194,7 @@ export function AboutAppTab() {
             }}
           />
           <SettingsRow
-            icon={<FolderSimple size={20} weight="fill" />}
+            icon={<MaterialSymbol icon="folder" size={20} fill={true} />}
             iconColor="monochrome"
             title={t(k.ABOUT_FEAT_ORGANIZER)}
             description={t(k.ABOUT_FEAT_ORGANIZER_DESC)}
@@ -216,7 +205,7 @@ export function AboutAppTab() {
             }}
           />
           <SettingsRow
-            icon={<BellSimple size={20} weight="fill" />}
+            icon={<MaterialSymbol icon="notifications" size={20} fill={true} />}
             iconColor="monochrome"
             title={t(k.ABOUT_FEAT_NOTIF)}
             description={t(k.ABOUT_FEAT_NOTIF_DESC)}
@@ -228,7 +217,7 @@ export function AboutAppTab() {
             }}
           />
           <SettingsRow
-            icon={<ShieldCheck size={20} weight="fill" />}
+            icon={<MaterialSymbol icon="security" size={20} fill={true} />}
             iconColor="monochrome"
             title={t(k.ABOUT_FEAT_PRIVACY)}
             description={t(k.ABOUT_FEAT_PRIVACY_DESC)}
@@ -297,7 +286,7 @@ export function BrandTab() {
             }}
           >
             elvannavil.vercel.app
-            <ArrowRight size={16} weight="bold" />
+            <MaterialSymbol icon="arrow_forward" size={16} />
           </ButtonBase>
         </Box>
       </SettingsSection>

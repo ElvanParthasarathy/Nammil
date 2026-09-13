@@ -1,6 +1,6 @@
 import React from 'react';
 import { Box, Button, Typography } from '@mui/material';
-import { Bell, ChatCircle, Trash } from '@phosphor-icons/react';
+import MaterialSymbol from '../shared/MaterialSymbol';
 import { SidebarItem } from '../shared/SettingsSection';
 import { useIsDark } from '../shared/hooks';
 import { useI18n } from '../../i18n/I18nContext';
@@ -29,7 +29,7 @@ export default function NotificationsSidebar({
     <Box sx={{ display: 'flex', flexDirection: 'column', height: '100%' }}>
       <Box sx={{ flex: 1 }}>
         <SidebarItem
-          icon={<Bell size={20} weight="fill" />}
+          icon={<MaterialSymbol icon="notifications" size={20} fill={activeAccount === 'All'} />}
           iconColor="monochrome"
           title={t(k.NOTIF_SIDEBAR_ALL)}
           description={`${totalCount} ${t(k.NOTIF_PLURAL)}`}
@@ -42,7 +42,7 @@ export default function NotificationsSidebar({
           return (
             <SidebarItem
               key={acc.id}
-              icon={<ChatCircle size={20} weight="fill" />}
+              icon={<MaterialSymbol icon="chat_bubble" size={20} fill={activeAccount === acc.name} />}
               iconColor="monochrome"
               title={acc.name}
               description={`${count} ${t(k.NOTIF_PLURAL)}`}

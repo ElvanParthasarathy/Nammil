@@ -1,6 +1,6 @@
 import React from 'react';
 import { Box, Typography, Button, IconButton, Modal, Paper, TextField } from '@mui/material';
-import { X, Warning } from '@phosphor-icons/react';
+import MaterialSymbol from '../shared/MaterialSymbol';
 import { useIsDark } from '../shared/hooks';
 import { useI18n } from '../../i18n/I18nContext';
 import { k } from '../../i18n/k';
@@ -43,7 +43,7 @@ export default function WinUIClearAllDialog({ open, onClose, onConfirm, accountN
               '&:hover': { bgcolor: isDark ? 'rgba(255,255,255,0.1)' : 'rgba(0,0,0,0.05)', color: 'var(--mac-text)' } 
             }}
           >
-            <X size={18} />
+            <MaterialSymbol icon="close" size={18} />
           </IconButton>
         </Box>
 
@@ -52,8 +52,7 @@ export default function WinUIClearAllDialog({ open, onClose, onConfirm, accountN
           <Box sx={{ display: 'flex', gap: 2, mb: 3 }}>
             <Box sx={{ pt: 0.5 }}>
               <Box sx={{ position: 'relative', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                <Warning size={32} weight="fill" color="#FFCC00" />
-                <Typography sx={{ position: 'absolute', color: '#000', fontSize: '18px', fontWeight: 700, mt: '2px' }}>!</Typography>
+                <MaterialSymbol icon="warning" size={32} fill={true} color="#FFCC00" />
               </Box>
             </Box>
             <Typography sx={{ fontSize: '14px', color: isDark ? '#ddd' : '#333' }}>

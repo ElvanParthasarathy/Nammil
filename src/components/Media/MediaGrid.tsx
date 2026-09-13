@@ -1,6 +1,6 @@
 import React from 'react';
 import { Box, Typography } from '@mui/material';
-import { FileDashed } from '@phosphor-icons/react';
+import MaterialSymbol from '../shared/MaterialSymbol';
 import { useI18n } from '../../i18n/I18nContext';
 import { k } from '../../i18n/k';
 import MediaCard from './MediaCard';
@@ -18,7 +18,7 @@ export default function MediaGrid({ groupedMedia, hasMore, onLoadMore }: MediaGr
   if (Object.keys(groupedMedia).length === 0) {
     return (
       <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', height: '100%', pt: 10, color: 'var(--mac-text-secondary)' }}>
-        <FileDashed size={80} weight="duotone" style={{ marginBottom: '16px', opacity: 0.7 }} />
+        <MaterialSymbol icon="folder_off" size={80} sx={{ mb: 2, opacity: 0.7 }} />
         <Typography sx={{ fontSize: '20px', fontWeight: 500 }}>{t(k.MEDIA_EMPTY)}</Typography>
       </Box>
     );

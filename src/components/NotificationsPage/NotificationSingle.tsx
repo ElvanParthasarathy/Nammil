@@ -1,6 +1,6 @@
 import React from 'react';
 import { Avatar, Box, IconButton, Paper, Stack, Typography } from '@mui/material';
-import { ChatCircle, X } from '@phosphor-icons/react';
+import MaterialSymbol from '../shared/MaterialSymbol';
 import { NotificationItem } from './index';
 
 interface NotificationSingleProps {
@@ -107,7 +107,7 @@ export default function NotificationSingle({
                 '&:hover': { color: isDark ? '#fff' : '#111', bgcolor: 'transparent' },
               }}
             >
-              <X size={16} weight="bold" />
+              <MaterialSymbol icon="close" size={16} />
             </IconButton>
           )}
         </Stack>

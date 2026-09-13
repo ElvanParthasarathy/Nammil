@@ -1,6 +1,6 @@
 import React from 'react';
 import { Box, OutlinedInput, InputAdornment, Chip } from '@mui/material';
-import { MagnifyingGlass } from '@phosphor-icons/react';
+import MaterialSymbol from '../shared/MaterialSymbol';
 import { useI18n } from '../../i18n/I18nContext';
 import { k } from '../../i18n/k';
 import { useIsDark } from '../shared/hooks';
@@ -27,7 +27,7 @@ export default function SearchBar({ searchQuery, setSearchQuery, activeFilter, d
         size="small"
         startAdornment={
           <InputAdornment position="start">
-            <MagnifyingGlass size={20} color={isDark ? '#888' : '#aaa'} />
+            <MaterialSymbol icon="search" size={20} color={isDark ? '#888' : '#aaa'} />
           </InputAdornment>
         }
         sx={{

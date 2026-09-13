@@ -1,18 +1,19 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Box, Typography, Button, IconButton, Tooltip, Skeleton } from '@mui/material';
-import { VideoCamera, FileText, FileAudio, FilePdf, FileDoc, FileXls, FilePpt, FileArchive, Image as ImageIcon } from '@phosphor-icons/react';
+import MaterialSymbol from '../shared/MaterialSymbol';
 
 const getFileIcon = (fileName: string, mediaType: string, size: number, weight: any = 'regular', color?: string) => {
   const ext = fileName.split('.').pop()?.toLowerCase() || '';
-  if (ext === 'pdf') return <FilePdf size={size} weight={weight} color={color} />;
-  if (['doc', 'docx'].includes(ext)) return <FileDoc size={size} weight={weight} color={color} />;
-  if (['xls', 'xlsx', 'csv'].includes(ext)) return <FileXls size={size} weight={weight} color={color} />;
-  if (['ppt', 'pptx'].includes(ext)) return <FilePpt size={size} weight={weight} color={color} />;
-  if (['zip', 'rar', '7z', 'tar', 'gz'].includes(ext)) return <FileArchive size={size} weight={weight} color={color} />;
-  if (mediaType === 'videos' || ['mp4', 'mkv', 'avi', 'mov', 'webm'].includes(ext)) return <VideoCamera size={size} weight={weight} color={color} />;
-  if (mediaType === 'audio' || ['mp3', 'wav', 'ogg', 'm4a', 'aac'].includes(ext)) return <FileAudio size={size} weight={weight} color={color} />;
-  if (mediaType === 'images' || ['jpg', 'jpeg', 'png', 'gif', 'webp', 'svg', 'bmp'].includes(ext)) return <ImageIcon size={size} weight={weight} color={color} />;
-  return <FileText size={size} weight={weight} color={color} />;
+  const fill = weight === 'fill';
+  if (ext === 'pdf') return <MaterialSymbol icon="picture_as_pdf" size={size} fill={fill} color={color} />;
+  if (['doc', 'docx'].includes(ext)) return <MaterialSymbol icon="description" size={size} fill={fill} color={color} />;
+  if (['xls', 'xlsx', 'csv'].includes(ext)) return <MaterialSymbol icon="table_chart" size={size} fill={fill} color={color} />;
+  if (['ppt', 'pptx'].includes(ext)) return <MaterialSymbol icon="slideshow" size={size} fill={fill} color={color} />;
+  if (['zip', 'rar', '7z', 'tar', 'gz'].includes(ext)) return <MaterialSymbol icon="folder_zip" size={size} fill={fill} color={color} />;
+  if (mediaType === 'videos' || ['mp4', 'mkv', 'avi', 'mov', 'webm'].includes(ext)) return <MaterialSymbol icon="videocam" size={size} fill={fill} color={color} />;
+  if (mediaType === 'audio' || ['mp3', 'wav', 'ogg', 'm4a', 'aac'].includes(ext)) return <MaterialSymbol icon="headphones" size={size} fill={fill} color={color} />;
+  if (mediaType === 'images' || ['jpg', 'jpeg', 'png', 'gif', 'webp', 'svg', 'bmp'].includes(ext)) return <MaterialSymbol icon="image" size={size} fill={fill} color={color} />;
+  return <MaterialSymbol icon="description" size={size} fill={fill} color={color} />;
 };
 import { useI18n } from '../../i18n/I18nContext';
 import { k } from '../../i18n/k';

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Box, Typography, Button, CircularProgress, IconButton, Tooltip } from '@mui/material';
-import { HardDrives, Warning, Trash, FolderOpen } from '@phosphor-icons/react';
+import MaterialSymbol from '../shared/MaterialSymbol';
 import { useI18n } from '../../i18n/I18nContext';
 import { k } from '../../i18n/k';
 import { SettingsSection as SettingsSection, SettingsRow } from '../shared/SettingsSection';
@@ -56,7 +56,7 @@ export default function StorageTab() {
     <Box sx={{ width: '100%' }}>
       <SettingsSection>
         <SettingsRow
-          icon={<HardDrives size={20} weight="fill" />}
+          icon={<MaterialSymbol icon="storage" size={20} fill={true} />}
           title={t(k.STORAGE_MEDIA_FOLDER)}
           description={currentPath || '...'}
           control={
@@ -72,13 +72,13 @@ export default function StorageTab() {
                   }
                 }}
               >
-                <FolderOpen size={20} weight="bold" />
+                <MaterialSymbol icon="folder_open" size={20} />
               </IconButton>
             </Tooltip>
           }
         />
         <SettingsRow
-          icon={<Warning size={20} weight="fill" />}
+          icon={<MaterialSymbol icon="warning" size={20} fill={true} />}
           title={t(k.RESET_APP_TITLE) || "Reset App Data"}
           description={t(k.RESET_APP_DESC) || "Clear all sessions and return to first setup. Keeps media."}
           control={
@@ -88,7 +88,7 @@ export default function StorageTab() {
                   if (window.confirm(t(k.RESET_APP_CONFIRM) || "Are you sure you want to reset all app data? This will log out all accounts but preserve your media folder.")) {
                     if ((window as any).electronAPI) {
                       try {
-                        const result = await (window as any).electronAPI.resetApp();
+                         const result = await (window as any).electronAPI.resetApp();
                         if (result && !result.success) {
                           alert("Reset App failed: " + result.error);
                         }
@@ -106,7 +106,7 @@ export default function StorageTab() {
                   }
                 }}
               >
-                <Trash size={20} weight="bold" />
+                <MaterialSymbol icon="delete" size={20} />
               </IconButton>
             </Tooltip>
           }

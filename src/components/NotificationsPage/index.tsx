@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Box, Button, Typography, IconButton, Chip, Stack, Paper, Avatar, Collapse } from '@mui/material';
-import { Bell, Trash, X, CheckCircle, ChatCircle, ArrowRight, CaretUp, CaretDown } from '@phosphor-icons/react';
+import MaterialSymbol from '../shared/MaterialSymbol';
 import DualPanelLayout from '../shared/DualPanelLayout';
 import NotificationsSidebar from './NotificationsSidebar';
 import NotificationGroup from './NotificationGroup';
@@ -173,7 +173,7 @@ export default function NotificationsPage({
         {filteredNotifications.length > 0 && (
           <Button
             variant="text"
-            startIcon={<Trash size={18} />}
+            startIcon={<MaterialSymbol icon="delete" size={18} />}
             onClick={handleClearCurrent}
             sx={{
               borderRadius: '24px',
@@ -227,7 +227,7 @@ export default function NotificationsPage({
                 mb: 2,
               }}
             >
-              <CheckCircle size={40} color={isDark ? '#888' : '#666'} weight="duotone" />
+              <MaterialSymbol icon="check_circle" size={40} color={isDark ? '#888' : '#666'} />
             </Box>
             <Typography sx={{ fontSize: '18px', fontWeight: 600, mb: 1, color: 'text.primary' }}>
               {t(k.NOTIF_ALL_CAUGHT_UP)}

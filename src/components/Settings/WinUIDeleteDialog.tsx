@@ -1,6 +1,6 @@
 import React from 'react';
 import { Box, Typography, Button, IconButton, Modal, Paper } from '@mui/material';
-import { X, Warning, ArrowRight } from '@phosphor-icons/react';
+import MaterialSymbol from '../shared/MaterialSymbol';
 import { useIsDark } from '../shared/hooks';
 import { useI18n } from '../../i18n/I18nContext';
 import { k } from '../../i18n/k';
@@ -42,7 +42,7 @@ export default function WinUIDeleteDialog({ open, onClose, onConfirm, accountNam
               '&:hover': { bgcolor: isDark ? 'rgba(255,255,255,0.1)' : 'rgba(0,0,0,0.05)', color: 'var(--mac-text)' } 
             }}
           >
-            <X size={16} />
+            <MaterialSymbol icon="close" size={16} />
           </IconButton>
         </Box>
 
@@ -51,8 +51,7 @@ export default function WinUIDeleteDialog({ open, onClose, onConfirm, accountNam
           {/* Warning Icon (Windows 11 Style) */}
           <Box sx={{ pt: 0.5 }}>
             <Box sx={{ position: 'relative', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-              <Warning size={32} weight="fill" color="#FFCC00" />
-              <Typography sx={{ position: 'absolute', color: '#000', fontSize: '18px', fontWeight: 700, mt: '2px' }}>!</Typography>
+              <MaterialSymbol icon="warning" size={32} fill={true} color="#FFCC00" />
             </Box>
           </Box>
           
@@ -75,7 +74,7 @@ export default function WinUIDeleteDialog({ open, onClose, onConfirm, accountNam
                 '&:hover': { bgcolor: isDark ? 'rgba(255,255,255,0.08)' : 'rgba(0,0,0,0.06)' }
               }}
             >
-              <ArrowRight size={20} color={isDark ? '#4CC2FF' : '#005FB8'} />
+              <MaterialSymbol icon="arrow_forward" size={20} color={isDark ? '#4CC2FF' : '#005FB8'} />
               <Typography sx={{ fontSize: '15px', color: isDark ? '#4CC2FF' : '#005FB8' }}>
                 {t(k.BTN_DELETE)}
               </Typography>

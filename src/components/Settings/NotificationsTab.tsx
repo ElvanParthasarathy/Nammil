@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Box, Typography, Button, Select, MenuItem, IconButton } from '@mui/material';
-import { SpeakerHigh } from '@phosphor-icons/react';
+import MaterialSymbol from '../shared/MaterialSymbol';
 import { useI18n } from '../../i18n/I18nContext';
 import { k } from '../../i18n/k';
 import { SettingsSection, SettingsRow } from '../shared/SettingsSection';
@@ -136,7 +136,7 @@ export default function NotificationsTab({ accounts }: any) {
                       sx={{ color: 'var(--mac-text)' }}
                       disabled={currentAccSound === 'silent'}
                     >
-                      <SpeakerHigh size={18} />
+                      <MaterialSymbol icon="volume_up" size={18} />
                     </IconButton>
                     <Select
                       value={currentAccSound}

@@ -1,6 +1,6 @@
 import React from 'react';
 import { Box } from '@mui/material';
-import { Check } from '@phosphor-icons/react';
+import MaterialSymbol from '../shared/MaterialSymbol';
 import { useI18n } from '../../i18n/I18nContext';
 import { k } from '../../i18n/k';
 import { SettingsSection, SettingsRow } from '../shared/SettingsSection';
@@ -38,7 +38,7 @@ export default function LanguageTab() {
             onClick={() => handleLangChange(option.value)}
             control={
               lang === option.value ? (
-                <Check size={20} weight="bold" color="var(--mac-text)" />
+                <MaterialSymbol icon="check" size={20} weight={600} color="var(--mac-text)" />
               ) : null
             }
           />

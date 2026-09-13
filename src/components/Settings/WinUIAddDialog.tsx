@@ -1,6 +1,6 @@
 import React from 'react';
 import { Box, Typography, Button, IconButton, Modal, Paper, TextField } from '@mui/material';
-import { X } from '@phosphor-icons/react';
+import MaterialSymbol from '../shared/MaterialSymbol';
 import { useIsDark } from '../shared/hooks';
 import { useI18n } from '../../i18n/I18nContext';
 import { k } from '../../i18n/k';
@@ -43,7 +43,7 @@ export default function WinUIAddDialog({ open, onClose, onConfirm, accountName, 
               '&:hover': { bgcolor: isDark ? 'rgba(255,255,255,0.1)' : 'rgba(0,0,0,0.05)', color: 'var(--mac-text)' } 
             }}
           >
-            <X size={18} />
+            <MaterialSymbol icon="close" size={18} />
           </IconButton>
         </Box>
 

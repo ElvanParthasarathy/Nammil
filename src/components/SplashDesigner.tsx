@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Box, Typography, Slider, Button, IconButton, Paper, Chip } from '@mui/material';
-import { Wrench, X, Copy, Check, ArrowsClockwise, Pause, Play, CaretDown, CaretUp, Plus, Minus } from '@phosphor-icons/react';
+import MaterialSymbol from './shared/MaterialSymbol';
 
 export interface SplashConfig {
   logoSize: number;
@@ -106,9 +106,9 @@ export default function SplashDesigner({
         }}
         onClick={() => setMinimized(false)}
       >
-        <Wrench size={18} weight="fill" color="#00e676" />
+        <MaterialSymbol icon="build" size={18} fill={true} color="#00e676" />
         <Typography sx={{ fontSize: '13px', fontWeight: 600 }}>Designer</Typography>
-        <CaretDown size={14} />
+        <MaterialSymbol icon="keyboard_arrow_down" size={14} />
       </Paper>
     );
   }
@@ -146,17 +146,17 @@ export default function SplashDesigner({
       {/* Header */}
       <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', pb: 1, borderBottom: '1px solid rgba(255,255,255,0.1)' }}>
         <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-          <Wrench size={20} weight="fill" color="#00e676" />
+          <MaterialSymbol icon="build" size={20} fill={true} color="#00e676" />
           <Typography sx={{ fontSize: '15px', fontWeight: 700, letterSpacing: '0.5px' }}>
             Splash Designer
           </Typography>
         </Box>
         <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.5 }}>
           <IconButton size="small" onClick={() => setMinimized(true)} sx={{ color: 'rgba(255,255,255,0.6)', '&:hover': { color: '#fff' } }}>
-            <CaretUp size={16} />
+            <MaterialSymbol icon="keyboard_arrow_up" size={16} />
           </IconButton>
           <IconButton size="small" onClick={onCloseDesigner} sx={{ color: 'rgba(255,255,255,0.6)', '&:hover': { color: '#fff' } }}>
-            <X size={16} />
+            <MaterialSymbol icon="close" size={16} />
           </IconButton>
         </Box>
       </Box>
@@ -170,7 +170,7 @@ export default function SplashDesigner({
           size="small"
           variant="contained"
           onClick={onTogglePause}
-          startIcon={isPaused ? <Play size={14} weight="fill" /> : <Pause size={14} weight="fill" />}
+          startIcon={isPaused ? <MaterialSymbol icon="play_arrow" size={14} fill={true} /> : <MaterialSymbol icon="pause" size={14} fill={true} />}
           sx={{
             bgcolor: isPaused ? '#00e676' : 'rgba(255,255,255,0.15)',
             color: isPaused ? '#000' : '#fff',
@@ -354,7 +354,7 @@ export default function SplashDesigner({
           fullWidth
           variant="contained"
           onClick={handleCopy}
-          startIcon={copied ? <Check size={18} weight="bold" /> : <Copy size={18} weight="bold" />}
+          startIcon={copied ? <MaterialSymbol icon="check" size={18} weight={600} /> : <MaterialSymbol icon="content_copy" size={18} />}
           sx={{
             bgcolor: copied ? '#00e676' : '#2563eb',
             color: copied ? '#000' : '#fff',
@@ -376,7 +376,7 @@ export default function SplashDesigner({
             size="small"
             variant="outlined"
             onClick={handleReset}
-            startIcon={<ArrowsClockwise size={14} />}
+            startIcon={<MaterialSymbol icon="refresh" size={14} />}
             sx={{
               color: 'rgba(255,255,255,0.7)',
               borderColor: 'rgba(255,255,255,0.2)',
@@ -479,7 +479,7 @@ function ControlItem({
               '&:hover': { bgcolor: 'rgba(255,255,255,0.18)', color: '#00e676' },
             }}
           >
-            <Minus size={12} weight="bold" />
+            <MaterialSymbol icon="remove" size={12} weight={600} />
           </IconButton>
 
           <input
@@ -525,7 +525,7 @@ function ControlItem({
               '&:hover': { bgcolor: 'rgba(255,255,255,0.18)', color: '#00e676' },
             }}
           >
-            <Plus size={12} weight="bold" />
+            <MaterialSymbol icon="add" size={12} weight={600} />
           </IconButton>
         </Box>
       </Box>

@@ -1,6 +1,6 @@
 import React from 'react';
 import { Box, Chip, useMediaQuery, Tooltip, IconButton, Avatar, Typography, Divider } from '@mui/material';
-import { FolderOpen, Image, VideoCamera, FileText, Headphones } from '@phosphor-icons/react';
+import MaterialSymbol from '../shared/MaterialSymbol';
 import { useI18n } from '../../i18n/I18nContext';
 import { k } from '../../i18n/k';
 import { useIsDark } from '../shared/hooks';
@@ -98,27 +98,27 @@ export default function MediaSidebar({ accounts, activeAccount, setActiveAccount
       )}
 
       <SidebarItem
-        icon={<FolderOpen size={20} weight="fill" />} iconColor="monochrome"
+        icon={<MaterialSymbol icon="folder_open" size={20} fill={activeFilter === 'All'} />} iconColor="monochrome"
         title={t(k.MEDIA_SIDEBAR_ALL)} description={t(k.MEDIA_DESC_ALL)}
         isActive={activeFilter === 'All'} onClick={() => setActiveFilter('All')}
       />
       <SidebarItem
-        icon={<Image size={20} weight="fill" />} iconColor="monochrome"
+        icon={<MaterialSymbol icon="image" size={20} fill={activeFilter === 'Images'} />} iconColor="monochrome"
         title={t(k.MEDIA_IMAGES)} description={t(k.MEDIA_DESC_IMAGES)}
         isActive={activeFilter === 'Images'} onClick={() => setActiveFilter('Images')}
       />
       <SidebarItem
-        icon={<VideoCamera size={20} weight="fill" />} iconColor="monochrome"
+        icon={<MaterialSymbol icon="videocam" size={20} fill={activeFilter === 'Videos'} />} iconColor="monochrome"
         title={t(k.MEDIA_VIDEOS)} description={t(k.MEDIA_DESC_VIDEOS)}
         isActive={activeFilter === 'Videos'} onClick={() => setActiveFilter('Videos')}
       />
       <SidebarItem
-        icon={<FileText size={20} weight="fill" />} iconColor="monochrome"
+        icon={<MaterialSymbol icon="description" size={20} fill={activeFilter === 'Documents'} />} iconColor="monochrome"
         title={t(k.MEDIA_DOCUMENTS)} description={t(k.MEDIA_DESC_DOCUMENTS)}
         isActive={activeFilter === 'Documents'} onClick={() => setActiveFilter('Documents')}
       />
       <SidebarItem
-        icon={<Headphones size={20} weight="fill" />} iconColor="monochrome"
+        icon={<MaterialSymbol icon="headphones" size={20} fill={activeFilter === 'Audio'} />} iconColor="monochrome"
         title={t(k.MEDIA_AUDIO)} description={t(k.MEDIA_DESC_AUDIO)}
         isActive={activeFilter === 'Audio'} onClick={() => setActiveFilter('Audio')}
       />

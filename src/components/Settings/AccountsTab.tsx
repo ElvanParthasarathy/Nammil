@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Box, Typography, TextField, Button, IconButton, Dialog, DialogTitle, DialogContent, DialogActions } from '@mui/material';
-import { ChatCircle, Trash, Plus } from '@phosphor-icons/react';
+import MaterialSymbol from '../shared/MaterialSymbol';
 import { useI18n } from '../../i18n/I18nContext';
 import { k } from '../../i18n/k';
 import { useIsDark } from '../shared/hooks';
@@ -59,7 +59,7 @@ export default function AccountsTab({ accounts, setAccounts }: any) {
           {accounts.map((acc: any, index: number) => (
             <SettingsRow
               key={acc.id}
-              icon={<ChatCircle size={20} weight="fill" />}
+              icon={<MaterialSymbol icon="chat_bubble" size={20} fill={true} />}
               iconColor="monochrome"
               title={acc.name}
               description={`${t(k.ACCOUNTS_INSTANCE)} ${index + 1}`}
@@ -79,7 +79,7 @@ export default function AccountsTab({ accounts, setAccounts }: any) {
                         } 
                       }}
                     >
-                      <Trash size={18} />
+                      <MaterialSymbol icon="delete" size={18} />
                     </IconButton>
                   )}
                 </Box>
@@ -88,7 +88,7 @@ export default function AccountsTab({ accounts, setAccounts }: any) {
           ))}
           {accounts.length < 5 && (
             <SettingsRow
-              icon={<Plus size={20} weight="bold" />}
+              icon={<MaterialSymbol icon="add" size={20} />}
               iconColor="monochrome"
               title={t(k.ACCOUNTS_ADD)}
               onClick={handleAddClick}

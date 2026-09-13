@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { OnboardingLayout, OnboardingButton } from './OnboardingComponents';
-import { CheckCircle, GlobeHemisphereWest } from '@phosphor-icons/react';
+import MaterialSymbol from '../shared/MaterialSymbol';
 import { List, ListItem, ListItemButton, ListItemText, ListItemIcon, Divider } from '@mui/material';
 import { useI18n } from '../../i18n/I18nContext';
 import { k } from '../../i18n/k';
@@ -95,7 +95,7 @@ export default function WelcomePhase({ onContinue }: { onContinue: () => void, s
                                         flexDirection: 'column',
                                         alignItems: 'flex-start',
                                     }}>
-                                        <GlobeHemisphereWest size={40} weight="regular" color="var(--onboarding-text)" />
+                                        <MaterialSymbol icon="language" size={40} color="var(--onboarding-text)" />
                                     </div>
                                     <div style={{
                                         textAlign: 'left',
@@ -209,7 +209,7 @@ export default function WelcomePhase({ onContinue }: { onContinue: () => void, s
                                                 />
                                                 {lang === l.code && (
                                                     <ListItemIcon sx={{ minWidth: 'auto', position: 'relative', zIndex: 2, pointerEvents: 'none' }}>
-                                                        <CheckCircle size={18} weight="fill" color="var(--onboarding-text)" />
+                                                        <MaterialSymbol icon="check_circle" size={18} fill={true} color="var(--onboarding-text)" />
                                                     </ListItemIcon>
                                                 )}
                                             </ListItemButton>

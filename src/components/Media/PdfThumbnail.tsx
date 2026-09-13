@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { Box, Skeleton } from '@mui/material';
 import * as pdfjsLib from 'pdfjs-dist';
-import { FilePdf } from '@phosphor-icons/react';
+import MaterialSymbol from '../shared/MaterialSymbol';
 import { useIsDark } from '../shared/hooks';
 
 // Configure pdfjs worker to run in Vite environments
@@ -84,7 +84,7 @@ export default function PdfThumbnail({ fileUrl, fileName, onLoad }: { fileUrl: s
   if (error) {
     return (
       <Box sx={{ p: 2, textAlign: 'center', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', width: '100%', height: '100%', zIndex: 2, position: 'absolute', top: 0, left: 0 }}>
-        <FilePdf size={48} weight="regular" color={isDark ? '#777' : '#aaa'} />
+        <MaterialSymbol icon="picture_as_pdf" size={48} color={isDark ? '#777' : '#aaa'} />
       </Box>
     );
   }
@@ -105,7 +105,7 @@ export default function PdfThumbnail({ fileUrl, fileName, onLoad }: { fileUrl: s
       {loading && !cachedImg && (
         <Box sx={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
           <Box sx={{ p: 2, textAlign: 'center', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', width: '100%', height: '100%' }}>
-            <FilePdf size={48} weight="regular" color={isDark ? '#777' : '#aaa'} />
+            <MaterialSymbol icon="picture_as_pdf" size={48} color={isDark ? '#777' : '#aaa'} />
           </Box>
           <Skeleton 
             variant="rectangular" 
