@@ -10,7 +10,7 @@ interface DualPanelLayoutProps {
 
 function useAutoHideScrollbar() {
   const [isVisible, setIsVisible] = React.useState(false);
-  const timerRef = React.useRef<NodeJS.Timeout | null>(null);
+  const timerRef = React.useRef<ReturnType<typeof setTimeout> | null>(null);
 
   const showBriefly = React.useCallback(() => {
     setIsVisible(true);
