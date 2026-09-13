@@ -23,6 +23,12 @@ class SettingsManager {
           args: ['--hidden'],
           path: process.execPath
         });
+
+        // Clean up legacy Startup folder shortcut if present to avoid dual startup collision
+        const startupLnk = path.join(this.app.getPath('appData'), 'Microsoft', 'Windows', 'Start Menu', 'Programs', 'Startup', 'Nammil.lnk');
+        if (fs.existsSync(startupLnk)) {
+          fs.unlinkSync(startupLnk);
+        }
       } catch (e) {
         console.warn('[SettingsManager] Failed to sync login item settings:', e);
       }

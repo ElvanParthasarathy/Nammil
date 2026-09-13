@@ -47,7 +47,8 @@ class WindowManager {
       if (!this.mainWindow || this.mainWindow.isDestroyed()) return;
       hasShown = true;
 
-      if (process.argv.includes('--hidden') || process.argv.includes('--minimized')) {
+      const hasSilentArg = process.argv.some(arg => typeof arg === 'string' && (arg.toLowerCase().includes('--hidden') || arg.toLowerCase().includes('--minimized')));
+      if (hasSilentArg) {
         // Run silently in background / system tray on boot
         return;
       }

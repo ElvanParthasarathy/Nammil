@@ -65,7 +65,16 @@ if (!gotTheLock) {
   let orchestrator = null;
 
   // 4. Handle second-instance launch (bring running Nammil instance to front)
-  app.on('second-instance', () => {
+  app.on('second-instance', (event, commandLine) => {
+    // If the second instance was triggered with --hidden or --minimized (e.g. Windows startup / dual autostart),
+    // ignore it completely so we don't accidentally unhide and pop the window onto the user's screen.
+    if (commandLine && Array.isArray(commandLine)) {
+      const isSilent = commandLine.some(arg => typeof arg === 'string' && (arg.toLowerCase().includes('--hidden') || arg.toLowerCase().includes('--minimized')));
+      if (isSilent) {
+        return;
+      }
+    }
+
     if (orchestrator && orchestrator.windowManager && orchestrator.windowManager.mainWindow) {
       const mainWindow = orchestrator.windowManager.mainWindow;
       if (!mainWindow.isDestroyed()) {
