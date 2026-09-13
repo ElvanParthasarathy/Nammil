@@ -171,12 +171,15 @@ export default function WelcomePhase({ onContinue }: { onContinue: () => void, s
                                                     px: 3,
                                                     position: 'relative',
                                                     overflow: 'hidden',
-                                                    bgcolor: 'transparent',
+                                                    bgcolor: lang === l.code 
+                                                        ? ((theme: any) => theme.palette.mode === 'dark' ? 'rgba(255, 255, 255, 0.06)' : 'rgba(0, 0, 0, 0.04)')
+                                                        : 'transparent',
                                                     color: 'var(--onboarding-text)',
                                                     cursor: 'pointer',
                                                     userSelect: 'none',
+                                                    transition: 'background-color 0.15s ease',
                                                     '&:hover': {
-                                                        bgcolor: 'transparent',
+                                                        bgcolor: (theme: any) => theme.palette.mode === 'dark' ? 'rgba(255, 255, 255, 0.09)' : 'rgba(0, 0, 0, 0.06)',
                                                     },
                                                 }}
                                             >
