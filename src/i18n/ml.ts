@@ -644,8 +644,8 @@ export const ml = {
     latn: 'What is Nammil?',
   },
   [k.ABOUT_NAMMIL_DESC]: {
-    ml: 'നമ്മിൽ എന്നത് വാട്ട്സ്ആപ്പിനായുള്ള ലളിതവും സുരക്ഷിതവുമായ ഡെസ്ക്ടോപ്പ് ആപ്പാണ്. ഒന്നിലധികം അക്കൗണ്ടുകൾ ഒരുമിച്ച് ഉപയോഗിക്കാനും മീഡിയ സ്വയം തരംതിരിക്കാനും ഇത് സഹായിക്കുന്നു.\n\nഎൽവൻ നവിൽ സംരംഭം\nസംഭാഷണങ്ങളും മീഡിയയും മനോഹരമായി ക്രമീകരിക്കാൻ രൂപകൽപ്പന ചെയ്തത്.',
-    latn: 'Nammil is a sleek desktop companion for WhatsApp.',
+    ml: 'നമ്മിൽ എന്നത് വാട്ട്സ്ആപ്പിനായുള്ള ലളിതവും സുരക്ഷിതവുമായ ഒരു ഡെസ്ക്ടോപ്പ് ആപ്പാണ്.\n\nഔദ്യോഗിക വാട്ട്സ്ആപ്പ് ഒരു അക്കൗണ്ട് മാത്രം അനുവദിക്കുന്ന പോരായ്മ പരിഹരിച്ച്, ഒന്നിലധികം അക്കൗണ്ടുകൾ ഒരേസമയം തടസ്സമില്ലാതെ ഉപയോഗിക്കാനും മീഡിയ സ്വയം ക്രമീകരിക്കാനും എൽവൻ നവിൽ ബ്രാൻഡിന് കീഴിൽ സ്ഥാപകനും ഡെവലപ്പറുമായ എൽവൻ പാർത്ഥസാരഥി വികസിപ്പിച്ചത്.',
+    latn: 'Nammil is a sleek desktop companion for WhatsApp by Elvan Navil.',
   },
   [k.ABOUT_FEATURES_TITLE]: {
     ml: 'പ്രത്യേകതകൾ',
@@ -808,5 +808,63 @@ export const ml = {
   [k.TOPBAR_UPDATE_TOOLTIP_READY]: {
     ml: 'അപ്ഡേറ്റ് ഇൻസ്റ്റാൾ ചെയ്യാൻ റീസ്റ്റാർട്ട് ചെയ്യുക',
     latn: 'Update install cheyyaan restart cheyyuka',
+  },
+
+  // Open Source, License & Legal Terms
+  [k.ABOUT_DEV_ROLE]: {
+    ml: 'സ്ഥാപകനും ഡെവലപ്പറും • എൽവൻ നവിൽ',
+    latn: 'Founder & Developer • Elvan Navil',
+  },
+  [k.ABOUT_LICENSE_TITLE]: {
+    ml: 'ഓപ്പൺ സോഴ്സ് ലൈസൻസ്',
+    latn: 'Open Source & License',
+  },
+  [k.ABOUT_LICENSE_TYPE]: {
+    ml: 'MIT ലൈസൻസ്',
+    latn: 'MIT License',
+  },
+  [k.ABOUT_LICENSE_DESC]: {
+    ml: 'എൽവൻ പാർത്ഥസാരഥി / എൽവൻ നവിൽ കീഴിലുള്ള സൗജന്യ ഓപ്പൺ സോഴ്സ് സോഫ്റ്റ്‌വെയർ',
+    latn: 'Free & open-source software under Elvan Navil',
+  },
+  [k.ABOUT_SOURCE_CODE]: {
+    ml: 'സോഴ്സ് കോഡ്',
+    latn: 'Source Code',
+  },
+  [k.ABOUT_SOURCE_CODE_DESC]: {
+    ml: 'github.com/ElvanParthasarathy/Nammil കാണുക',
+    latn: 'github.com/ElvanParthasarathy/Nammil',
+  },
+  [k.ABOUT_ISSUES]: {
+    ml: 'പ്രശ്നങ്ങൾ അറിയിക്കുക',
+    latn: 'Report an Issue',
+  },
+  [k.ABOUT_ISSUES_DESC]: {
+    ml: 'ബഗുകളും നിർദ്ദേശങ്ങളും അറിയിക്കുക',
+    latn: 'Submit bugs & feature requests',
+  },
+  [k.ABOUT_RELEASES]: {
+    ml: 'റിലീസുകൾ & മാറ്റങ്ങൾ',
+    latn: 'Releases & Changelog',
+  },
+  [k.ABOUT_RELEASES_DESC]: {
+    ml: 'പതിപ്പുകളുടെ ചരിത്രം കാണുക',
+    latn: 'View release history',
+  },
+  [k.ABOUT_TERMS_TITLE]: {
+    ml: 'നിബന്ധനകളും നിരാകരണവും',
+    latn: 'Terms & Legal Disclaimer',
+  },
+  [k.ABOUT_TERMS_DISCLAIMER]: {
+    ml: 'എൽവൻ നവിൽ ബ്രാൻഡിന് കീഴിൽ എൽവൻ പാർത്ഥസാരഥി വികസിപ്പിച്ച ഒരു സ്വതന്ത്ര ഓപ്പൺ സോഴ്സ് ആപ്പാണ് നമ്മിൽ. വാട്ട്സ്ആപ്പ് എന്നത് മെറ്റാ പ്ലാറ്റ്‌ഫോംസിന്റെ രജിസ്റ്റർ ചെയ്ത വ്യാപാരമുദ്രയാണ്. നമ്മിൽ വാട്ട്സ്ആപ്പുമായോ മെറ്റയുമായോ ഔദ്യോഗികമായി ബന്ധപ്പെട്ടിട്ടില്ല. നിങ്ങളുടെ സന്ദേശങ്ങളും ഫയലുകളും നിങ്ങളുടെ കമ്പ്യൂട്ടറിൽ തന്നെ സുരക്ഷിതമായിരിക്കും.',
+    latn: 'Nammil is an independent open-source desktop companion developed under Elvan Navil.',
+  },
+  [k.ABOUT_TERMS_PRIVACY]: {
+    ml: '100% ലോക്കൽ പ്രൈവസി',
+    latn: '100% Local & Offline Privacy',
+  },
+  [k.ABOUT_TERMS_PRIVACY_DESC]: {
+    ml: 'നമ്മിൽ യാതൊരു വിവരങ്ങളും പുറത്തേക്ക് അയക്കുന്നില്ല. എല്ലാം നിങ്ങളുടെ കമ്പ്യൂട്ടറിൽ പൂർണ്ണമായും സുരക്ഷിതമാണ്.',
+    latn: 'Zero telemetry. All data remains strictly local.',
   },
 };

@@ -40,6 +40,9 @@ export function DeveloperTab() {
           <Typography sx={{ mt: 2, fontSize: '22px', fontWeight: 'bold', color: 'var(--mac-text)' }}>
             {t(k.ABOUT_DEV_NAME)}
           </Typography>
+          <Typography sx={{ mt: 0.5, fontSize: '13px', fontWeight: 500, color: 'var(--mac-text-secondary)', opacity: 0.8 }}>
+            {t(k.ABOUT_DEV_ROLE)}
+          </Typography>
 
           {/* Monochrome Pill Button for Portfolio */}
           <ButtonBase
@@ -401,10 +404,71 @@ export function AboutAppTab() {
         </Box>
       </SettingsSection>
 
-      {/* Version Footer */}
-      <Typography sx={{ mt: 2, mb: 1.5, textAlign: 'center', fontSize: '12px', color: 'var(--mac-text-secondary)', opacity: 0.4 }}>
-        {t(k.BRAND_NAME)} {version}
-      </Typography>
+      {/* Open Source & License */}
+      <SettingsSection title={t(k.ABOUT_LICENSE_TITLE)} sx={{ mb: 2 }}>
+        <SettingsRow
+          icon={<MaterialSymbol icon="verified_user" size={20} fill={true} />}
+          iconColor="monochrome"
+          title={t(k.ABOUT_LICENSE_TYPE)}
+          description={t(k.ABOUT_LICENSE_DESC)}
+          control={<MaterialSymbol icon="open_in_new" size={18} color="var(--mac-text-secondary)" />}
+          onClick={() => openUrl('https://github.com/ElvanParthasarathy/Nammil/blob/main/LICENSE')}
+        />
+        <SettingsRow
+          icon={<MaterialSymbol icon="code" size={20} fill={true} />}
+          iconColor="monochrome"
+          title={t(k.ABOUT_SOURCE_CODE)}
+          description={t(k.ABOUT_SOURCE_CODE_DESC)}
+          control={<MaterialSymbol icon="open_in_new" size={18} color="var(--mac-text-secondary)" />}
+          onClick={() => openUrl('https://github.com/ElvanParthasarathy/Nammil')}
+        />
+        <SettingsRow
+          icon={<MaterialSymbol icon="bug_report" size={20} fill={true} />}
+          iconColor="monochrome"
+          title={t(k.ABOUT_ISSUES)}
+          description={t(k.ABOUT_ISSUES_DESC)}
+          control={<MaterialSymbol icon="open_in_new" size={18} color="var(--mac-text-secondary)" />}
+          onClick={() => openUrl('https://github.com/ElvanParthasarathy/Nammil/issues')}
+        />
+        <SettingsRow
+          icon={<MaterialSymbol icon="history" size={20} fill={true} />}
+          iconColor="monochrome"
+          title={t(k.ABOUT_RELEASES)}
+          description={t(k.ABOUT_RELEASES_DESC)}
+          control={<MaterialSymbol icon="open_in_new" size={18} color="var(--mac-text-secondary)" />}
+          onClick={() => openUrl('https://github.com/ElvanParthasarathy/Nammil/releases')}
+        />
+      </SettingsSection>
+
+      {/* Legal & Terms */}
+      <SettingsSection title={t(k.ABOUT_TERMS_TITLE)} sx={{ mb: 2 }}>
+        <Box sx={{ p: 2.5 }}>
+          <Typography sx={{ fontSize: '13px', lineHeight: '21px', color: 'var(--mac-text-secondary)', opacity: 0.9 }}>
+            {t(k.ABOUT_TERMS_DISCLAIMER)}
+          </Typography>
+          <Box sx={{ mt: 2, pt: 2, borderTop: isDark ? '1px solid rgba(255,255,255,0.06)' : '1px solid rgba(0,0,0,0.06)' }}>
+            <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, mb: 0.5 }}>
+              <MaterialSymbol icon="lock" size={16} fill={true} style={{ color: '#00c853' }} />
+              <Typography sx={{ fontSize: '13.5px', fontWeight: 600, color: 'var(--mac-text)' }}>
+                {t(k.ABOUT_TERMS_PRIVACY)}
+              </Typography>
+            </Box>
+            <Typography sx={{ fontSize: '12.5px', lineHeight: '19px', color: 'var(--mac-text-secondary)', opacity: 0.8 }}>
+              {t(k.ABOUT_TERMS_PRIVACY_DESC)}
+            </Typography>
+          </Box>
+        </Box>
+      </SettingsSection>
+
+      {/* Version & Copyright Footer */}
+      <Box sx={{ mt: 3, mb: 2, textAlign: 'center' }}>
+        <Typography sx={{ fontSize: '12.5px', fontWeight: 500, color: 'var(--mac-text-secondary)', opacity: 0.5 }}>
+          {t(k.BRAND_NAME)} {version} • {t(k.ABOUT_DEV_NAME)} • {t(k.ABOUT_PARENT_BRAND_NAME)}
+        </Typography>
+        <Typography sx={{ mt: 0.5, fontSize: '12px', color: 'var(--mac-text-secondary)', opacity: 0.35 }}>
+          {t(k.ABOUT_ALL_RIGHTS_RESERVED)} • Open Source under MIT License
+        </Typography>
+      </Box>
     </Box>
   );
 }
