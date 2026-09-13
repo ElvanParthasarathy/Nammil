@@ -62,7 +62,7 @@ function App() {
       setSettingsLoaded(true);
       setActiveTab('wa-default');
     }
-  }, [setLang]);
+  }, []);
 
   // Controls splash screen dismissal coordinated with WhatsApp loading
   useEffect(() => {

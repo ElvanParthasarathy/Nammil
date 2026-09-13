@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
+import React, { createContext, useContext, useState, useEffect, useCallback, ReactNode } from 'react';
 import { transliterate, capitalizeWords } from 'navil-engine';
 import { taToMlym, mlymToTaml } from './mozhiyaakkam';
 import { en } from './en';
@@ -78,12 +78,12 @@ export const I18nProvider = ({ children, initialLang = 'system' }: { children: R
     setActualLang(resolveLanguage(userLang));
   }, [userLang]);
 
-  const handleSetLang = (newLang: string) => {
+  const handleSetLang = useCallback((newLang: string) => {
     setUserLang(newLang);
     try {
       localStorage.setItem('nammil-language', newLang);
     } catch {}
-  };
+  }, []);
 
   const t = (key: string) => {
     if (actualLang === 'en') return (en as any)[key] || key;
