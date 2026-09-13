@@ -21,7 +21,7 @@ export default function AppearanceTab({ userTheme, setUserTheme }: any) {
 
   return (
     <Box sx={{ width: '100%' }}>
-      <SettingsSection description={t(k.THEME_DESC)}>
+      <SettingsSection>
         <Box sx={{ display: 'flex', justifyContent: 'space-evenly', p: 3 }}>
           {/* Light Mode Option */}
           <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 1 }}>

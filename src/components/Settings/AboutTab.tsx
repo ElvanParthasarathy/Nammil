@@ -40,9 +40,6 @@ export function DeveloperTab() {
           <Typography sx={{ mt: 2, fontSize: '22px', fontWeight: 'bold', color: 'var(--mac-text)' }}>
             {t(k.ABOUT_DEV_NAME)}
           </Typography>
-          <Typography sx={{ mt: 0.5, fontSize: '13px', fontWeight: 500, color: 'var(--mac-text-secondary)', opacity: 0.8 }}>
-            {t(k.ABOUT_DEV_ROLE)}
-          </Typography>
 
           {/* Monochrome Pill Button for Portfolio */}
           <ButtonBase
