@@ -1,5 +1,5 @@
 import React from 'react';
-import { Box, useMediaQuery, Tooltip, Avatar, Typography, Divider } from '@mui/material';
+import { Box, useMediaQuery, Tooltip, Avatar, Typography } from '@mui/material';
 import { FolderOpen, Image, VideoCamera, FileText, Headphones } from '@phosphor-icons/react';
 import { useI18n } from '../../i18n/I18nContext';
 import { k } from '../../i18n/k';
@@ -7,6 +7,7 @@ import { useIsDark } from '../shared/hooks';
 import { SidebarItem } from '../shared/SettingsSection';
 import { Material3Chip } from '../shared/Material3Chip';
 import { Material3IconButton } from '../shared/Material3IconButton';
+import { Material3Divider } from '../shared/Material3Divider';
 
 interface MediaSidebarProps {
   accounts: any[];
@@ -96,7 +97,7 @@ export default function MediaSidebar({ accounts, activeAccount, setActiveAccount
       </Box>
 
       {isSmallScreen && (
-        <Divider sx={{ my: 1, mx: 2, borderColor: isDark ? 'rgba(255,255,255,0.08)' : 'rgba(0,0,0,0.08)' }} />
+        <Material3Divider sx={{ my: 1, mx: 2, borderColor: isDark ? 'rgba(255,255,255,0.08)' : 'rgba(0,0,0,0.08)' }} />
       )}
 
       <SidebarItem

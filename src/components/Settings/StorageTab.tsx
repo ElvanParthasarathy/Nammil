@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from 'react';
-import { Box, Typography, CircularProgress, Tooltip } from '@mui/material';
+import { Box, Typography, Tooltip } from '@mui/material';
 import { HardDrives, Warning, Trash, FolderOpen } from '@phosphor-icons/react';
 import { useI18n } from '../../i18n/I18nContext';
 import { k } from '../../i18n/k';
 import { SettingsSection as SettingsSection, SettingsRow } from '../shared/SettingsSection';
 import { Material3IconButton } from '../shared/Material3IconButton';
+import { Material3CircularProgress } from '../shared/Material3Progress';
 import { useIsDark } from '../shared/hooks';
 
 export default function StorageTab() {
@@ -111,7 +112,7 @@ export default function StorageTab() {
       {isMigrating && progress && (
         <Box sx={{ mt: 3, p: 3, borderRadius: '16px', bgcolor: isDark ? 'rgba(255,255,255,0.05)' : 'rgba(0,0,0,0.03)', border: '1px solid var(--mac-border)' }}>
           <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
-            <CircularProgress size={20} sx={{ mr: 2, color: 'var(--mac-text)' }} />
+            <Material3CircularProgress size={20} sx={{ mr: 2, color: 'var(--mac-text)' }} />
             <Typography sx={{ fontWeight: 600 }}>
               {progress.status === 'counting' ? 'Analyzing files...' : 
                progress.status === 'copying' ? 'Copying files safely...' :

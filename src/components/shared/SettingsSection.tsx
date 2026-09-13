@@ -1,6 +1,7 @@
 import React from 'react';
-import { Box, Typography, Divider, Paper, ButtonBase, Tooltip, useMediaQuery } from '@mui/material';
+import { Box, Typography, Paper, ButtonBase, Tooltip, useMediaQuery } from '@mui/material';
 import { Material3IconButton } from './Material3IconButton';
+import { Material3Divider } from './Material3Divider';
 
 export interface SettingsSectionProps {
   title?: string;
@@ -31,7 +32,7 @@ export function SettingsSection({ title, description, children, sx, paperSx }: S
         {React.Children.toArray(children).filter(Boolean).map((child, index, array) => (
           <React.Fragment key={index}>
             {child}
-            {index < array.length - 1 && <Divider sx={{ ml: '20px', mr: '20px', borderColor: (theme) => theme.palette.mode === 'dark' ? 'rgba(255, 255, 255, 0.04)' : 'rgba(0, 0, 0, 0.04)' }} />}
+            {index < array.length - 1 && <Material3Divider sx={{ mx: 2.5, borderColor: 'var(--mac-divider)' }} />}
           </React.Fragment>
         ))}
       </Paper>
