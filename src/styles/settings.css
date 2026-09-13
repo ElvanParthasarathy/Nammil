@@ -35,8 +35,8 @@
 }
 
 .s2-col-right {
-    padding-top: 32px;
-    padding-left: 32px;
+    padding-top: 24px;
+    padding-left: 24px;
     padding-right: 24px;
     display: flex;
     flex-direction: column;
@@ -53,7 +53,7 @@
     flex-shrink: 0;
 }
 
-/* ── Custom Pill Scrollbars for Layout ── */
+/* ── Custom Auto-Hiding Pill Scrollbars for Layout ── */
 .s2-col-left::-webkit-scrollbar,
 .s2-col-right::-webkit-scrollbar {
     width: 8px;
@@ -65,16 +65,43 @@
     background: transparent;
     border-radius: 8px;
 }
+/* Default: Auto-hidden (transparent) */
 .s2-col-left::-webkit-scrollbar-thumb,
 .s2-col-right::-webkit-scrollbar-thumb {
-    background: rgba(150, 150, 150, 0.5);
+    background-color: transparent;
+    border-radius: 8px;
+    border: 2px solid transparent;
+    background-clip: content-box;
+    transition: background-color 0.3s ease;
+}
+
+/* Hover or active directly on the scrollbar thumb */
+.s2-col-left::-webkit-scrollbar-thumb:hover,
+.s2-col-right::-webkit-scrollbar-thumb:hover {
+    background-color: var(--scrollbar-thumb-hover, rgba(150, 150, 150, 0.7));
     border-radius: 8px;
     border: 2px solid transparent;
     background-clip: content-box;
 }
-.s2-col-left::-webkit-scrollbar-thumb:hover,
-.s2-col-right::-webkit-scrollbar-thumb:hover {
-    background-color: rgba(150, 150, 150, 0.8);
+.s2-col-left::-webkit-scrollbar-thumb:active,
+.s2-col-right::-webkit-scrollbar-thumb:active {
+    background-color: var(--scrollbar-thumb-hover, rgba(150, 150, 150, 0.9));
+    border-radius: 8px;
+    border: 2px solid transparent;
+    background-clip: content-box;
+}
+
+/* Visible during active scrolling or when mouse is near the scrollbar edge */
+.s2-col-left.scrollbar-visible::-webkit-scrollbar-thumb,
+.s2-col-right.scrollbar-visible::-webkit-scrollbar-thumb {
+    background-color: var(--scrollbar-thumb, rgba(150, 150, 150, 0.45));
+    border-radius: 8px;
+    border: 2px solid transparent;
+    background-clip: content-box;
+}
+.s2-col-left.scrollbar-visible::-webkit-scrollbar-thumb:hover,
+.s2-col-right.scrollbar-visible::-webkit-scrollbar-thumb:hover {
+    background-color: var(--scrollbar-thumb-hover, rgba(150, 150, 150, 0.75));
 }
 
 .s2-col-left>*,
@@ -129,6 +156,17 @@
 }
 
 @keyframes fadeIn {
-    from { opacity: 0; }
-    to { opacity: 1; }
+    from {
+        opacity: 0;
+        transform: translateY(3px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.s2-tab-content {
+    width: 100%;
+    animation: fadeIn 0.16s ease-out;
 }

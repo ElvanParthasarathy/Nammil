@@ -22,7 +22,7 @@ export function SettingsSection({ title, description, children, sx, paperSx }: S
         sx={{ 
           borderRadius: '24px', 
           overflow: 'hidden', 
-          bgcolor: 'var(--mac-card-bg, #1c1c1e)',
+          bgcolor: 'var(--mac-card-bg, #1f2020)',
           border: 'none',
           ...paperSx
         }}
@@ -88,13 +88,13 @@ export function SidebarItem({ icon, iconColor, title, description, isActive, onC
               p: '14px 20px',
               borderRadius: '18px',
               cursor: 'pointer',
-              bgcolor: isActive ? (theme: any) => theme.palette.mode === 'dark' ? '#282929' : '#FFFFFF' : 'transparent',
+              bgcolor: isActive ? (theme: any) => theme.palette.mode === 'dark' ? 'var(--mac-card-bg, #1f2020)' : '#FFFFFF' : 'transparent',
               transition: 'background-color 0.15s ease',
               zIndex: isActive ? 2 : 1,
               '&:hover': {
                 bgcolor: isActive 
-                  ? ((theme: any) => theme.palette.mode === 'dark' ? '#2c2d2d' : '#f5f5f5')
-                  : ((theme: any) => theme.palette.mode === 'dark' ? 'rgba(255, 255, 255, 0.06)' : 'rgba(0, 0, 0, 0.04)'),
+                  ? ((theme: any) => theme.palette.mode === 'dark' ? 'rgba(255, 255, 255, 0.08)' : '#f5f5f5')
+                  : ((theme: any) => theme.palette.mode === 'dark' ? 'rgba(255, 255, 255, 0.05)' : 'rgba(0, 0, 0, 0.04)'),
               },
             }}
           >

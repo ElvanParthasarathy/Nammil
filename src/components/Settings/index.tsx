@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Box, Typography, IconButton, Menu, MenuItem } from '@mui/material';
-import { ChatCircle, Palette, Translate, CaretLeft, Gear, DotsThreeVertical, HardDrives, Bell, GearSix, Info } from '@phosphor-icons/react';
+import { ChatCircle, Palette, Translate, CaretLeft, Gear, DotsThreeVertical, HardDrives, Bell, Info, Code, Sparkle } from '@phosphor-icons/react';
 import { useI18n } from '../../i18n/I18nContext';
 import { k } from '../../i18n/k';
 import { SidebarItem } from '../shared/SettingsSection';
@@ -13,8 +13,7 @@ import AppearanceTab from './AppearanceTab';
 import LanguageTab from './LanguageTab';
 import StorageTab from './StorageTab';
 import NotificationsTab from './NotificationsTab';
-import GeneralTab from './GeneralTab';
-import AboutTab from './AboutTab';
+import { DeveloperTab, AboutAppTab, BrandTab } from './AboutTab';
 
 export default function Settings({ accounts, setAccounts, userTheme, setUserTheme }: any) {
   const { t } = useI18n();
@@ -41,9 +40,10 @@ export default function Settings({ accounts, setAccounts, userTheme, setUserThem
     if (activeTab === 'notifications') return t(k.NOTIF_TITLE);
     if (activeTab === 'appearance') return t(k.THEME_TITLE);
     if (activeTab === 'language') return t(k.LANG_TITLE);
-    if (activeTab === 'general') return t(k.GENERAL_TITLE);
     if (activeTab === 'storage') return t(k.STORAGE_TITLE);
-    if (activeTab === 'about') return t(k.ABOUT_TITLE);
+    if (activeTab === 'developer') return t(k.ABOUT_DEVELOPER);
+    if (activeTab === 'aboutApp') return t(k.ABOUT_APP_TITLE);
+    if (activeTab === 'brand') return t(k.ABOUT_PARENT_BRAND_NAME);
     return t(k.SETTINGS_TITLE);
   };
 
@@ -82,14 +82,6 @@ export default function Settings({ accounts, setAccounts, userTheme, setUserThem
         onClick={() => setActiveTab('language')}
       />
       <SidebarItem
-        icon={<GearSix size={20} weight="fill" />}
-        iconColor="monochrome"
-        title={t(k.GENERAL_TITLE)}
-        description={t(k.GENERAL_DESC)}
-        isActive={activeTab === 'general'}
-        onClick={() => setActiveTab('general')}
-      />
-      <SidebarItem
         icon={<HardDrives size={20} weight="fill" />}
         iconColor="monochrome"
         title={t(k.STORAGE_TITLE) || 'Storage & Data'}
@@ -98,12 +90,28 @@ export default function Settings({ accounts, setAccounts, userTheme, setUserThem
         onClick={() => setActiveTab('storage')}
       />
       <SidebarItem
+        icon={<Code size={20} weight="fill" />}
+        iconColor="monochrome"
+        title={t(k.ABOUT_DEVELOPER)}
+        description={t(k.ABOUT_DEVELOPER_DESC)}
+        isActive={activeTab === 'developer'}
+        onClick={() => setActiveTab('developer')}
+      />
+      <SidebarItem
         icon={<Info size={20} weight="fill" />}
         iconColor="monochrome"
-        title={t(k.ABOUT_TITLE)}
-        description={t(k.ABOUT_DESC)}
-        isActive={activeTab === 'about'}
-        onClick={() => setActiveTab('about')}
+        title={t(k.ABOUT_APP_TITLE)}
+        description={t(k.ABOUT_APP_DESC)}
+        isActive={activeTab === 'aboutApp'}
+        onClick={() => setActiveTab('aboutApp')}
+      />
+      <SidebarItem
+        icon={<Sparkle size={20} weight="fill" />}
+        iconColor="monochrome"
+        title={t(k.ABOUT_PARENT_BRAND_NAME)}
+        description={t(k.ABOUT_BRAND_DESC)}
+        isActive={activeTab === 'brand'}
+        onClick={() => setActiveTab('brand')}
       />
     </>
   );
@@ -117,7 +125,7 @@ export default function Settings({ accounts, setAccounts, userTheme, setUserThem
     </Box>
   ) : (
     <>
-      <Box sx={{ display: 'flex', alignItems: 'center', mb: 3, pr: '24px' }}>
+      <Box sx={{ display: 'flex', alignItems: 'center', mb: 2, width: '100%' }}>
         <IconButton
           onClick={() => setActiveTab('')}
           sx={{
@@ -183,13 +191,16 @@ export default function Settings({ accounts, setAccounts, userTheme, setUserThem
         )}
       </Box>
 
-      {activeTab === 'accounts' && <AccountsTab accounts={accounts} setAccounts={setAccounts} />}
-      {activeTab === 'notifications' && <NotificationsTab accounts={accounts} />}
-      {activeTab === 'appearance' && <AppearanceTab userTheme={userTheme} setUserTheme={setUserTheme} />}
-      {activeTab === 'language' && <LanguageTab />}
-      {activeTab === 'general' && <GeneralTab />}
-      {activeTab === 'storage' && <StorageTab />}
-      {activeTab === 'about' && <AboutTab />}
+      <Box className="s2-tab-content" key={activeTab}>
+        {activeTab === 'accounts' && <AccountsTab accounts={accounts} setAccounts={setAccounts} />}
+        {activeTab === 'notifications' && <NotificationsTab accounts={accounts} />}
+        {activeTab === 'appearance' && <AppearanceTab userTheme={userTheme} setUserTheme={setUserTheme} />}
+        {activeTab === 'language' && <LanguageTab />}
+        {activeTab === 'storage' && <StorageTab />}
+        {activeTab === 'developer' && <DeveloperTab />}
+        {activeTab === 'aboutApp' && <AboutAppTab />}
+        {activeTab === 'brand' && <BrandTab />}
+      </Box>
 
       <WinUIClearAllDialog
         open={isClearing}

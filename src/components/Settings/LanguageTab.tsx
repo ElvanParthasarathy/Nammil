@@ -28,7 +28,7 @@ export default function LanguageTab() {
   ];
 
   return (
-    <Box>
+    <Box sx={{ width: '100%' }}>
       <SettingsSection>
         {langOptions.map((option) => (
           <SettingsRow

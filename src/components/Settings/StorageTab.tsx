@@ -9,7 +9,7 @@ import { useIsDark } from '../shared/hooks';
 export default function StorageTab() {
   const { t } = useI18n();
   const isDark = useIsDark();
-  const [currentPath, setCurrentPath] = useState('Loading...');
+  const [currentPath, setCurrentPath] = useState('');
   const [isMigrating, setIsMigrating] = useState(false);
   const [progress, setProgress] = useState<any>(null);
 
@@ -17,7 +17,7 @@ export default function StorageTab() {
     let unsubscribe: any;
     if ((window as any).electronAPI) {
       (window as any).electronAPI.getBaseMediaDir().then((dir: string) => {
-        setCurrentPath(dir);
+        if (dir) setCurrentPath(dir);
       });
 
       unsubscribe = (window as any).electronAPI.onMigrationProgress((data: any) => {
@@ -53,12 +53,12 @@ export default function StorageTab() {
   };
 
   return (
-    <Box sx={{ pr: '24px', pb: '24px' }}>
-      <SettingsSection title={t(k.STORAGE_TITLE)}>
+    <Box sx={{ width: '100%' }}>
+      <SettingsSection>
         <SettingsRow
           icon={<HardDrives size={20} weight="fill" />}
           title={t(k.STORAGE_MEDIA_FOLDER)}
-          description={currentPath}
+          description={currentPath || '...'}
           control={
             <Tooltip title={t(k.BTN_CHANGE_FOLDER)} placement="top" arrow>
               <IconButton 

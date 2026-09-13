@@ -94,7 +94,7 @@ export default function NotificationsTab({ accounts }: any) {
   };
 
   return (
-    <Box sx={{ pr: '24px', pb: '24px' }}>
+    <Box sx={{ width: '100%' }}>
       <SettingsSection>
         <SettingsRow
           title={t(k.NOTIF_ENABLE)}

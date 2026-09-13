@@ -65,4 +65,5 @@ contextBridge.exposeInMainWorld('electronAPI', {
     return () => ipcRenderer.removeListener('whatsapp-ready', handler);
   },
   isWhatsAppReady: (accountId) => ipcRenderer.invoke('is-whatsapp-ready', accountId),
+  openExternal: (url) => ipcRenderer.send('open-external', url),
 });

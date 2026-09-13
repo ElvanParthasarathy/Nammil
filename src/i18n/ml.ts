@@ -530,12 +530,12 @@ export const ml = {
     latn: 'Udane restart cheyyuka',
   },
   [k.ABOUT_TITLE]: {
-    ml: 'കുറിച്ച്',
-    latn: 'Kurichu',
+    ml: 'ആപ്പും ബ്രാൻഡും',
+    latn: 'Appum Brandum',
   },
   [k.ABOUT_DESC]: {
-    ml: 'ആപ്പ് വിവരങ്ങൾ, ക്രെഡിറ്റ്സ്',
-    latn: 'App vivarangal, credits',
+    ml: 'ഡെവലപ്പർ, ആപ്പ് വിവരങ്ങൾ, ബ്രാൻഡ്',
+    latn: 'Developer, app vivarangal, brand',
   },
   [k.ABOUT_VERSION]: {
     ml: 'പതിപ്പ്',
@@ -550,8 +550,8 @@ export const ml = {
     latn: 'Elvan Navil',
   },
   [k.ABOUT_DEVELOPER]: {
-    ml: 'ഡെവലപ്പർ',
-    latn: 'Developer',
+    ml: 'ഡെവലപ്പറെ കുറിച്ച്',
+    latn: 'Developere Kurichu',
   },
   [k.ABOUT_DEV_NAME]: {
     ml: 'എൽവൻ പാർത്തചാരതി',
@@ -575,7 +575,113 @@ export const ml = {
   },
   [k.ABOUT_COPYRIGHT]: {
     ml: 'പകർപ്പവകാശം',
-    latn: 'Pakarppavakasam',
+    latn: 'Pakarppavakasham',
+  },
+
+  // About & Brand (Neram 3-Phase Architecture)
+  [k.ABOUT_GROUP_TITLE]: {
+    ml: 'ആപ്പും ബ്രാൻഡും',
+    latn: 'About & Brand',
+  },
+  [k.ABOUT_DEVELOPER_DESC]: {
+    ml: 'ഡെവലപ്പർ വിവരങ്ങളും ബന്ധപ്പെടാനും',
+    latn: 'Developer Vivarangalum Bandhappedanum',
+  },
+  [k.ABOUT_APP_TITLE]: {
+    ml: 'ആപ്പിനെ പറ്റി',
+    latn: 'Appine Patti',
+  },
+  [k.ABOUT_APP_DESC]: {
+    ml: 'നമ്മിൽ - വാട്ട്സ്ആപ്പ് ഓർഗനൈസർ',
+    latn: 'Nammil - WhatsApp Organizer',
+  },
+  [k.ABOUT_BRAND_DESC]: {
+    ml: 'എൽവൻ പാർത്തചാരതിയുടെ നിർമ്മിതി',
+    latn: 'Elvan Parthasarathiyude Nirmithi',
+  },
+  [k.ABOUT_VISIT_PORTFOLIO]: {
+    ml: 'പോർട്ട്ഫോളിയോ സന്ദർശിക്കുക',
+    latn: 'Visit Portfolio',
+  },
+  [k.ABOUT_CONNECT_TITLE]: {
+    ml: 'ബന്ധപ്പെടുക',
+    latn: 'CONNECT WITH ME',
+  },
+  [k.ABOUT_EMAIL]: {
+    ml: 'ഇമെയിൽ',
+    latn: 'Email',
+  },
+  [k.ABOUT_LINKEDIN]: {
+    ml: 'ലിങ്ക്ഡ്ഇൻ',
+    latn: 'LinkedIn',
+  },
+  [k.ABOUT_GITHUB]: {
+    ml: 'ഗിറ്റ്ഹബ്ബ്',
+    latn: 'GitHub',
+  },
+  [k.ABOUT_LOCATION]: {
+    ml: 'സ്ഥലം',
+    latn: 'Location',
+  },
+  [k.ABOUT_LOCATION_VAL]: {
+    ml: 'ചെന്നൈ, തമിഴ്നാട്',
+    latn: 'Chennai, Tamil Nadu',
+  },
+  [k.ABOUT_FROM_BRAND]: {
+    ml: 'എൽവൻ നവിൽ സംരംഭം',
+    latn: 'From Elvan Navil',
+  },
+  [k.ABOUT_WHAT_IS_NAMMIL]: {
+    ml: 'എന്താണ് നമ്മിൽ?',
+    latn: 'What is Nammil?',
+  },
+  [k.ABOUT_NAMMIL_DESC]: {
+    ml: 'നമ്മിൽ എന്നത് വാട്ട്സ്ആപ്പിനായുള്ള ലളിതവും സുരക്ഷിതവുമായ ഡെസ്ക്ടോപ്പ് ആപ്പാണ്. ഒന്നിലധികം അക്കൗണ്ടുകൾ ഒരുമിച്ച് ഉപയോഗിക്കാനും മീഡിയ സ്വയം തരംതിരിക്കാനും ഇത് സഹായിക്കുന്നു.\n\nഎൽവൻ നവിൽ സംരംഭം\nസംഭാഷണങ്ങളും മീഡിയയും മനോഹരമായി ക്രമീകരിക്കാൻ രൂപകൽപ്പന ചെയ്തത്.',
+    latn: 'Nammil is a sleek desktop companion for WhatsApp.',
+  },
+  [k.ABOUT_FEATURES_TITLE]: {
+    ml: 'പ്രത്യേകതകൾ',
+    latn: 'Features',
+  },
+  [k.ABOUT_FEAT_MULTI_ACCOUNT]: {
+    ml: 'മൾട്ടി അക്കൗണ്ട്',
+    latn: 'Multi-Account Sessions',
+  },
+  [k.ABOUT_FEAT_MULTI_ACCOUNT_DESC]: {
+    ml: 'ഒന്നിലധികം വാട്ട്സ്ആപ്പ് അക്കൗണ്ടുകൾ ഒരേസമയം പ്രവർത്തിപ്പിക്കുക.',
+    latn: 'Run independent WhatsApp instances side-by-side.',
+  },
+  [k.ABOUT_FEAT_ORGANIZER]: {
+    ml: 'മീഡിയ ഓർഗനൈസർ',
+    latn: 'Automated Media Organizer',
+  },
+  [k.ABOUT_FEAT_ORGANIZER_DESC]: {
+    ml: 'ഫയലുകളും ഫോട്ടോകളും തനിയെ തരംതിരിക്കപ്പെടുന്നു.',
+    latn: 'Automatically categorizes your media files.',
+  },
+  [k.ABOUT_FEAT_NOTIF]: {
+    ml: 'ഡെസ്ക്ടോപ്പ് അറിയിപ്പുകൾ',
+    latn: 'Native Desktop Notifications',
+  },
+  [k.ABOUT_FEAT_NOTIF_DESC]: {
+    ml: 'ശബ്ദ നിയന്ത്രണങ്ങളോടെയുള്ള തത്സമയ അറിയിപ്പുകൾ.',
+    latn: 'Native desktop alerts with custom chimes.',
+  },
+  [k.ABOUT_FEAT_PRIVACY]: {
+    ml: 'സുരക്ഷിതത്വം',
+    latn: 'Local & Offline Privacy',
+  },
+  [k.ABOUT_FEAT_PRIVACY_DESC]: {
+    ml: 'നിങ്ങളുടെ വിവരങ്ങൾ നിങ്ങളുടെ കമ്പ്യൂട്ടറിൽ മാത്രം സൂക്ഷിക്കപ്പെടുന്നു.',
+    latn: 'All your sessions and files remain strictly local.',
+  },
+  [k.ABOUT_ALL_RIGHTS_RESERVED]: {
+    ml: '© എല്ലാ അവകാശങ്ങളും നിക്ഷിപ്തം',
+    latn: '© All rights reserved',
+  },
+  [k.ABOUT_BRAND_TAGLINE]: {
+    ml: 'ചിന്തകളും എഴുത്തുകളും ഡിജിറ്റൽ നിർമ്മിതികളും — എൽവൻ നവിൽ.',
+    latn: 'Thoughts, writings, and digital creations — Elvan Navil.',
   },
   [k.TIME_AM]: {
     ml: 'രാവിലെ',

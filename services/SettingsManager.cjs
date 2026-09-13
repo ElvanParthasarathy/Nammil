@@ -234,6 +234,7 @@ class SettingsManager {
     ipcMain.on('set-auto-start', (event, enabled) => {
       this.app.setLoginItemSettings({
         openAtLogin: enabled,
+        args: ['--hidden'],
         path: process.execPath
       });
     });

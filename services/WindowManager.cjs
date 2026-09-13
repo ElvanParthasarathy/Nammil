@@ -18,9 +18,9 @@ class WindowManager {
 
     this.mainWindow = new BrowserWindow({
       width: isFirstBoot ? 980 : 1280,
-      height: isFirstBoot ? 540 : 720,
+      height: isFirstBoot ? 540 : 840,
       minWidth: isFirstBoot ? 980 : 940,
-      minHeight: isFirstBoot ? 540 : 600,
+      minHeight: isFirstBoot ? 540 : 650,
       resizable: !isFirstBoot,
       maximizable: !isFirstBoot,
       show: false, // Hide until maximized
@@ -46,6 +46,11 @@ class WindowManager {
       if (hasShown) return;
       if (!this.mainWindow || this.mainWindow.isDestroyed()) return;
       hasShown = true;
+
+      if (process.argv.includes('--hidden') || process.argv.includes('--minimized')) {
+        // Run silently in background / system tray on boot
+        return;
+      }
 
       if (!isFirstBoot) {
         this.mainWindow.maximize();

@@ -54,7 +54,7 @@ export default function AccountsTab({ accounts, setAccounts }: any) {
 
   return (
     <>
-      <Box>
+      <Box sx={{ width: '100%' }}>
         <SettingsSection>
           {accounts.map((acc: any, index: number) => (
             <SettingsRow

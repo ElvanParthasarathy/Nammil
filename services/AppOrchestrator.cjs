@@ -42,11 +42,16 @@ class AppOrchestrator {
     this.notificationManager.registerIPC(ipcMain, dialog);
     this.whatsAppViewManager.registerIPC(ipcMain);
 
-    // 5. General App Lifecycle IPCs
     ipcMain.on('restart-app', () => {
       this.app.isQuitting = true;
       this.app.relaunch();
       this.app.exit(0);
+    });
+
+    ipcMain.on('open-external', (_event, url) => {
+      if (url && (url.startsWith('https://') || url.startsWith('http://') || url.startsWith('mailto:'))) {
+        shell.openExternal(url);
+      }
     });
 
     ipcMain.handle('reset-app', async () => {
