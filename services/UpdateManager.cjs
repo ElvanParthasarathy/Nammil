@@ -328,7 +328,7 @@ class UpdateManager {
     // If downloaded via direct fallback
     if (this.downloadedInstallerPath && fs.existsSync(this.downloadedInstallerPath)) {
       try {
-        spawn(this.downloadedInstallerPath, ['/SILENT'], { detached: true, stdio: 'ignore' }).unref();
+        spawn(this.downloadedInstallerPath, ['/VERYSILENT', '/SUPPRESSMSGBOXES', '/NORESTART', '/SP-'], { detached: true, stdio: 'ignore' }).unref();
         if (this.app && typeof this.app.quit === 'function') {
           this.app.isQuitting = true;
           this.app.quit();
@@ -341,7 +341,7 @@ class UpdateManager {
 
     if (this.app && this.app.isPackaged && updater) {
       try {
-        updater.quitAndInstall();
+        updater.quitAndInstall(true, true);
         return;
       } catch (e) {
         console.warn('[UpdateManager] quitAndInstall failed:', e.message);

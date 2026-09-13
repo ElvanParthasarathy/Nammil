@@ -196,23 +196,23 @@ input,
 
 .splash-shape {
     position: absolute;
-    background-color: #141414;
+    background-color: rgba(255, 255, 255, 0.03);
     pointer-events: none;
     z-index: 0;
 }
 
 @media (prefers-color-scheme: light) {
     .splash-shape {
-        background-color: #EAEAEA;
+        background-color: rgba(0, 0, 0, 0.035);
     }
 }
 
 .splash-screen-root.dark .splash-shape {
-    background-color: #141414;
+    background-color: rgba(255, 255, 255, 0.03);
 }
 
 .splash-screen-root.light .splash-shape {
-    background-color: #EAEAEA;
+    background-color: rgba(0, 0, 0, 0.035);
 }
 
 .splash-center {

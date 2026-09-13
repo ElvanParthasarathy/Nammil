@@ -109,23 +109,23 @@
       color: #1A1A1A;
     }
 
-    /* Floating background shapes from Neram */
+    /* Floating background shapes with layered translucent depth */
     .splash-shape {
       position: absolute;
-      background-color: #141414;
+      background-color: rgba(255, 255, 255, 0.03);
       pointer-events: none;
       z-index: 0;
     }
     @media (prefers-color-scheme: light) {
       .splash-shape {
-        background-color: #EAEAEA;
+        background-color: rgba(0, 0, 0, 0.035);
       }
     }
     html.theme-dark .splash-shape {
-      background-color: #141414;
+      background-color: rgba(255, 255, 255, 0.03);
     }
     html.theme-light .splash-shape {
-      background-color: #EAEAEA;
+      background-color: rgba(0, 0, 0, 0.035);
     }
     .shape-1 {
       top: 2%;
