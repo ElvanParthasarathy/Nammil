@@ -1,5 +1,5 @@
 #define MyAppName "Nammil"
-#define MyAppVersion "1.2.2"
+#define MyAppVersion "1.2.3"
 #define MyAppPublisher "Elvan Navil"
 #define MyAppExeName "Nammil.exe"
 #define MyOutputDir "build-release"
@@ -52,6 +52,9 @@ Type: files; Name: "{autodesktop}\Elvan Nammil.lnk"
 Type: files; Name: "{userprograms}\Elvan Nammil.lnk"
 Type: files; Name: "{userdesktop}\Elvan Nammil.lnk"
 Type: files; Name: "{userstartup}\Elvan Nammil.lnk"
+Type: files; Name: "{commonprograms}\{#MyAppName}.lnk"
+Type: files; Name: "{commondesktop}\{#MyAppName}.lnk"
+Type: files; Name: "{commonstartup}\{#MyAppName}.lnk"
 
 [Icons]
 Name: "{autoprograms}\{#MyAppName}"; Filename: "{app}\{#MyAppExeName}"
@@ -64,9 +67,21 @@ Filename: "{app}\{#MyAppExeName}"; Flags: nowait skipifnotsilent
 
 [UninstallDelete]
 Type: filesandordirs; Name: "{app}"
+Type: files; Name: "{autoprograms}\{#MyAppName}.lnk"
+Type: files; Name: "{autodesktop}\{#MyAppName}.lnk"
+Type: files; Name: "{userstartup}\{#MyAppName}.lnk"
 
 [Code]
 function InitializeSetup(): Boolean;
+var
+  ResultCode: Integer;
+begin
+  Exec('taskkill.exe', '/F /IM Nammil.exe /T', '', SW_HIDE, ewWaitUntilTerminated, ResultCode);
+  Exec('taskkill.exe', '/F /IM "Elvan Nammil.exe" /T', '', SW_HIDE, ewWaitUntilTerminated, ResultCode);
+  Result := True;
+end;
+
+function InitializeUninstall(): Boolean;
 var
   ResultCode: Integer;
 begin
