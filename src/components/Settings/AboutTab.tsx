@@ -404,42 +404,6 @@ export function AboutAppTab() {
         </Box>
       </SettingsSection>
 
-      {/* Source Code & Community */}
-      <SettingsSection title={t(k.ABOUT_SOURCE_CODE)} sx={{ mb: 2 }}>
-        <SettingsRow
-          icon={<MaterialSymbol icon="code" size={20} fill={true} />}
-          iconColor="monochrome"
-          title={t(k.ABOUT_SOURCE_CODE)}
-          description={t(k.ABOUT_SOURCE_CODE_DESC)}
-          control={<MaterialSymbol icon="open_in_new" size={18} color="var(--mac-text-secondary)" />}
-          onClick={() => openUrl('https://github.com/ElvanParthasarathy/Nammil')}
-        />
-        <SettingsRow
-          icon={<MaterialSymbol icon="bug_report" size={20} fill={true} />}
-          iconColor="monochrome"
-          title={t(k.ABOUT_ISSUES)}
-          description={t(k.ABOUT_ISSUES_DESC)}
-          control={<MaterialSymbol icon="open_in_new" size={18} color="var(--mac-text-secondary)" />}
-          onClick={() => openUrl('https://github.com/ElvanParthasarathy/Nammil/issues')}
-        />
-        <SettingsRow
-          icon={<MaterialSymbol icon="history" size={20} fill={true} />}
-          iconColor="monochrome"
-          title={t(k.ABOUT_RELEASES)}
-          description={t(k.ABOUT_RELEASES_DESC)}
-          control={<MaterialSymbol icon="open_in_new" size={18} color="var(--mac-text-secondary)" />}
-          onClick={() => openUrl('https://github.com/ElvanParthasarathy/Nammil/releases')}
-        />
-        <SettingsRow
-          icon={<MaterialSymbol icon="verified_user" size={20} fill={true} />}
-          iconColor="monochrome"
-          title={t(k.ABOUT_LICENSE_TYPE)}
-          description={t(k.ABOUT_LICENSE_DESC)}
-          control={<MaterialSymbol icon="open_in_new" size={18} color="var(--mac-text-secondary)" />}
-          onClick={() => openUrl('https://github.com/ElvanParthasarathy/Nammil/blob/main/LICENSE')}
-        />
-      </SettingsSection>
-
       {/* Version Footer */}
       <Box sx={{ mt: 3, mb: 2, textAlign: 'center' }}>
         <Typography sx={{ fontSize: '12.5px', fontWeight: 500, color: 'var(--mac-text-secondary)', opacity: 0.5 }}>
@@ -516,7 +480,7 @@ export function BrandTab() {
         </Box>
       </SettingsSection>
 
-      {/* Open Source & License */}
+      {/* Open Source & Resources */}
       <SettingsSection title={t(k.ABOUT_LICENSE_TITLE)} sx={{ mb: 2 }}>
         <SettingsRow
           icon={<MaterialSymbol icon="verified_user" size={20} fill={true} />}
@@ -533,6 +497,22 @@ export function BrandTab() {
           description={t(k.ABOUT_SOURCE_CODE_DESC)}
           control={<MaterialSymbol icon="open_in_new" size={18} color="var(--mac-text-secondary)" />}
           onClick={() => openUrl('https://github.com/ElvanParthasarathy/Nammil')}
+        />
+        <SettingsRow
+          icon={<MaterialSymbol icon="bug_report" size={20} fill={true} />}
+          iconColor="monochrome"
+          title={t(k.ABOUT_ISSUES)}
+          description={t(k.ABOUT_ISSUES_DESC)}
+          control={<MaterialSymbol icon="open_in_new" size={18} color="var(--mac-text-secondary)" />}
+          onClick={() => openUrl('https://github.com/ElvanParthasarathy/Nammil/issues')}
+        />
+        <SettingsRow
+          icon={<MaterialSymbol icon="history" size={20} fill={true} />}
+          iconColor="monochrome"
+          title={t(k.ABOUT_RELEASES)}
+          description={t(k.ABOUT_RELEASES_DESC)}
+          control={<MaterialSymbol icon="open_in_new" size={18} color="var(--mac-text-secondary)" />}
+          onClick={() => openUrl('https://github.com/ElvanParthasarathy/Nammil/releases')}
         />
       </SettingsSection>
 
