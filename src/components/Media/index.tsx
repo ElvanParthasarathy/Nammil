@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Box, Button, Typography, Slide } from '@mui/material';
+import { Box } from '@mui/material';
 import { useI18n } from '../../i18n/I18nContext';
 import { k } from '../../i18n/k';
 import DualPanelLayout from '../shared/DualPanelLayout';

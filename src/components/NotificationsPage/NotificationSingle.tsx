@@ -1,5 +1,6 @@
 import React from 'react';
-import { Avatar, Box, IconButton, Paper, Stack, Typography } from '@mui/material';
+import { Avatar, Box, Paper, Stack, Typography } from '@mui/material';
+import { Material3IconButton } from '../shared/Material3IconButton';
 import { ChatCircle, X } from '@phosphor-icons/react';
 import { NotificationItem } from './index';
 
@@ -94,21 +95,20 @@ export default function NotificationSingle({
         {/* Right side icons (X) */}
         <Stack direction="row" alignItems="center" spacing={1} sx={{ pl: 1, alignSelf: 'center' }}>
           {onClearSingle && (
-            <IconButton
+            <Material3IconButton
               size="small"
               className="action-btn"
-              onClick={(e) => {
+              onClick={(e: any) => {
                 e.stopPropagation();
                 onClearSingle(item.id);
               }}
               sx={{
                 color: isDark ? '#888' : '#aaa',
                 p: 0.5,
-                '&:hover': { color: isDark ? '#fff' : '#111', bgcolor: 'transparent' },
               }}
             >
               <X size={16} weight="bold" />
-            </IconButton>
+            </Material3IconButton>
           )}
         </Stack>
       </Stack>
