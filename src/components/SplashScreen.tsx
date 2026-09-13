@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useI18n } from '../i18n/I18nContext';
+import AppLogo from '../assets/app_icon.png';
 
 import './Onboarding/Onboarding.css';
 
@@ -59,8 +60,8 @@ export default function SplashScreen({ userTheme }: SplashScreenProps) {
       {/* Centered Content: Logo alone */}
       <div className="splash-center">
         <img 
-          src="/app_icon.png" 
-          alt="Nammil" 
+          src={AppLogo} 
+          alt="" 
           className="splash-logo" 
         />
       </div>
