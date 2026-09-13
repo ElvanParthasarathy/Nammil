@@ -13,6 +13,20 @@ class SettingsManager {
     } else {
       this.nativeTheme.themeSource = 'system';
     }
+
+    // Ensure auto-start is active by default in production
+    if (this.app && this.app.isPackaged) {
+      try {
+        const shouldAutoStart = this.settings.autoStart !== false;
+        this.app.setLoginItemSettings({
+          openAtLogin: shouldAutoStart,
+          args: ['--hidden'],
+          path: process.execPath
+        });
+      } catch (e) {
+        console.warn('[SettingsManager] Failed to sync login item settings:', e);
+      }
+    }
   }
 
   getSettingsSync() {
@@ -23,6 +37,8 @@ class SettingsManager {
       duplicateAction: 'skip',
       notificationSound: 'kumizhi',
       accountSounds: {},
+      autoStart: true,
+      startMinimized: true,
       isFirstBoot: true,
       accounts: [
         { id: 'account_1', name: 'Personal' }
@@ -236,15 +252,23 @@ class SettingsManager {
     });
 
     ipcMain.handle('get-auto-start', () => {
-      return this.app.getLoginItemSettings().openAtLogin;
+      const s = this.getSettingsSync();
+      return s.autoStart !== false;
     });
 
     ipcMain.on('set-auto-start', (event, enabled) => {
-      this.app.setLoginItemSettings({
-        openAtLogin: enabled,
-        args: ['--hidden'],
-        path: process.execPath
-      });
+      let s = this.getSettingsSync();
+      s.autoStart = enabled;
+      this.saveSettingsSync(s);
+      try {
+        this.app.setLoginItemSettings({
+          openAtLogin: enabled,
+          args: ['--hidden'],
+          path: process.execPath
+        });
+      } catch (e) {
+        console.warn('[SettingsManager] setLoginItemSettings error:', e);
+      }
     });
 
     ipcMain.on('set-hardware-acceleration', (event, enabled) => {

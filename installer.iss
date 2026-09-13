@@ -1,5 +1,5 @@
 #define MyAppName "Nammil"
-#define MyAppVersion "1.2.1"
+#define MyAppVersion "1.2.2"
 #define MyAppPublisher "Elvan Navil"
 #define MyAppExeName "Nammil.exe"
 #define MyOutputDir "build-release"
@@ -51,14 +51,16 @@ Type: files; Name: "{autoprograms}\Elvan Nammil.lnk"
 Type: files; Name: "{autodesktop}\Elvan Nammil.lnk"
 Type: files; Name: "{userprograms}\Elvan Nammil.lnk"
 Type: files; Name: "{userdesktop}\Elvan Nammil.lnk"
+Type: files; Name: "{userstartup}\Elvan Nammil.lnk"
 
 [Icons]
 Name: "{autoprograms}\{#MyAppName}"; Filename: "{app}\{#MyAppExeName}"
 Name: "{autodesktop}\{#MyAppName}"; Filename: "{app}\{#MyAppExeName}"; Tasks: desktopicon
+Name: "{userstartup}\{#MyAppName}"; Filename: "{app}\{#MyAppExeName}"; Parameters: "--hidden"
 
 [Run]
-Filename: "{app}\{#MyAppExeName}"; Description: "{cm:LaunchProgram,{#StringChange(MyAppName, '&', '&&')}}"; Flags: nowait postinstall skipifsilent runasoriginaluser
-Filename: "{app}\{#MyAppExeName}"; Flags: nowait skipifnotsilent runasoriginaluser
+Filename: "{app}\{#MyAppExeName}"; Description: "{cm:LaunchProgram,{#StringChange(MyAppName, '&', '&&')}}"; Flags: nowait postinstall skipifsilent
+Filename: "{app}\{#MyAppExeName}"; Flags: nowait skipifnotsilent
 
 [UninstallDelete]
 Type: filesandordirs; Name: "{app}"
