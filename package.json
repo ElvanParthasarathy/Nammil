@@ -3,7 +3,7 @@
   "productName": "Nammil",
   "author": "Elvan Parthasarathy",
   "description": "Nammil - WhatsApp Client",
-  "version": "1.1.8",
+  "version": "1.1.9",
   "private": true,
   "type": "module",
   "main": "main.cjs",

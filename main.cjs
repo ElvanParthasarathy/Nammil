@@ -71,7 +71,6 @@ if (!gotTheLock) {
       if (!mainWindow.isDestroyed()) {
         if (mainWindow.isMinimized()) mainWindow.restore();
         mainWindow.show();
-        mainWindow.restore();
         mainWindow.setAlwaysOnTop(true);
         mainWindow.focus();
         setTimeout(() => {
