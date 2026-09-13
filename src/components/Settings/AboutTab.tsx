@@ -270,15 +270,12 @@ export function BrandTab() {
           <Typography sx={{ fontSize: '24px', fontWeight: 'bold', color: 'var(--mac-text)' }}>
             {t(k.ABOUT_PARENT_BRAND_NAME)}
           </Typography>
-          <Typography sx={{ color: 'var(--mac-text-secondary)', fontSize: '13.5px', mt: 1.25, maxWidth: 600, lineHeight: 1.6 }}>
-            {t(k.ABOUT_BRAND_TAGLINE)}
-          </Typography>
 
           {/* Monochrome Pill Button for Brand Website */}
           <ButtonBase
             onClick={() => openUrl('https://elvannavil.vercel.app')}
             sx={{
-              mt: 2.5,
+              mt: 2.25,
               px: 2.75,
               py: 1.15,
               borderRadius: '50px',
@@ -289,11 +286,6 @@ export function BrandTab() {
               display: 'inline-flex',
               alignItems: 'center',
               gap: 0.75,
-              transition: 'all 0.15s ease',
-              '&:hover': {
-                bgcolor: isDark ? 'rgba(255, 255, 255, 0.16)' : 'rgba(0, 0, 0, 0.12)',
-                transform: 'translateY(-1px)',
-              },
             }}
           >
             elvannavil.vercel.app
