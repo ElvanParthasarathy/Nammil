@@ -1,6 +1,6 @@
 #define MyAppName "Nammil"
 #define MyAppVersion "2.5.11"
-#define MyAppPublisher "Elvan Parthasarathy"
+#define MyAppPublisher "Elvan Navil"
 #define MyAppExeName "Nammil.exe"
 #define MyOutputDir "build-release"
 #define MyAppURL "https://nammil.elvan.dev"

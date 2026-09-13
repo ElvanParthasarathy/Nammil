@@ -34,7 +34,6 @@ export function DeveloperTab() {
               height: 96,
               borderRadius: '50%',
               objectFit: 'cover',
-              border: `2px solid ${isDark ? 'rgba(255,255,255,0.1)' : 'rgba(0,0,0,0.08)'}`,
             }}
           />
           <Typography sx={{ mt: 2, fontSize: '22px', fontWeight: 'bold', color: 'var(--mac-text)' }}>
