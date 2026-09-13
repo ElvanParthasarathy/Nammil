@@ -57,11 +57,6 @@ export default function NotificationsTab({ accounts }: any) {
     }
   };
 
-  const handleAccountSoundChange = (accountId: string, sound: string) => {
-    const updated = { ...accountSounds, [accountId]: sound };
-    handleToggle('accountSounds', updated, setAccountSounds);
-  };
-
   const previewSound = (soundToPlay = notificationSound) => {
     if (!soundToPlay || soundToPlay === 'silent') return;
 
@@ -86,11 +81,17 @@ export default function NotificationsTab({ accounts }: any) {
     });
   };
 
-  const toggleAccountMute = (accountId: string) => {
-    const newMuted = mutedAccounts.includes(accountId)
-      ? mutedAccounts.filter(id => id !== accountId)
-      : [...mutedAccounts, accountId];
-    handleToggle('mutedAccounts', newMuted, setMutedAccounts);
+  const handleAccountSoundChange = (accountId: string, sound: string) => {
+    const updatedSounds = { ...accountSounds, [accountId]: sound };
+    handleToggle('accountSounds', updatedSounds, setAccountSounds);
+
+    let updatedMuted: string[];
+    if (sound === 'silent') {
+      updatedMuted = mutedAccounts.includes(accountId) ? mutedAccounts : [...mutedAccounts, accountId];
+    } else {
+      updatedMuted = mutedAccounts.filter(id => id !== accountId);
+    }
+    handleToggle('mutedAccounts', updatedMuted, setMutedAccounts);
   };
 
   return (
@@ -121,8 +122,8 @@ export default function NotificationsTab({ accounts }: any) {
       {accounts && accounts.length >= 1 && (
         <SettingsSection title={t(k.NOTIF_PER_ACCOUNT)}>
           {accounts.map((acc: any) => {
-            const currentAccSound = accountSounds[acc.id] || notificationSound || 'kumizhi';
             const isMuted = mutedAccounts.includes(acc.id) || mutedAccounts.includes(acc.name);
+            const currentAccSound = isMuted ? 'silent' : (accountSounds[acc.id] || notificationSound || 'kumizhi');
             return (
               <SettingsRow
                 key={acc.id}
@@ -133,7 +134,7 @@ export default function NotificationsTab({ accounts }: any) {
                       onClick={() => previewSound(currentAccSound)}
                       size="small"
                       sx={{ color: 'var(--mac-text)' }}
-                      disabled={isMuted || currentAccSound === 'silent'}
+                      disabled={currentAccSound === 'silent'}
                     >
                       <SpeakerHigh size={18} />
                     </IconButton>
@@ -141,9 +142,8 @@ export default function NotificationsTab({ accounts }: any) {
                       value={currentAccSound}
                       onChange={(e) => handleAccountSoundChange(acc.id, e.target.value)}
                       size="small"
-                      disabled={isMuted}
                       sx={{
-                        minWidth: 110,
+                        minWidth: 120,
                         borderRadius: '12px',
                         color: 'var(--mac-text)',
                         '.MuiOutlinedInput-notchedOutline': { borderColor: 'var(--mac-divider)' },
@@ -159,10 +159,6 @@ export default function NotificationsTab({ accounts }: any) {
                       <MenuItem value="alai">{t(k.NOTIF_SOUND_ALAI)}</MenuItem>
                       <MenuItem value="silent">{t(k.NOTIF_SOUND_SILENT)}</MenuItem>
                     </Select>
-                    <Material3Switch
-                      checked={!isMuted}
-                      onChange={() => toggleAccountMute(acc.id)}
-                    />
                   </Box>
                 }
               />
