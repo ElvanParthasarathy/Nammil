@@ -1,4 +1,6 @@
 const { ipcMain, dialog, shell, nativeTheme, nativeImage, protocol, net } = require('electron');
+const fs = require('fs');
+const path = require('path');
 
 const SettingsManager = require('./SettingsManager.cjs');
 const WindowManager = require('./WindowManager.cjs');
@@ -115,6 +117,13 @@ class AppOrchestrator {
     });
 
     ipcMain.handle('get-app-version', () => {
+      try {
+        const pkgPath = path.join(__dirname, '..', 'package.json');
+        if (fs.existsSync(pkgPath)) {
+          const pkg = JSON.parse(fs.readFileSync(pkgPath, 'utf8'));
+          if (pkg.version) return pkg.version;
+        }
+      } catch (e) {}
       return this.app.getVersion();
     });
 

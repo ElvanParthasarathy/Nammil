@@ -7,6 +7,7 @@ import { SettingsSection, SettingsRow } from '../shared/SettingsSection';
 import { useIsDark } from '../shared/hooks';
 import NammilLogo from '../../assets/nammil_outline.webp';
 import DeveloperAvatar from '../../assets/developer_profile.png';
+import pkg from '../../../package.json';
 
 const openUrl = (url: string) => {
   if ((window as any).electronAPI && (window as any).electronAPI.openExternal) {
@@ -121,12 +122,12 @@ export function AboutAppTab() {
   const { t } = useI18n();
   const isDark = useIsDark();
   const isDesktopWide = useMediaQuery('(min-width: 1200px)');
-  const [version, setVersion] = useState('v2.5.11');
+  const [version, setVersion] = useState(`v${pkg.version}`);
 
   useEffect(() => {
     if ((window as any).electronAPI && (window as any).electronAPI.getAppVersion) {
       (window as any).electronAPI.getAppVersion().then((v: string) => {
-        if (v) setVersion(`v${v}`);
+        if (v && v !== '2.2.0') setVersion(`v${v}`);
       });
     }
   }, []);
@@ -251,12 +252,12 @@ export function AboutAppTab() {
 export function BrandTab() {
   const { t } = useI18n();
   const isDark = useIsDark();
-  const [version, setVersion] = useState('v2.5.11');
+  const [version, setVersion] = useState(`v${pkg.version}`);
 
   useEffect(() => {
     if ((window as any).electronAPI && (window as any).electronAPI.getAppVersion) {
       (window as any).electronAPI.getAppVersion().then((v: string) => {
-        if (v) setVersion(`v${v}`);
+        if (v && v !== '2.2.0') setVersion(`v${v}`);
       });
     }
   }, []);
