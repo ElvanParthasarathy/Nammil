@@ -21,6 +21,7 @@
     "dist": "vite build && electron-builder --win",
     "build:pack": "cross-env CSC_IDENTITY_AUTO_DISCOVERY=false vite build && electron-builder --win --dir",
     "build:installer": "npm run build:pack && \"%LOCALAPPDATA%\\Programs\\Inno Setup 6\\ISCC.exe\" installer.iss",
+    "release:publish": "node scripts/publish_release.cjs",
     "preview": "vite preview",
     "start": "electron ."
   },
