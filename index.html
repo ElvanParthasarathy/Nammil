@@ -7,6 +7,12 @@
   <link rel="preload" href="./Fonts/ElvanSans-Regular.ttf" as="font" type="font/ttf" crossorigin />
   <link rel="preload" href="./Fonts/MaterialSymbolsRounded.woff2" as="font" type="font/woff2" crossorigin />
   <link rel="preload" href="./app_icon.png" as="image" />
+  <script>
+    if (document.fonts && document.fonts.load) {
+      document.fonts.load('24px "Material Symbols Rounded"');
+      document.fonts.load('16px "Elvan Sans"');
+    }
+  </script>
   <style>
     :root {
       color-scheme: light dark;
@@ -17,7 +23,7 @@
       src: url('./Fonts/MaterialSymbolsRounded.woff2') format('woff2');
       font-weight: 100 700;
       font-style: normal;
-      font-display: swap;
+      font-display: block;
     }
     .material-symbols-rounded {
       font-family: 'Material Symbols Rounded';
@@ -27,13 +33,17 @@
       line-height: 1;
       letter-spacing: normal;
       text-transform: none;
-      display: inline-block;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
       white-space: nowrap;
       word-wrap: normal;
       direction: ltr;
+      font-feature-settings: 'liga';
       -webkit-font-feature-settings: 'liga';
       -webkit-font-smoothing: antialiased;
       user-select: none;
+      overflow: hidden;
       font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
     }
     /* Main application font */

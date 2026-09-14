@@ -1,4 +1,4 @@
-﻿import React from 'react';
+import React from 'react';
 import { Box, SxProps, Theme } from '@mui/material';
 
 export interface MaterialSymbolProps {
@@ -52,10 +52,12 @@ export default function MaterialSymbol({
         wordWrap: 'normal',
         direction: 'ltr',
         fontFeatureSettings: "'liga'",
+        WebkitFontFeatureSettings: "'liga'",
         WebkitFontSmoothing: 'antialiased',
         userSelect: 'none',
         verticalAlign: 'middle',
         flexShrink: 0,
+        overflow: 'hidden',
         color: color || 'inherit',
         fontVariationSettings: `'FILL' ${fill ? 1 : 0}, 'wght' ${weight}, 'GRAD' ${grade}, 'opsz' ${opsz}`,
         transition: 'font-variation-settings 0.2s cubic-bezier(0.4, 0, 0.2, 1), color 0.15s ease',

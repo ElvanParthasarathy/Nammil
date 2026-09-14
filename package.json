@@ -3,7 +3,7 @@
   "productName": "Nammil",
   "author": "Elvan Parthasarathy <jaiprakashpartha@gmail.com> (https://jaiprakashpartha.vercel.app/)",
   "description": "A beautifully crafted, privacy-focused desktop companion for WhatsApp featuring multi-account sessions, automated media organization, and native notifications. By Elvan Navil.",
-  "version": "1.2.8",
+  "version": "1.2.9",
   "license": "MIT",
   "homepage": "https://elvannavil.vercel.app",
   "repository": {

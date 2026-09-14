@@ -177,7 +177,20 @@ class WhatsAppViewManager {
             var _OrigAudio = window.Audio;
             window.Audio = function(src) {
               var a = new _OrigAudio(src);
-              a.volume = 0;
+              var _origPlay = a.play;
+              a.play = function() {
+                try {
+                  var currentSource = a.src || a.currentSrc || '';
+                  if (currentSource.startsWith('blob:')) {
+                    if (a.volume === 0) a.volume = 1;
+                    a.muted = false;
+                  } else {
+                    a.volume = 0;
+                    a.muted = true;
+                  }
+                } catch(e) {}
+                return _origPlay.apply(a, arguments);
+              };
               return a;
             };
             window.Audio.prototype = _OrigAudio.prototype;
