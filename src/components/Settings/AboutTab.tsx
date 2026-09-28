@@ -86,9 +86,9 @@ export function DeveloperTab() {
           icon={<MaterialSymbol icon="mail" size={18} fill={true} />}
           iconColor="monochrome"
           title={t(k.ABOUT_EMAIL)}
-          description="jaiprakashpartha@gmail.com"
+          description="elvanpartha@gmail.com"
           control={<MaterialSymbol icon="chevron_right" size={18} color="var(--mac-text-secondary)" />}
-          onClick={() => openUrl('mailto:jaiprakashpartha@gmail.com')}
+          onClick={() => openUrl('mailto:elvanpartha@gmail.com')}
         />
         <SettingsRow
           icon={<MaterialSymbol icon="work" size={18} fill={true} />}

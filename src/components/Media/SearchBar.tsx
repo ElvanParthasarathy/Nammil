@@ -1,5 +1,5 @@
 import React from 'react';
-import { Box, OutlinedInput, InputAdornment, Chip } from '@mui/material';
+import { Box, OutlinedInput, InputAdornment, IconButton, Chip } from '@mui/material';
 import MaterialSymbol from '../shared/MaterialSymbol';
 import { useI18n } from '../../i18n/I18nContext';
 import { k } from '../../i18n/k';
@@ -24,11 +24,27 @@ export default function SearchBar({ searchQuery, setSearchQuery, activeFilter, d
         placeholder={t(k.MEDIA_SEARCH_PLACEHOLDER)}
         value={searchQuery}
         onChange={(e) => setSearchQuery(e.target.value)}
+        onKeyDown={(e) => {
+          if (e.key === 'Escape') setSearchQuery('');
+        }}
         size="small"
         startAdornment={
           <InputAdornment position="start">
             <MaterialSymbol icon="search" size={20} color={isDark ? '#888' : '#aaa'} />
           </InputAdornment>
+        }
+        endAdornment={
+          searchQuery ? (
+            <InputAdornment position="end">
+              <IconButton 
+                size="small" 
+                onClick={() => setSearchQuery('')}
+                sx={{ color: isDark ? '#888' : '#aaa', p: 0.5, mr: 0.5 }}
+              >
+                <MaterialSymbol icon="close" size={18} />
+              </IconButton>
+            </InputAdornment>
+          ) : null
         }
         sx={{
           bgcolor: isDark ? 'rgba(255,255,255,0.05)' : '#ffffff',

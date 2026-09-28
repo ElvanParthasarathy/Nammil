@@ -1,4 +1,4 @@
-﻿const fs = require('fs');
+const fs = require('fs');
 const path = require('path');
 const https = require('https');
 const { execSync } = require('child_process');
@@ -21,9 +21,11 @@ if (!token) {
   process.exit(1);
 }
 
+const pkgPath = path.join(__dirname, '..', 'package.json');
+const pkg = JSON.parse(fs.readFileSync(pkgPath, 'utf8'));
 const owner = 'ElvanParthasarathy';
 const repo = 'Nammil';
-const tag = 'v1.2.9';
+const tag = `v${pkg.version}`;
 
 async function api(endpoint, method = 'GET', body = null, headers = {}) {
   const url = endpoint.startsWith('http') ? endpoint : `https://api.github.com${endpoint}`;
@@ -125,7 +127,7 @@ async function main() {
       tag_name: tag,
       target_commitish: 'main',
       name: `Nammil ${tag}`,
-      body: `### ✨ What's New in v1.2.9\n\n- **Voice Message Audio Fix**: Intelligent audio stream routing ensures incoming and outgoing voice notes, voice messages, and audio attachments play at full volume with zero distortion.\n- **Silent Native Notifications**: WhatsApp native notification dings are silenced to prevent audio collisions with Nammil's custom notification chimes (*Kumizhi*, *Minnal*, *Alai*, *Thendral*, *Thuli*, *Thullal*).\n- **Performance & Stability**: Smoother tab rendering and font loading improvements.\n\n### 📥 Installation\nDownload \`Nammil-Setup.exe\` below and run the installer. Zero admin rights required.`,
+      body: `### ✨ What's New in ${tag}\n\n- **Fix Minimize Blank Screen**: Fixed the issue where WhatsApp views turned blank or transparent after being minimized to the taskbar. Added Chromium occlusion bypass flags and automatic compositor frame invalidation on restore.\n- **Robust File Downloads**: Bulletproof document downloads with illegal NTFS character sanitization, Windows Defender EBUSY retry backoff, URL-encoding decode, and instant duplicate opening without redundant downloads.\n- **Media Library Across All Accounts**: Opening the Media tab now automatically defaults to showing all media across **All Accounts** instead of locking onto a single account.\n- **Enhanced Media Search**: Normalizes spaces, underscores, and hyphens so searching "whatsapp image" matches "whatsapp_image". Added a one-click clear button (\`✕\`), \`Escape\` key dismissal, and instant pagination reset.\n- **Live Media Auto-Refresh**: Downloaded media and documents now immediately appear live in the Media tab upon download completion without needing to restart.\n- **Developer Profile Update**: Official developer contact email updated to \`elvanpartha@gmail.com\`.\n\n### 📥 Installation\nDownload \`Nammil-Setup.exe\` below and run the installer. Zero admin rights required.`,
       draft: false,
       prerelease: false
     }, { 'Content-Type': 'application/json' });
@@ -133,9 +135,24 @@ async function main() {
     console.log(`Release created: ID ${release.id}`);
   }
 
-  const installerPath = path.join(__dirname, '..', 'build-release', 'Nammil-Setup.exe');
+  const buildReleaseDir = path.join(__dirname, '..', 'build-release');
+  let installerPath = path.join(buildReleaseDir, 'Nammil-Setup.exe');
   if (!fs.existsSync(installerPath)) {
-    throw new Error(`Installer not found at ${installerPath}`);
+    const candidates = [
+      path.join(buildReleaseDir, 'Nammil Setup.exe'),
+      path.join(buildReleaseDir, `Nammil Setup ${pkg.version}.exe`),
+      path.join(buildReleaseDir, `Nammil-${pkg.version}-setup.exe`)
+    ];
+    for (const c of candidates) {
+      if (fs.existsSync(c)) {
+        installerPath = c;
+        break;
+      }
+    }
+  }
+
+  if (!fs.existsSync(installerPath)) {
+    throw new Error(`Installer not found in ${buildReleaseDir}`);
   }
 
   // Delete existing asset if present

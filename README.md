@@ -150,7 +150,7 @@ The final standalone installer will be generated at:
 - **Founder & Developer**: [Elvan Parthasarathy](https://jaiprakashpartha.vercel.app/)
   - **GitHub**: [@ElvanParthasarathy](https://github.com/elvanparthasarathy)
   - **LinkedIn**: [in/jaiprakashpartha](https://www.linkedin.com/in/jaiprakashpartha)
-  - **Email**: [jaiprakashpartha@gmail.com](mailto:jaiprakashpartha@gmail.com)
+  - **Email**: [elvanpartha@gmail.com](mailto:elvanpartha@gmail.com)
   - **Location**: Arani, Tamil Nadu, India
 
 ---

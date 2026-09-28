@@ -14,17 +14,16 @@ export default function MediaLibrary({ accounts }: any) {
   const { t } = useI18n();
   const isDark = useIsDark();
 
-  const userSelectedRef = useRef(false);
-  const [activeAccount, setActiveAccount] = useState<string>(() => accounts?.[0]?.name || 'All');
+  const [activeAccount, setActiveAccount] = useState<string>('All');
 
   useEffect(() => {
-    if (!userSelectedRef.current && accounts?.length && accounts[0]?.name) {
-      setActiveAccount(accounts[0].name);
+    if (activeAccount !== 'All' && accounts?.length) {
+      const exists = accounts.some((a: any) => a.name === activeAccount);
+      if (!exists) setActiveAccount('All');
     }
-  }, [accounts]);
+  }, [accounts, activeAccount]);
 
   const handleAccountChange = (accName: string) => {
-    userSelectedRef.current = true;
     setActiveAccount(accName);
   };
 
@@ -36,13 +35,14 @@ export default function MediaLibrary({ accounts }: any) {
   const PAGE_SIZE = 24;
   const [visibleCount, setVisibleCount] = useState(PAGE_SIZE);
 
-  // Debounce search: only update the filter pipeline 300ms after the user stops typing
+  // Debounce search: update filter pipeline and reset pagination 250ms after typing stops
   const debounceRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   useEffect(() => {
     if (debounceRef.current) clearTimeout(debounceRef.current);
     debounceRef.current = setTimeout(() => {
       setDebouncedSearch(searchQuery);
-    }, 300);
+      setVisibleCount(PAGE_SIZE);
+    }, 250);
     return () => { if (debounceRef.current) clearTimeout(debounceRef.current); };
   }, [searchQuery]);
 
@@ -58,12 +58,36 @@ export default function MediaLibrary({ accounts }: any) {
     fetchMedia();
   }, [activeAccount, activeFilter]);
 
+  // Auto-refresh media library when a new file finishes downloading
+  useEffect(() => {
+    if ((window as any).electronAPI && (window as any).electronAPI.onDownloadComplete) {
+      const unsubscribe = (window as any).electronAPI.onDownloadComplete(() => {
+        fetchMedia();
+      });
+      return () => {
+        if (typeof unsubscribe === 'function') unsubscribe();
+      };
+    }
+  }, [activeAccount, activeFilter]);
+
   // Memoize the expensive filter + sort pipeline so it only runs when inputs actually change
   const filteredMedia = useMemo(() => {
+    const query = debouncedSearch.trim().toLowerCase();
+    const normalizedQuery = query.replace(/[_\-\s]+/g, ' ');
+
     return mediaItems.filter((item: any) => {
-      if (debouncedSearch && !item.fileName.toLowerCase().includes(debouncedSearch.toLowerCase())) return false;
+      const rawName = (item.fileName || item.name || '').toLowerCase();
+      const normalizedName = rawName.replace(/[_\-\s]+/g, ' ');
+
+      if (query) {
+        const matchesName = rawName.includes(query) || normalizedName.includes(normalizedQuery);
+        const matchesAccount = (item.accountName || item.account || '').toLowerCase().includes(query);
+        const matchesExt = getFileExtension(rawName).includes(query);
+        if (!matchesName && !matchesAccount && !matchesExt) return false;
+      }
+
       if (activeFilter === 'Documents' && docFormatFilter !== 'All') {
-        const ext = getFileExtension(item.fileName);
+        const ext = getFileExtension(rawName);
         if (docFormatFilter === 'PDF' && ext !== 'pdf') return false;
         if (docFormatFilter === 'Word' && !ext.match(/^(doc|docx)$/)) return false;
         if (docFormatFilter === 'PPT' && !ext.match(/^(ppt|pptx)$/)) return false;

@@ -7,7 +7,11 @@ webFrame.setVisualZoomLevelLimits(1, 1);
 contextBridge.exposeInMainWorld('electronAPI', {
   // ── Existing APIs ──
   switchTab: (tabId) => ipcRenderer.send('switch-tab', tabId),
-  onDownloadComplete: (callback) => ipcRenderer.on('download-complete', (_event, value) => callback(value)),
+  onDownloadComplete: (callback) => {
+    const handler = (_event, value) => callback(value);
+    ipcRenderer.on('download-complete', handler);
+    return () => ipcRenderer.removeListener('download-complete', handler);
+  },
   saveSetting: (key, value) => ipcRenderer.send('save-setting', key, value),
   getSettings: () => ipcRenderer.invoke('get-settings'),
   getMediaFiles: (filter, accountName) => ipcRenderer.invoke('get-media', filter, accountName),

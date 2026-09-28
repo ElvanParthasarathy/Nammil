@@ -1,3 +1,4 @@
+const fs = require('fs');
 const path = require('path');
 const { WebContentsView, Menu, MenuItem, shell, session } = require('electron');
 
@@ -253,25 +254,39 @@ class WhatsAppViewManager {
 
     view.webContents.session.on('will-download', (event, item, webContents) => {
       const fileName = item.getFilename();
-      const tempPath = path.join(this.app.getPath('temp'), fileName);
+      const safeTempName = `nammil_${Date.now()}_${fileName.replace(/[\\/:*?"<>|]/g, '_')}`;
+      const tempPath = path.join(this.app.getPath('temp'), safeTempName);
       item.setSavePath(tempPath);
 
       item.on('updated', (event, state) => {
         if (state === 'interrupted') {
-          console.log('Download is interrupted but can be resumed');
+          console.warn('[Nammil Download] Download interrupted for:', fileName);
         }
       });
 
       item.once('done', async (event, state) => {
         if (state === 'completed') {
           const result = await this.orchestrator.downloadManager.processDownloadedFile(tempPath, fileName, view.accountName);
-          const mainWindow = this.orchestrator.windowManager.mainWindow;
-          if (mainWindow) {
+          const mainWindow = this.orchestrator.windowManager && this.orchestrator.windowManager.mainWindow;
+          if (mainWindow && !mainWindow.isDestroyed()) {
             mainWindow.webContents.send('download-complete', result);
           }
-          if (result.success && result.filePath) {
-            shell.openPath(result.filePath);
+
+          // Open the file with default viewer or fallback to Explorer
+          if (result && result.success && result.filePath && fs.existsSync(result.filePath)) {
+            try {
+              const openError = await shell.openPath(result.filePath);
+              if (openError) {
+                console.warn('[Nammil Download] openPath error, falling back to showItemInFolder:', openError);
+                shell.showItemInFolder(result.filePath);
+              }
+            } catch (err) {
+              console.error('[Nammil Download] Failed to open file:', err);
+              shell.showItemInFolder(result.filePath);
+            }
           }
+        } else {
+          console.error('[Nammil Download] Download failed with state:', state);
         }
       });
     });
@@ -381,6 +396,9 @@ class WhatsAppViewManager {
     Object.values(this.views).forEach(view => {
       try {
         view.setBounds(rect);
+        if (view.webContents && !view.webContents.isDestroyed()) {
+          view.webContents.invalidate();
+        }
       } catch (e) {}
     });
   }

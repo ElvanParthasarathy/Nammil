@@ -62,13 +62,52 @@ class DownloadManager {
     return null;
   }
 
-  async processDownloadedFile(tempPath, fileName, accountName) {
+  sanitizeFileName(name) {
+    if (!name) return 'Document_' + Date.now();
+    const ext = path.extname(name);
+    const base = path.basename(name, ext);
+    // Remove characters illegal in Windows NTFS: \ / : * ? " < > |
+    let safeBase = base.replace(/[\\/:*?"<>|]/g, '_').trim();
+    // Windows cannot have trailing dots or spaces
+    safeBase = safeBase.replace(/[. ]+$/, '');
+    if (!safeBase) safeBase = 'Document_' + Date.now();
+    return safeBase + ext;
+  }
+
+  async copyWithRetry(src, dest, retries = 3, delay = 100) {
+    for (let i = 0; i < retries; i++) {
+      try {
+        fs.copyFileSync(src, dest);
+        return true;
+      } catch (err) {
+        if (err.code === 'EBUSY' && i < retries - 1) {
+          await new Promise(r => setTimeout(r, delay));
+        } else {
+          throw err;
+        }
+      }
+    }
+  }
+
+  async processDownloadedFile(tempPath, rawFileName, accountName) {
     try {
+      if (!fs.existsSync(tempPath)) {
+        return { success: false, reason: 'error', message: 'Temporary download file is missing.' };
+      }
+      const tempStat = fs.statSync(tempPath);
+      if (tempStat.size === 0) {
+        try { fs.unlinkSync(tempPath); } catch(e) {}
+        return { success: false, reason: 'error', message: 'Downloaded file is empty (0 bytes).' };
+      }
+
+      let decodedName = rawFileName;
+      try { decodedName = decodeURIComponent(rawFileName); } catch(e) {}
+      const fileName = this.sanitizeFileName(decodedName);
       const settings = this.orchestrator.settingsManager.getSettingsSync();
       const baseDir = this.orchestrator.settingsManager.getMediaFolder();
 
-      const sanitize = name => name.replace(/[^a-zA-Z0-9 _-]/g, '').trim() || 'Account';
-      const safeAccName = sanitize(accountName || 'WhatsApp');
+      const sanitizeAccount = name => name.replace(/[\\/:*?"<>|]/g, '').trim() || 'Account';
+      const safeAccName = sanitizeAccount(accountName || 'WhatsApp');
 
       const ext = path.extname(fileName).toLowerCase();
       let subFolder = 'Documents';
@@ -100,22 +139,27 @@ class DownloadManager {
       if (fs.existsSync(finalPath)) {
         const action = settings.duplicateAction || 'skip';
         if (action === 'skip') {
+          try { fs.unlinkSync(tempPath); } catch(e) {}
           return {
-            success: false,
+            success: true, // Mark true so WhatsAppViewManager opens it immediately!
+            alreadyExists: true,
             reason: 'duplicate',
-            message: `File "${fileName}" already exists. Skipped download.`,
+            message: `File "${fileName}" already exists. Opened existing file.`,
             fileName,
-            filePath: finalPath
+            filePath: finalPath,
+            fileType,
+            size: fs.statSync(finalPath).size
           };
         } else if (action === 'overwrite') {
-          fs.copyFileSync(tempPath, finalPath);
+          await this.copyWithRetry(tempPath, finalPath);
         } else if (action === 'rename') {
           const nameWithoutExt = path.basename(fileName, ext);
           const timestamp = Date.now();
           const newFileName = `${nameWithoutExt}_${timestamp}${ext}`;
           const renamePath = path.join(targetDir, newFileName);
-          fs.copyFileSync(tempPath, renamePath);
+          await this.copyWithRetry(tempPath, renamePath);
           this.scheduleThumbnailGeneration(renamePath, fileType);
+          try { fs.unlinkSync(tempPath); } catch(e) {}
           return {
             success: true,
             filePath: renamePath,
@@ -125,10 +169,12 @@ class DownloadManager {
           };
         }
       } else {
-        fs.copyFileSync(tempPath, finalPath);
+        await this.copyWithRetry(tempPath, finalPath);
       }
 
       this.scheduleThumbnailGeneration(finalPath, fileType);
+      try { fs.unlinkSync(tempPath); } catch(e) {}
+
       return {
         success: true,
         filePath: finalPath,
@@ -137,7 +183,8 @@ class DownloadManager {
         size: fs.statSync(finalPath).size
       };
     } catch (e) {
-      console.error('Error processing downloaded file:', e);
+      console.error('[DownloadManager] Error processing downloaded file:', e);
+      try { if (fs.existsSync(tempPath)) fs.unlinkSync(tempPath); } catch(err) {}
       return { success: false, reason: 'error', message: e.message };
     }
   }
@@ -251,22 +298,43 @@ class DownloadManager {
       let results = [];
       if (!fs.existsSync(baseDir)) return results;
 
+      const filterAcc = (accountName || 'All').trim().toLowerCase();
+      const isAllAccounts = filterAcc === 'all';
+
       const readDirRec = (dir, currentAccount) => {
-        const entries = fs.readdirSync(dir, { withFileTypes: true });
+        let entries = [];
+        try {
+          entries = fs.readdirSync(dir, { withFileTypes: true });
+        } catch (e) {
+          return;
+        }
+
         for (const entry of entries) {
           if (entry.name.startsWith('.')) continue;
           const res = path.resolve(dir, entry.name);
           if (entry.isDirectory()) {
-            readDirRec(res, currentAccount || entry.name);
+            let nextAccount = currentAccount;
+            const isMediaCategory = ['images', 'videos', 'documents', 'audio', '.thumbnails'].includes(entry.name.toLowerCase());
+            if (!nextAccount && !isMediaCategory) {
+              nextAccount = entry.name;
+            }
+            readDirRec(res, nextAccount);
           } else {
-            if (accountName !== 'All' && currentAccount !== accountName) continue;
+            const accName = currentAccount || 'WhatsApp';
+            if (!isAllAccounts && accName.toLowerCase() !== filterAcc) continue;
 
             const ext = path.extname(entry.name).toLowerCase();
-            const stats = fs.statSync(res);
+            let stats;
+            try {
+              stats = fs.statSync(res);
+            } catch (e) {
+              continue;
+            }
+
             let type = 'document';
-            if (['.jpg', '.jpeg', '.png', '.gif', '.webp'].includes(ext)) type = 'image';
-            else if (['.mp4', '.avi', '.mkv', '.mov'].includes(ext)) type = 'video';
-            else if (['.mp3', '.wav', '.ogg', '.m4a'].includes(ext)) type = 'audio';
+            if (['.jpg', '.jpeg', '.png', '.gif', '.webp', '.bmp'].includes(ext)) type = 'image';
+            else if (['.mp4', '.avi', '.mkv', '.mov', '.webm'].includes(ext)) type = 'video';
+            else if (['.mp3', '.wav', '.ogg', '.m4a', '.aac', '.opus'].includes(ext)) type = 'audio';
 
             if (filter !== 'All') {
               if (filter === 'Images' && type !== 'image') continue;
@@ -286,8 +354,8 @@ class DownloadManager {
               size: stats.size,
               fileSize: stats.size,
               date: stats.mtime,
-              account: currentAccount || 'WhatsApp',
-              accountName: currentAccount || 'WhatsApp'
+              account: accName,
+              accountName: accName
             });
           }
         }

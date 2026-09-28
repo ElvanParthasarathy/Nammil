@@ -41,6 +41,10 @@ if (!gotTheLock) {
   // 2. Set Windows AppUserModelId for Native Windows Toast Notifications
   app.setAppUserModelId(APP_ID);
 
+  // Prevent Chromium from discarding WebContentsView GPU rendering surface on minimize/occlusion
+  app.commandLine.appendSwitch('disable-backgrounding-occluded-windows');
+  app.commandLine.appendSwitch('disable-renderer-backgrounding');
+
   // 3. Register Privileged Protocol Scheme for custom fonts, icons, and thumbnails
   protocol.registerSchemesAsPrivileged([
     { scheme: 'nammil', privileges: { standard: true, secure: true, supportFetchAPI: true, bypassCSP: true, corsEnabled: true, stream: true } }
