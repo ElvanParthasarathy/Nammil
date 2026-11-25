@@ -131,7 +131,7 @@ class UpdateManager {
       this.app.on('before-quit', () => {
         if (this.currentStatus.status === 'downloaded' && this.downloadedInstallerPath && fs.existsSync(this.downloadedInstallerPath)) {
           try {
-            spawn(this.downloadedInstallerPath, ['/VERYSILENT', '/SUPPRESSMSGBOXES', '/NORESTART', '/SP-'], { detached: true, stdio: 'ignore' }).unref();
+            this._launchInstaller();
           } catch (e) {
             console.warn('[UpdateManager] Could not launch installer on quit:', e.message);
           }
@@ -341,12 +341,19 @@ class UpdateManager {
     return false;
   }
 
+  // "Restart & Install" quits the app, which fires before-quit: start the installer only once.
+  _launchInstaller() {
+    if (this._installerStarted) return;
+    spawn(this.downloadedInstallerPath, ['/VERYSILENT', '/SUPPRESSMSGBOXES', '/NORESTART', '/SP-'], { detached: true, stdio: 'ignore' }).unref();
+    this._installerStarted = true;
+  }
+
   restartAndInstall() {
     const updater = this._getAutoUpdater();
     // If downloaded via direct fallback
     if (this.downloadedInstallerPath && fs.existsSync(this.downloadedInstallerPath)) {
       try {
-        spawn(this.downloadedInstallerPath, ['/VERYSILENT', '/SUPPRESSMSGBOXES', '/NORESTART', '/SP-'], { detached: true, stdio: 'ignore' }).unref();
+        this._launchInstaller();
         if (this.app && typeof this.app.quit === 'function') {
           this.app.isQuitting = true;
           this.app.quit();

@@ -28,6 +28,8 @@ OutputBaseFilename=Nammil Setup
 ArchitecturesAllowed=x64compatible
 ArchitecturesInstallIn64BitMode=x64compatible
 CloseApplications=force
+; No /T on the taskkill calls below: the in-app updater starts Setup as a child of Nammil.exe, and /T kills Setup too.
+SetupMutex=NammilSetupMutex
 RestartApplications=no
 
 ; Custom UI Images (Branding)
@@ -76,8 +78,8 @@ function InitializeSetup(): Boolean;
 var
   ResultCode: Integer;
 begin
-  Exec('taskkill.exe', '/F /IM Nammil.exe /T', '', SW_HIDE, ewWaitUntilTerminated, ResultCode);
-  Exec('taskkill.exe', '/F /IM "Elvan Nammil.exe" /T', '', SW_HIDE, ewWaitUntilTerminated, ResultCode);
+  Exec('taskkill.exe', '/F /IM Nammil.exe', '', SW_HIDE, ewWaitUntilTerminated, ResultCode);
+  Exec('taskkill.exe', '/F /IM "Elvan Nammil.exe"', '', SW_HIDE, ewWaitUntilTerminated, ResultCode);
   Result := True;
 end;
 
@@ -94,8 +96,8 @@ function PrepareToInstall(var NeedsRestart: Boolean): String;
 var
   ResultCode: Integer;
 begin
-  Exec('taskkill.exe', '/F /IM Nammil.exe /T', '', SW_HIDE, ewWaitUntilTerminated, ResultCode);
-  Exec('taskkill.exe', '/F /IM "Elvan Nammil.exe" /T', '', SW_HIDE, ewWaitUntilTerminated, ResultCode);
+  Exec('taskkill.exe', '/F /IM Nammil.exe', '', SW_HIDE, ewWaitUntilTerminated, ResultCode);
+  Exec('taskkill.exe', '/F /IM "Elvan Nammil.exe"', '', SW_HIDE, ewWaitUntilTerminated, ResultCode);
   Result := '';
 end;
 
