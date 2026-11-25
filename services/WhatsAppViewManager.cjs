@@ -4,6 +4,8 @@ const { WebContentsView, Menu, MenuItem, shell, session } = require('electron');
 
 const USER_AGENT = 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36';
 const WHATSAPP_URL = 'https://web.whatsapp.com';
+// Inlined because nammil:// is only served to the app's own session, not to the account partitions.
+const CHAT_FONT_URL = 'data:font/ttf;base64,' + fs.readFileSync(path.join(__dirname, '..', 'public', 'Fonts', 'ElvanSans-Regular.ttf')).toString('base64');
 
 class WhatsAppViewManager {
   constructor(app, orchestrator) {
@@ -72,7 +74,7 @@ class WhatsAppViewManager {
       view.webContents.insertCSS(`
         @font-face {
           font-family: 'Elvan Sans';
-          src: url('nammil://assets/Fonts/ElvanSans-Regular.ttf') format('truetype');
+          src: url('${CHAT_FONT_URL}') format('truetype');
         }
         body, button, input, select, textarea, div { 
           font-family: 'Elvan Sans', sans-serif !important; 
