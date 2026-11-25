@@ -136,10 +136,10 @@ async function main() {
   }
 
   const buildReleaseDir = path.join(__dirname, '..', 'build-release');
-  let installerPath = path.join(buildReleaseDir, 'Nammil-Setup.exe');
+  let installerPath = path.join(buildReleaseDir, 'Nammil Setup.exe');
   if (!fs.existsSync(installerPath)) {
     const candidates = [
-      path.join(buildReleaseDir, 'Nammil Setup.exe'),
+      path.join(buildReleaseDir, 'Nammil-Setup.exe'),
       path.join(buildReleaseDir, `Nammil Setup ${pkg.version}.exe`),
       path.join(buildReleaseDir, `Nammil-${pkg.version}-setup.exe`)
     ];
