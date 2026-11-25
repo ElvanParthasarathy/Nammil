@@ -127,7 +127,7 @@ async function main() {
       tag_name: tag,
       target_commitish: 'main',
       name: `Nammil ${tag}`,
-      body: `### ✨ What's New in ${tag}\n\n- **Chat font**: Chats now use the Elvan Sans bundled with Nammil instead of whichever copy is installed in Windows.\n- **Updates install again**: The installer no longer closes itself or starts twice during an in-app update.\n\n### 📥 Installation\nDownload \`Nammil-Setup.exe\` below and run the installer. Zero admin rights required.`,
+      body: `### ✨ What's New in ${tag}\n\n- **Chat font weights**: Bundled Elvan Sans Medium, SemiBold, and Bold alongside Regular so headings, filter chips, and contact names render with true font weights instead of synthetic bold.\n- **Chat font**: Chats now use the Elvan Sans bundled with Nammil instead of whichever copy is installed in Windows.\n- **Updates install again**: The installer no longer closes itself or starts twice during an in-app update.\n\n### 📥 Installation\nDownload \`Nammil-Setup.exe\` below and run the installer. Zero admin rights required.`,
       draft: false,
       prerelease: false
     }, { 'Content-Type': 'application/json' });
